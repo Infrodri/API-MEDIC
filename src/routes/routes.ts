@@ -15,8 +15,11 @@ import { createMedicamentos, deleteMedicamentos, findMedicamentos, findMedicamen
 import { createPacienteAdicciones, deletePacienteAdicciones, findPacienteAdicciones, findPacienteAdiccionesById, softDeletePacienteAdicciones, updatePacienteAdicciones } from "@controllers/pacienteAdiccionesControllers";
 import { createPacienteObstetricosGinecologicos, deletePacienteObstetricosGinecologicos, findPacienteObstetricosGinecologicos, findPacienteObstetricosGinecologicosById, softDeletePacienteObstetricosGinecologicos, updatePacienteObstetricosGinecologicos } from "@controllers/pacienteObstetricosGinecologicosControllers";
 import { createPacienteOperaciones, deletePacienteOperaciones, findPacienteOperaciones, findPacienteOperacionesById, softDeletePacienteOperaciones, updatePacienteOperaciones } from "@controllers/pacienteOperacionesControllers";
-import { createRecetasMedicamentos, deleteRecetasMedicamentos, findRecetasMedicamentos, findRecetasMedicamentosById, softDeleteRecetasMedicamentos, updateRecetasMedicamentos } from "@controllers/recetasMedicamentosControllers"; // Nuevas importaciones
-import { createPacienteExamenes, deletePacienteExamenes, findPacienteExamenes, findPacienteExamenesById, softDeletePacienteExamenes, updatePacienteExamenes } from "@controllers/pacienteExamenesControllers"; // Nuevas importaciones
+import { createRecetasMedicamentos, deleteRecetasMedicamentos, findRecetasMedicamentos, findRecetasMedicamentosById, softDeleteRecetasMedicamentos, updateRecetasMedicamentos } from "@controllers/recetasMedicamentosControllers";
+import { createPacienteExamenes, deletePacienteExamenes, findPacienteExamenes, findPacienteExamenesById, softDeletePacienteExamenes, updatePacienteExamenes } from "@controllers/pacienteExamenesControllers";
+import { createPermisos, deletePermisos, findPermisos, findPermisosById, softDeletePermisos, updatePermisos } from "@controllers/permisosControllers"; // Nuevas importaciones
+import { createUsuarioRoles, deleteUsuarioRoles, findUsuarioRoles, findUsuarioRolesById, softDeleteUsuarioRoles, updateUsuarioRoles } from "@controllers/usuarioRolesControllers"; // Nuevas importaciones
+import { createRolesPermisos, deleteRolesPermisos, findRolesPermisos, findRolesPermisosById, softDeleteRolesPermisos, updateRolesPermisos } from "@controllers/rolesPermisosControllers"; // Nuevas importaciones
 import { Router } from "express";
 import { getPermissons, verifyToken } from "middlewares/auth";
 import { checkRoles } from "middlewares/roles";
@@ -158,20 +161,44 @@ export default () => {
   router.patch("/paciente-operaciones/:id/soft-delete", verifyToken, getPermissons, softDeletePacienteOperaciones);
 
   // Rutas de Recetas-Medicamentos
-  router.get("/recetas-medicamentos", verifyToken, getPermissons, findRecetasMedicamentos); // Listar relaciones (activas)
-  router.get("/recetas-medicamentos/:id", verifyToken, getPermissons, findRecetasMedicamentosById); // Obtener relación por ID
-  router.post("/recetas-medicamentos", verifyToken, getPermissons, checkRoles, createRecetasMedicamentos); // Crear relación
-  router.put("/recetas-medicamentos/:id", verifyToken, getPermissons, updateRecetasMedicamentos); // Actualizar relación
-  router.delete("/recetas-medicamentos/:id", verifyToken, getPermissons, deleteRecetasMedicamentos); // Eliminar físicamente (si aplica)
-  router.patch("/recetas-medicamentos/:id/soft-delete", verifyToken, getPermissons, softDeleteRecetasMedicamentos); // Eliminar lógicamente (cambiar a Inactivo)
+  router.get("/recetas-medicamentos", verifyToken, getPermissons, findRecetasMedicamentos);
+  router.get("/recetas-medicamentos/:id", verifyToken, getPermissons, findRecetasMedicamentosById);
+  router.post("/recetas-medicamentos", verifyToken, getPermissons, checkRoles, createRecetasMedicamentos);
+  router.put("/recetas-medicamentos/:id", verifyToken, getPermissons, updateRecetasMedicamentos);
+  router.delete("/recetas-medicamentos/:id", verifyToken, getPermissons, deleteRecetasMedicamentos);
+  router.patch("/recetas-medicamentos/:id/soft-delete", verifyToken, getPermissons, softDeleteRecetasMedicamentos);
 
   // Rutas de Paciente-Exámenes
-  router.get("/paciente-examenes", verifyToken, getPermissons, findPacienteExamenes); // Listar relaciones (activas)
-  router.get("/paciente-examenes/:id", verifyToken, getPermissons, findPacienteExamenesById); // Obtener relación por ID
-  router.post("/paciente-examenes", verifyToken, getPermissons, checkRoles, createPacienteExamenes); // Crear relación
-  router.put("/paciente-examenes/:id", verifyToken, getPermissons, updatePacienteExamenes); // Actualizar relación
-  router.delete("/paciente-examenes/:id", verifyToken, getPermissons, deletePacienteExamenes); // Eliminar físicamente (si aplica)
-  router.patch("/paciente-examenes/:id/soft-delete", verifyToken, getPermissons, softDeletePacienteExamenes); // Eliminar lógicamente (cambiar a Inactivo)
+  router.get("/paciente-examenes", verifyToken, getPermissons, findPacienteExamenes);
+  router.get("/paciente-examenes/:id", verifyToken, getPermissons, findPacienteExamenesById);
+  router.post("/paciente-examenes", verifyToken, getPermissons, checkRoles, createPacienteExamenes);
+  router.put("/paciente-examenes/:id", verifyToken, getPermissons, updatePacienteExamenes);
+  router.delete("/paciente-examenes/:id", verifyToken, getPermissons, deletePacienteExamenes);
+  router.patch("/paciente-examenes/:id/soft-delete", verifyToken, getPermissons, softDeletePacienteExamenes);
+
+  // Rutas de Permisos
+  router.get("/permisos", verifyToken, getPermissons, findPermisos); // Listar permisos (activos)
+  router.get("/permisos/:id", verifyToken, getPermissons, findPermisosById); // Obtener permiso por ID
+  router.post("/permisos", verifyToken, getPermissons, checkRoles, createPermisos); // Crear permiso
+  router.put("/permisos/:id", verifyToken, getPermissons, updatePermisos); // Actualizar permiso
+  router.delete("/permisos/:id", verifyToken, getPermissons, deletePermisos); // Eliminar físicamente (si aplica)
+  router.patch("/permisos/:id/soft-delete", verifyToken, getPermissons, softDeletePermisos); // Eliminar lógicamente (cambiar a Inactivo)
+
+  // Rutas de Usuario-Roles
+  router.get("/usuario-roles", verifyToken, getPermissons, findUsuarioRoles); // Listar relaciones (activas)
+  router.get("/usuario-roles/:id", verifyToken, getPermissons, findUsuarioRolesById); // Obtener relación por ID
+  router.post("/usuario-roles", verifyToken, getPermissons, checkRoles, createUsuarioRoles); // Crear relación
+  router.put("/usuario-roles/:id", verifyToken, getPermissons, updateUsuarioRoles); // Actualizar relación
+  router.delete("/usuario-roles/:id", verifyToken, getPermissons, deleteUsuarioRoles); // Eliminar físicamente (si aplica)
+  router.patch("/usuario-roles/:id/soft-delete", verifyToken, getPermissons, softDeleteUsuarioRoles); // Eliminar lógicamente (cambiar a Inactivo)
+
+  // Rutas de Roles-Permisos
+  router.get("/roles-permisos", verifyToken, getPermissons, findRolesPermisos); // Listar relaciones (activas)
+  router.get("/roles-permisos/:id", verifyToken, getPermissons, findRolesPermisosById); // Obtener relación por ID
+  router.post("/roles-permisos", verifyToken, getPermissons, checkRoles, createRolesPermisos); // Crear relación
+  router.put("/roles-permisos/:id", verifyToken, getPermissons, updateRolesPermisos); // Actualizar relación
+  router.delete("/roles-permisos/:id", verifyToken, getPermissons, deleteRolesPermisos); // Eliminar físicamente (si aplica)
+  router.patch("/roles-permisos/:id/soft-delete", verifyToken, getPermissons, softDeleteRolesPermisos); // Eliminar lógicamente (cambiar a Inactivo)
 
   return router;
 };
