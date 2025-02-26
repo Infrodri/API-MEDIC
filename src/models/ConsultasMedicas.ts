@@ -5,23 +5,29 @@ const ConsultasMedicasSchema: Schema = new Schema<ConsultasMedicas>(
   {
     paciente: {
       type: Schema.Types.ObjectId,
-      ref: "Paciente", // Relación con Pacientes
+      ref: "Paciente",
       required: [true, "El paciente es obligatorio"],
+      index: true,
     },
     medico: {
       type: Schema.Types.ObjectId,
-      ref: "Medico", // Relación con Medicos
+      ref: "Medico",
       required: [true, "El médico es obligatorio"],
     },
     fichaMedica: {
       type: Schema.Types.ObjectId,
-      ref: "FichasMedicas", // Relación con FichasMedicas
+      ref: "FichasMedicas",
       required: [true, "La ficha médica es obligatoria"],
+    },
+    especialidad: {
+      type: Schema.Types.ObjectId,
+      ref: "Especialidades", // Nueva relación
+      required: [true, "La especialidad es obligatoria"],
     },
     fecha: {
       type: Date,
       required: [true, "La fecha es obligatoria"],
-      default: Date.now, // Fecha por defecto es la actual
+      default: Date.now,
     },
     motivo: {
       type: String,
@@ -40,18 +46,18 @@ const ConsultasMedicasSchema: Schema = new Schema<ConsultasMedicas>(
     },
   },
   {
-    timestamps: true, // Automatically add createdAt and updatedAt
+    timestamps: true,
     versionKey: false,
   }
 );
 
-// Method to get basic consultas médicas info (for the list)
 ConsultasMedicasSchema.methods.getBasicInfo = function () {
   return {
-    _id: this._id, // Usamos el _id generado por MongoDB
+    _id: this._id,
     paciente: this.paciente,
     medico: this.medico,
     fichaMedica: this.fichaMedica,
+    especialidad: this.especialidad, // Incluyo especialidad
     fecha: this.fecha,
     estado: this.estado,
   };

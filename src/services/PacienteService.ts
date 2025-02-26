@@ -13,7 +13,7 @@ export class PacienteService implements IPacienteService {
     const newPaciente = await this.pacienteRepository.create(pacienteData as Paciente);
     return { paciente: newPaciente, message: "Paciente registrado con éxito" };
   }
-
+  
   async findPacientes(query?: Query): Promise<Paciente[]> {
     return this.pacienteRepository.findActive(query);
   }

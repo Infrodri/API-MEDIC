@@ -9,23 +9,23 @@ export class ConsultasMedicasRepository implements IConsultasMedicasRepository {
   }
 
   async find(query?: Query): Promise<ConsultasMedicas[]> {
-    return await ConsultasMedicasModel.find(query || {}).populate("paciente medico fichaMedica").exec();
+    return await ConsultasMedicasModel.find(query || {}).populate("paciente medico fichaMedica especialidad").exec();
   }
 
   async findActive(query?: Query): Promise<ConsultasMedicas[]> {
-    return await ConsultasMedicasModel.find({ ...query, estado: "Activo" }).populate("paciente medico fichaMedica").exec();
+    return await ConsultasMedicasModel.find({ ...query, estado: "Activo" }).populate("paciente medico fichaMedica especialidad").exec();
   }
 
   async findOne(query: Query): Promise<ConsultasMedicas | null> {
-    return await ConsultasMedicasModel.findOne(query).populate("paciente medico fichaMedica").exec();
+    return await ConsultasMedicasModel.findOne(query).populate("paciente medico fichaMedica especialidad").exec();
   }
 
   async findById(id: string): Promise<ConsultasMedicas | null> {
-    return await ConsultasMedicasModel.findById(id).populate("paciente medico fichaMedica").exec();
+    return await ConsultasMedicasModel.findById(id).populate("paciente medico fichaMedica especialidad").exec();
   }
 
   async update(id: string, data: Partial<ConsultasMedicas>): Promise<ConsultasMedicas | null> {
-    return await ConsultasMedicasModel.findByIdAndUpdate(id, data, { new: true, runValidators: true }).populate("paciente medico fichaMedica").exec();
+    return await ConsultasMedicasModel.findByIdAndUpdate(id, data, { new: true, runValidators: true }).populate("paciente medico fichaMedica especialidad").exec();
   }
 
   async delete(id: string): Promise<boolean> {

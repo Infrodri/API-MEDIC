@@ -20,6 +20,8 @@ import { createPacienteExamenes, deletePacienteExamenes, findPacienteExamenes, f
 import { createPermisos, deletePermisos, findPermisos, findPermisosById, softDeletePermisos, updatePermisos } from "@controllers/permisosControllers"; // Nuevas importaciones
 import { createUsuarioRoles, deleteUsuarioRoles, findUsuarioRoles, findUsuarioRolesById, softDeleteUsuarioRoles, updateUsuarioRoles } from "@controllers/usuarioRolesControllers"; // Nuevas importaciones
 import { createRolesPermisos, deleteRolesPermisos, findRolesPermisos, findRolesPermisosById, softDeleteRolesPermisos, updateRolesPermisos } from "@controllers/rolesPermisosControllers"; // Nuevas importaciones
+import { createEspecialidades, deleteEspecialidades, findEspecialidades, findEspecialidadesById, softDeleteEspecialidades, updateEspecialidades } from "@controllers/especialidadesControllers";
+import { createAdministrativos, deleteAdministrativos, findAdministrativos, findAdministrativosById, softDeleteAdministrativos, updateAdministrativos } from "@controllers/administrativosControllers";
 import { Router } from "express";
 import { getPermissons, verifyToken } from "middlewares/auth";
 import { checkRoles } from "middlewares/roles";
@@ -199,6 +201,22 @@ export default () => {
   router.put("/roles-permisos/:id", verifyToken, getPermissons, updateRolesPermisos); // Actualizar relación
   router.delete("/roles-permisos/:id", verifyToken, getPermissons, deleteRolesPermisos); // Eliminar físicamente (si aplica)
   router.patch("/roles-permisos/:id/soft-delete", verifyToken, getPermissons, softDeleteRolesPermisos); // Eliminar lógicamente (cambiar a Inactivo)
+
+  router.get("/especialidades", verifyToken, getPermissons, findEspecialidades);
+  router.get("/especialidades/:id", verifyToken, getPermissons, findEspecialidadesById);
+  router.post("/especialidades", verifyToken, getPermissons, checkRoles, createEspecialidades);
+  router.put("/especialidades/:id", verifyToken, getPermissons, updateEspecialidades);
+  router.delete("/especialidades/:id", verifyToken, getPermissons, deleteEspecialidades);
+  router.patch("/especialidades/:id/soft-delete", verifyToken, getPermissons, softDeleteEspecialidades);
+
+  router.get("/administrativos", verifyToken, getPermissons, findAdministrativos);
+  router.get("/administrativos/:id", verifyToken, getPermissons, findAdministrativosById);
+  router.post("/administrativos", verifyToken, getPermissons, checkRoles, createAdministrativos);
+  router.put("/administrativos/:id", verifyToken, getPermissons, updateAdministrativos);
+  router.delete("/administrativos/:id", verifyToken, getPermissons, deleteAdministrativos);
+  router.patch("/administrativos/:id/soft-delete", verifyToken, getPermissons, softDeleteAdministrativos);
+
+
 
   return router;
 };
