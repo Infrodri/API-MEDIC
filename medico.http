@@ -1,55 +1,57 @@
 # Crear un nuevo médico
 POST http://localhost:4000/api/v1/medicos HTTP/1.1
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3YmMxNTEzOTA2OTUyOTE4Y2FiZjYyOCIsImVtYWlsIjoiYWRtaW5AdGVzdC5jb20iLCJ1c2VybmFtZSI6ImFkbWluIiwiaWF0IjoxNzQwNTMwNTMzLCJleHAiOjE3NDA1MzQxMzN9.cgeyW8BN2dQ1Dz_4_0l2VhZq7EOepCCcLplnMogjS2Y
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3YmMxNTEzOTA2OTUyOTE4Y2FiZjYyOCIsImVtYWlsIjoiYWRtaW5AdGVzdC5jb20iLCJ1c2VybmFtZSI6ImFkbWluIiwiaWF0IjoxNzQwNDMxMjczLCJleHAiOjE3NDA0MzQ4NzN9.X7xTUuFZZjjZVpxYtrAA6n_eolFR9QKP2p19eGLnhk4
 
 {
-  "primerNombre": "María",
-  "segundoNombre": "Isabel",
-  "primerApellido": "Gómez",
-  "segundoApellido": "López",
-  "fechaNacimiento": "1985-03-20",
-  "lugarNacimiento": "Quito",
-  "nacionalidad": "Ecuatoriana",
-  "ciudadDondeVive": "Guayaquil",
-  "direccion": "Calle 789, Barrio Central",
-  "telefono": "987654323",
-  "celular": "0987654323",
-  "genero": "Femenino",
-  "cedula": "1234567891"
+  "cedula": "1234567890",
+  "primerNombre": "Juan",
+  "segundoNombre": "Carlos",
+  "primerApellido": "Pérez",
+  "segundoApellido": "Gómez",
+  "fechaNacimiento": "1980-05-15",
+  "lugarNacimiento": "Bogotá",
+  "nacionalidad": "Colombiana",
+  "ciudadDondeVive": "Medellín",
+  "direccion": "Calle 123 #45-67",
+  "telefono": "1234567",
+  "celular": "3001234567",
+  "genero": "Masculino",
+  "especialidad": "Cardiología",
+  "usuario": "67bc14f2906952918cabf625"  # Ejemplo de ID de usuario en Users
 }
 
 ###
 # Listar todos los médicos
 GET http://localhost:4000/api/v1/medicos HTTP/1.1
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3YmMxNTEzOTA2OTUyOTE4Y2FiZjYyOCIsImVtYWlsIjoiYWRtaW5AdGVzdC5jb20iLCJ1c2VybmFtZSI6ImFkbWluIiwiaWF0IjoxNzQwNTMwNTMzLCJleHAiOjE3NDA1MzQxMzN9.cgeyW8BN2dQ1Dz_4_0l2VhZq7EOepCCcLplnMogjS2Y
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3YmMxNTEzOTA2OTUyOTE4Y2FiZjYyOCIsImVtYWlsIjoiYWRtaW5AdGVzdC5jb20iLCJ1c2VybmFtZSI6ImFkbWluIiwiaWF0IjoxNzQwNDMxMjczLCJleHAiOjE3NDA0MzQ4NzN9.X7xTUuFZZjjZVpxYtrAA6n_eolFR9QKP2p19eGLnhk4
 
 ###
 # Obtener un médico por ID
 GET http://localhost:4000/api/v1/medicos/67bc130a7d9eab592d2d02cf HTTP/1.1
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3YmMxNTEzOTA2OTUyOTE4Y2FiZjYyOCIsImVtYWlsIjoiYWRtaW5AdGVzdC5jb20iLCJ1c2VybmFtZSI6ImFkbWluIiwiaWF0IjoxNzQwNTMwNTMzLCJleHAiOjE3NDA1MzQxMzN9.cgeyW8BN2dQ1Dz_4_0l2VhZq7EOepCCcLplnMogjS2YA
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3YmMxNWNjOTA2OTUyOTE4Y2FiZjYzMSIsImVtYWlsIjoidGVzdEB0ZXN0LmNvbSIsInVzZXJuYW1lIjoidGVzdCIsImlhdCI6MTc0MDQyOTQ1NCwiZXhwIjoxNzQwNDMzMDU0fQ.bjveHow1X4ycarXRLCwPsplGh8KkS-ooho5nsQDp2MA
 
 ###
 # Actualizar un médico
 PUT http://localhost:4000/api/v1/medicos/67009a72d4d2db15547140a1 HTTP/1.1
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3YmMxNTEzOTA2OTUyOTE4Y2FiZjYyOCIsImVtYWlsIjoiYWRtaW5AdGVzdC5jb20iLCJ1c2VybmFtZSI6ImFkbWluIiwiaWF0IjoxNzQwNTMwNTMzLCJleHAiOjE3NDA1MzQxMzN9.cgeyW8BN2dQ1Dz_4_0l2VhZq7EOepCCcLplnMogjS2Y
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3MDA5YTVhZDRkMmRiMTU1NDcxNDA5OSIsImVtYWlsIjoiYWRtaW5AdGVzdC5jb20iLCJ1c2VybmFtZSI6ImFkbWluIiwiaWF0IjoxNzI4MDk5NzY5LCJleHAiOjE3MjgxMDMzNjl9.reKeBCmX--AwQ3y0Yl90nK5jMrJypWX0k67PlrnrX4U
 
 {
-  "direccion": "Avenida 101, Nueva Zona",
-  "telefono": "987654324"
+  "especialidad": "Neurología",
+  "celular": "3009876543"
 }
 
 ###
 # Eliminar lógicamente un médico (cambiar a Inactivo)
 PATCH http://localhost:4000/api/v1/medicos/67bc14f2906952918cabf625/soft-delete HTTP/1.1
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3YmMxNTEzOTA2OTUyOTE4Y2FiZjYyOCIsImVtYWlsIjoiYWRtaW5AdGVzdC5jb20iLCJ1c2VybmFtZSI6ImFkbWluIiwiaWF0IjoxNzQwNTMwNTMzLCJleHAiOjE3NDA1MzQxMzN9.cgeyW8BN2dQ1Dz_4_0l2VhZq7EOepCCcLplnMogjS2Y
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3YmMxNTEzOTA2OTUyOTE4Y2FiZjYyOCIsImVtYWlsIjoiYWRtaW5AdGVzdC5jb20iLCJ1c2VybmFtZSI6ImFkbWluIiwiaWF0IjoxNzQwNDMwNDg2LCJleHAiOjE3NDA0MzQwODZ9.BgTY0C7SDKRdsQkhz6kGbudEZNxte0MpRvgt-QudT2o
 
 ###
-# Eliminar físicamente un médico (si aplica, aunque en tu sistema prefieres eliminaciones lógicas)
+# Eliminar físicamente un médico
 DELETE http://localhost:4000/api/v1/medicos/67bc14f2906952918cabf625 HTTP/1.1
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3YmMxNTEzOTA2OTUyOTE4Y2FiZjYyOCIsImVtYWlsIjoiYWRtaW5AdGVzdC5jb20iLCJ1c2VybmFtZSI6ImFkbWluIiwiaWF0IjoxNzQwNTMwNTMzLCJleHAiOjE3NDA1MzQxMzN9.cgeyW8BN2dQ1Dz_4_0l2VhZq7EOepCCcLplnMogjS2Y
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3YmMxNTEzOTA2OTUyOTE4Y2FiZjYyOCIsImVtYWlsIjoiYWRtaW5AdGVzdC5jb20iLCJ1c2VybmFtZSI6ImFkbWluIiwiaWF0IjoxNzQwNDMwNDg2LCJleHAiOjE3NDA0MzQwODZ9.BgTY0C7SDKRdsQkhz6kGbudEZNxte0MpRvgt-QudT2o

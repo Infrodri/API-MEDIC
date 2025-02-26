@@ -4,10 +4,20 @@ import { User } from "types/UsersTypes";
 
 export interface Administrativos extends Document {
   getBasicInfo(): any;
-  nombre: string; // Nombre del administrativo
-  apellido: string; // Apellido del administrativo
-  cedula: string; // Cédula del administrativo
-  profesion: string; // Profesión (e.g., "Recepcionista")
+  cedula: string; // ID number
+  primerNombre: string; // First name
+  segundoNombre: string; // Second name
+  primerApellido: string; // First last name
+  segundoApellido: string; // Second last name
+  fechaNacimiento: Date; // Birth date
+  lugarNacimiento: string; // Birth place
+  nacionalidad: string; // Nationality
+  ciudadDondeVive: string; // City of residence
+  direccion: string; // Address
+  telefono: string; // Landline phone
+  celular: string; // Cell phone
+  genero: string; // Gender
+  profesion: string; // Profession
   usuario: Types.ObjectId | User; // Relación con Users para autenticación
   estado: "Activo" | "Inactivo"; // Status for logical deletion
 }

@@ -4,9 +4,19 @@ Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3YmMxNTEzOTA2OTUyOTE4Y2FiZjYyOCIsImVtYWlsIjoiYWRtaW5AdGVzdC5jb20iLCJ1c2VybmFtZSI6ImFkbWluIiwiaWF0IjoxNzQwNDMxMjczLCJleHAiOjE3NDA0MzQ4NzN9.X7xTUuFZZjjZVpxYtrAA6n_eolFR9QKP2p19eGLnhk4
 
 {
-  "nombre": "María",
-  "apellido": "González",
-  "cedula": "1234567890",
+  "cedula": "0987654321",
+  "primerNombre": "Ana",
+  "segundoNombre": "María",
+  "primerApellido": "López",
+  "segundoApellido": "Rodríguez",
+  "fechaNacimiento": "1985-08-20",
+  "lugarNacimiento": "Cali",
+  "nacionalidad": "Colombiana",
+  "ciudadDondeVive": "Bogotá",
+  "direccion": "Carrera 10 #20-30",
+  "telefono": "7654321",
+  "celular": "3109876543",
+  "genero": "Femenino",
   "profesion": "Recepcionista",
   "usuario": "67bc14f2906952918cabf625"  # Ejemplo de ID de usuario en Users
 }
@@ -30,7 +40,8 @@ Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3MDA5YTVhZDRkMmRiMTU1NDcxNDA5OSIsImVtYWlsIjoiYWRtaW5AdGVzdC5jb20iLCJ1c2VybmFtZSI6ImFkbWluIiwiaWF0IjoxNzI4MDk5NzY5LCJleHAiOjE3MjgxMDMzNjl9.reKeBCmX--AwQ3y0Yl90nK5jMrJypWX0k67PlrnrX4U
 
 {
-  "profesion": "Asistente Administrativo"
+  "profesion": "Asistente Administrativo",
+  "celular": "3101234567"
 }
 
 ###
