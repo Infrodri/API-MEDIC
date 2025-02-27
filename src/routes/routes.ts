@@ -44,7 +44,7 @@ export default () => {
     // Roles Routes
     router.get("/roles", verifyToken, getPermissons, findRoles);
     router.get("/roles/:id", verifyToken, getPermissons, findRolesById);
-    router.post("/roles", createRoles);
+    router.post("/roles", verifyToken, getPermissons, createRoles);
     router.put("/roles/:id", verifyToken, getPermissons, updateRoles);
     router.delete("/roles/:id", verifyToken, getPermissons, deleteRoles);
   
