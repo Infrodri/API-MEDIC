@@ -9,21 +9,23 @@ export class UserRepository implements IUserRepository {
   }
 
   async find(query?: Query): Promise<User[]> {
-    return await UserModel.find(query || {})
-      .populate("roles")
-      .exec();
+    return await UserModel.find(query || {}).exec();
+  }
+
+  async findActive(query?: Query): Promise<User[]> {
+    return await UserModel.find({ ...query, estado: "Activo" }).exec();
   }
 
   async findOne(query: Query): Promise<User | null> {
-    return await UserModel.findOne(query).populate("roles").exec();
+    return await UserModel.findOne(query).exec();
   }
 
   async findById(id: string): Promise<User | null> {
-    return await UserModel.findById(id).populate("roles").exec();
+    return await UserModel.findById(id).exec();
   }
 
   async update(id: string, data: Partial<User>): Promise<User | null> {
-    return await UserModel.findByIdAndUpdate(id, data, { new: true }).populate("roles").exec();
+    return await UserModel.findByIdAndUpdate(id, data, { new: true, runValidators: true }).exec();
   }
 
   async delete(id: string): Promise<boolean> {

@@ -4,7 +4,13 @@ import { Roles } from "types/RolesTypes"; // Asegúrate de ajustar la ruta segú
 import { Permisos } from "types/PermisosTypes";
 
 export interface RolesPermisos extends Document {
-  getBasicInfo(): any;
+  // Modificación: Especificamos el tipo de retorno de getBasicInfo para mayor claridad
+  getBasicInfo(): {
+    _id: string;
+    rol: Types.ObjectId | Roles;
+    permiso: Types.ObjectId | Permisos;
+    estado: "Activo" | "Inactivo";
+  };
   rol: Types.ObjectId | Roles; // Relación con Roles
   permiso: Types.ObjectId | Permisos; // Relación con Permisos
   estado: "Activo" | "Inactivo"; // Status for logical deletion

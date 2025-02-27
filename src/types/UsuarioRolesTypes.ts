@@ -4,7 +4,13 @@ import { User } from "types/UsersTypes"; // Asegúrate de ajustar la ruta según
 import { Roles } from "types/RolesTypes"; // Asegúrate de ajustar la ruta según tu estructura
 
 export interface UsuarioRoles extends Document {
-  getBasicInfo(): any;
+  // Modificación: Especificamos el tipo de retorno de getBasicInfo para mayor claridad
+  getBasicInfo(): {
+    _id: string;
+    usuario: Types.ObjectId | User;
+    rol: Types.ObjectId | Roles;
+    estado: "Activo" | "Inactivo";
+  };
   usuario: Types.ObjectId | User; // Relación con Users
   rol: Types.ObjectId | Roles; // Relación con Roles
   estado: "Activo" | "Inactivo"; // Status for logical deletion

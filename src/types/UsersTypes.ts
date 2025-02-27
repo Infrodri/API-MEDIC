@@ -1,19 +1,18 @@
 import { Document } from "mongoose";
 import { Query, Repository } from "./RepositoryTypes";
-import { Roles } from "./RolesTypes";
 
 export interface User extends Document {
   name: string;
   username: string;
   email: string;
   password: string;
-  roles?: Roles[];
-  permissions?: string[];
+  estado: "Activo" | "Inactivo"; // Nuevo campo  permissions?: string[];
   comparePassword(password: string): Promise<boolean>;
 }
 
 export interface IUserRepository extends Repository<User> {
   findOne(query: Query): Promise<User | null>;
+  findActive(query?: Query): Promise<User[]>; // Nuevo método para encontrar usuarios activos
 }
 
 export interface IUserService {
@@ -23,4 +22,5 @@ export interface IUserService {
   findUsersByEmail(email: string): Promise<User | null>;
   updateUser(id: string, user: Partial<User>): Promise<User | null>;
   deleteUser(id: string): Promise<boolean>;
+  softDeleteUser(id: string): Promise<{ success: boolean; message: string }>; // Nuevo método para eliminar lógicamente un usuario
 }

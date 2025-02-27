@@ -2,7 +2,12 @@ import { Document } from "mongoose";
 import { Query, Repository } from "./RepositoryTypes";
 
 export interface Permisos extends Document {
-  getBasicInfo(): any;
+  // Modificación: Especificamos el tipo de retorno de getBasicInfo para mayor claridad
+  getBasicInfo(): {
+    _id: string;
+    nombre: string;
+    estado: "Activo" | "Inactivo";
+  };
   nombre: string; // Nombre del permiso (e.g., "read_users", "write_posts")
   descripcion: string; // Descripción del permiso
   estado: "Activo" | "Inactivo"; // Status for logical deletion

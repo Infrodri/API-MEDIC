@@ -1,3 +1,4 @@
+
 import { UserRepository } from "@repositories/userRepositories";
 import { UserService } from "@services/userService";
 import { Request, Response } from "express";
@@ -9,66 +10,71 @@ const userService: IUserService = new UserService(userRepository);
 export const findUsers = async (req: Request, res: Response) => {
   try {
     const users = await userService.findUsers();
-    if (users.length === 0) return res.status(404).json({ message: "no users Found." });
+    if (users.length === 0) return res.status(404).json({ message: "No hay usuarios encontrados." });
 
-    res.json(users);
+    res.json({ users, message: "Lista de usuarios obtenida con éxito" });
   } catch (error) {
     console.log("error :>> ", error);
-    res.status(500).json(error);
+    res.status(500).json({ error: "Error al obtener usuarios", details: error });
   }
 };
 
 export const findUsersById = async (req: Request, res: Response) => {
   try {
-    const users = await userService.findUsersById(req.params.id);
-    if (!users) return res.status(404).json({ message: "Not user Found" });
+    const user = await userService.findUsersById(req.params.id);
+    if (!user) return res.status(404).json({ message: "Usuario no encontrado" });
 
-    res.json(users);
+    res.json({ user, message: "Usuario encontrado con éxito" });
   } catch (error) {
     console.log("error :>> ", error);
-    res.status(500).json(error);
+    res.status(500).json({ error: "Error al obtener usuario", details: error });
   }
 };
 
 export const createUser = async (req: Request, res: Response) => {
   try {
-    const newUser: User = req.body;
-    const result = await userService.createUser(newUser);
+    const newUser: Omit<User, keyof Document> = req.body;
+    const user = await userService.createUser(newUser);
 
-    res.status(201).json(result);
+    res.status(201).json({ user, message: "Usuario creado con éxito" });
   } catch (error) {
     console.log("error :>> ", error);
-    res.status(400).json(error);
+    res.status(400).json({ error: "Error al crear usuario", details: error });
   }
 };
+
 export const updateUser = async (req: Request, res: Response) => {
   try {
-    console.log("ID del usuario a actualizar:", req.params.id);
-    console.log("Datos a actualizar:", req.body);
-    const result = await userService.updateUser(req.params.id, req.body);
-    if (!result) return res.status(404).json({ message: "Not user Found" });
+    const user = await userService.updateUser(req.params.id, req.body);
+    if (!user) return res.status(404).json({ message: "Usuario no encontrado" });
 
-    res.json(result);
+    res.json({ user, message: "Usuario actualizado con éxito" });
   } catch (error) {
     console.log("error :>> ", error);
-    res.status(500).json(error);
+    res.status(500).json({ error: "Error al actualizar usuario", details: error });
   }
 };
 
+export const softDeleteUser = async (req: Request, res: Response) => {
+  try {
+    const { success, message } = await userService.softDeleteUser(req.params.id);
+    if (!success) return res.status(404).json({ message: "Usuario no encontrado" });
+
+    res.json({ success, message });
+  } catch (error) {
+    console.log("error :>> ", error);
+    res.status(500).json({ error: "Error al eliminar usuario", details: error });
+  }
+};
 
 export const deleteUser = async (req: Request, res: Response) => {
   try {
-    console.log("ID del usuario a eliminar:", req.params.id);
     const success = await userService.deleteUser(req.params.id);
-    
-    if (!success) {
-      console.log("No se encontró el usuario para eliminar.");
-      return res.status(404).json({ message: "Not user Found" });
-    }
+    if (!success) return res.status(404).json({ message: "Usuario no encontrado" });
 
-    res.json({ message: "Usuario eliminado con éxito" });
+    res.json({ success, message: "Usuario eliminado físicamente" });
   } catch (error) {
-    console.log("Error al eliminar:", error);
-    res.status(500).json({ message: "Error al eliminar el usuario", error });
+    console.log("error :>> ", error);
+    res.status(500).json({ error: "Error al eliminar usuario físicamente", details: error });
   }
 };
