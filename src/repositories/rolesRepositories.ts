@@ -4,22 +4,12 @@ import { IRolesRepository, Roles } from "types/RolesTypes";
 
 export class RolesRepository implements IRolesRepository {
   async create(data: Roles): Promise<Roles> {
-    const newRole = new RolesModel(data);
-    return await newRole.save();
+    const newRoles = new RolesModel(data);
+    return await newRoles.save();
   }
 
   async find(query?: Query): Promise<Roles[]> {
     return await RolesModel.find(query || {}).exec();
-  }
-
-  // Método añadido para buscar solo roles activos
-  async findActive(query?: Query): Promise<Roles[]> {
-    return await RolesModel.find({ ...query, estado: "Activo" }).exec();
-  }
-
-  // Método añadido para buscar un rol específico
-  async findOne(query: Query): Promise<Roles | null> {
-    return await RolesModel.findOne(query).exec();
   }
 
   async findById(id: string): Promise<Roles | null> {
@@ -27,10 +17,7 @@ export class RolesRepository implements IRolesRepository {
   }
 
   async update(id: string, data: Partial<Roles>): Promise<Roles | null> {
-    return await RolesModel.findByIdAndUpdate(id, data, {
-      new: true,
-      runValidators: true,
-    }).exec();
+    return await RolesModel.findByIdAndUpdate(id, data, { new: true }).exec();
   }
 
   async delete(id: string): Promise<boolean> {

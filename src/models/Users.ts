@@ -4,15 +4,39 @@ import bcrypt from "bcrypt";
 
 const UserSchema: Schema = new Schema<User>(
   {
-    name: { type: String, required: true },
-    username: { type: String, required: true, unique: true },
-    email: { type: String, required: true, unique: true },
-    password: { type: String, required: true, trim: true },
-    estado: { type: String, enum: ["Activo", "Inactivo"], default: "Activo" }, // Nuevo campo
+    name: {
+      type: String,
+      required: true
+    },
+    username: {
+      type: String,
+      required: true,
+      unique: true
+    },
+    email: {
+      type: String,
+      required: true,
+      unique: true
+    },
+    password: {
+      type: String,
+      required: true,
+      trim: true
+    },
+    permissions: {
+      type: [String],
+      default: []
+    },
+    roles: [
+      {
+        ref: "Roles",
+        type: Schema.Types.ObjectId
+      }
+    ]
   },
   {
     timestamps: true,
-    versionKey: false,
+    versionKey: false
   }
 );
 
@@ -34,5 +58,4 @@ UserSchema.methods.toJSON = function () {
   delete userObj.password;
   return userObj;
 };
-
 export const UserModel = mongoose.model<User>("User", UserSchema);
