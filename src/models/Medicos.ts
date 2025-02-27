@@ -78,10 +78,16 @@ const MedicoSchema: Schema = new Schema<Medico>(
       enum: ["Masculino", "Femenino", "Otro"],
       default: "Otro",
     },
+    usuario: {
+      type: Schema.Types.ObjectId,
+      ref: "Users",
+      required: [true, "El usuario asociado es obligatorio"],
+      index: true,
+    },
     estado: {
       type: String,
       enum: ["Activo", "Inactivo"],
-      default: "Activo",
+      default: "Inactivo",
     },
   },
   {
@@ -93,9 +99,11 @@ const MedicoSchema: Schema = new Schema<Medico>(
 // Method to get basic medico info (for the list)
 MedicoSchema.methods.getBasicInfo = function () {
   return {
+    _id: this._id,
     cedula: this.cedula,
     primerNombre: this.primerNombre,
     primerApellido: this.primerApellido,
+    especialidad: this.especialidad,
     estado: this.estado,
   };
 };

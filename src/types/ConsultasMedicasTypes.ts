@@ -23,6 +23,7 @@ export interface IConsultasMedicasRepository extends Repository<ConsultasMedicas
 }
 
 export interface IConsultasMedicasService {
+  concludeConsulta(id: string, medicoId: any): { success: any; message: any; } | PromiseLike<{ success: any; message: any; }>;
   createConsultasMedicas(consulta: ConsultasMedicas): Promise<{ consulta: ConsultasMedicas; message: string }>;
   findConsultasMedicas(query?: Query): Promise<ConsultasMedicas[]>;
   findConsultasMedicasById(id: string): Promise<ConsultasMedicas | null>;
