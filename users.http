@@ -1,7 +1,6 @@
 POST http://localhost:4000/api/v1/users HTTP/1.1
 Content-Type: application/json
-Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3YzA4MzgxOTdjN2VhYzQzYmEzNzM3ZiIsImVtYWlsIjoiYWRtaW5AdGVzdC5jb20iLCJ1c2VybmFtZSI6ImFkbWluIiwiaWF0IjoxNzQwNzE3NzQ0LCJleHAiOjE3NDA3MjEzNDR9.NEagFdw6olSwB6hMeGJ5iKZHkLEZg5FZVHrqMB4rAXk
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3YzA4MzgxOTdjN2VhYzQzYmEzNzM3ZiIsImVtYWlsIjoiYWRtaW5AdGVzdC5jb20iLCJ1c2VybmFtZSI6ImFkbWluIiwiaWF0IjoxNzQwNzIxNTg1LCJleHAiOjE3NDEwODE1ODV9.X3b3zSiszSInn2QkVkh2_xjoh19aez5m-8S-WCIcix4
 
 {
   "name": "pedro",
@@ -15,7 +14,6 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3YzA4MzgxO
 GET http://localhost:4000/api/v1/users HTTP/1.1
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3YzA4MzgxOTdjN2VhYzQzYmEzNzM3ZiIsImVtYWlsIjoiYWRtaW5AdGVzdC5jb20iLCJ1c2VybmFtZSI6ImFkbWluIiwiaWF0IjoxNzQwNzIxNTg1LCJleHAiOjE3NDEwODE1ODV9.X3b3zSiszSInn2QkVkh2_xjoh19aez5m-8S-WCIcix4
-
 ###
 GET http://localhost:4000/api/v1/users/67c09aab2c89d7ec9c500da2 HTTP/1.1
 Content-Type: application/json
