@@ -14,13 +14,13 @@
       "@models/*": ["models/*"],
       "@routes/*": ["routes/*"],
       "@server/*": ["server/*"],
-      "@config/*": ["config/*"]
+      "@config/*": ["config/*"],
+      "@types/*": ["../@types/*"] // Añadimos para mapear @types desde la raíz
     },
     "typeRoots": ["@types", "./node_modules/@types"]
   },
-  "include": ["src"],
-  "exclude": ["node_modules"],
+  "include": ["src/**/*", "@types/**/*"], // Añadimos para incluir explícitamente @types  "exclude": ["node_modules"],
   "ts-node": {
-    "require": ["tsconfig-paths/register"]
+  "require": ["tsconfig-paths/register"]
   }
 }

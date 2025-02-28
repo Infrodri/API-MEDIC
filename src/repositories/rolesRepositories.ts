@@ -1,13 +1,9 @@
-
-//las consultas e inserciones de la base de datos se hacen en esta carpeta
-
 import { RolesModel } from "@models/Roles";
 import { Query } from "types/RepositoryTypes";
 import { IRolesRepository, Roles } from "types/RolesTypes";
 
 export class RolesRepository implements IRolesRepository {
   async create(data: Roles): Promise<Roles> {
-    console.log("Insertando roles:", data); // Agrega esta línea para depurar
     const newRoles = new RolesModel(data);
     return await newRoles.save();
   }

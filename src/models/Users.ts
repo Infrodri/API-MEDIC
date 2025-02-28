@@ -29,7 +29,6 @@ const UserSchema: Schema = new Schema<User>(
     },
     roles: [
       {
-        //en mongoose puede referencial a coleciones de otros en el caso de este es guardar el id de roles
         ref: "Roles",
         type: Schema.Types.ObjectId
       }
@@ -41,7 +40,6 @@ const UserSchema: Schema = new Schema<User>(
   }
 );
 
-//metodo de verificacion de contraseĆ±a e incriptacion de contraseĆ±a
 UserSchema.pre<User>("save", async function (next) {
   if (this.isModified("password") || this.isNew) {
     const salt = await bcrypt.genSalt(12);
@@ -50,11 +48,11 @@ UserSchema.pre<User>("save", async function (next) {
   }
   next();
 });
-//comparacion de contrasena
+
 UserSchema.method("comparePassword", async function (password: string): Promise<boolean> {
   return await bcrypt.compare(password, this.password as string);
 });
-//metodo para no mostrar la contrasena en el json
+
 UserSchema.methods.toJSON = function () {
   const userObj = this.toObject();
   delete userObj.password;

@@ -7,6 +7,9 @@ export class ConsultasMedicasService implements IConsultasMedicasService {
   constructor(consultasMedicasRepository: IConsultasMedicasRepository) {
     this.consultasMedicasRepository = consultasMedicasRepository;
   }
+  concludeConsulta(id: string, medicoId: any): { success: any; message: any; } | PromiseLike<{ success: any; message: any; }> {
+    throw new Error("Method not implemented.");
+  }
 
   async createConsultasMedicas(consultaData: Omit<ConsultasMedicas, keyof Document>): Promise<{ consulta: ConsultasMedicas; message: string }> {
     const newConsulta = await this.consultasMedicasRepository.create({
@@ -50,4 +53,5 @@ export class ConsultasMedicasService implements IConsultasMedicasService {
     await this.consultasMedicasRepository.update(id, consulta);
     return { success: true, message: "Consulta médica cambiada a estado Inactivo" };
   }
+  
 }

@@ -1,7 +1,7 @@
 import mongoose, { Schema } from "mongoose";
-import { Medico } from "types/MedicoTypes";
+import { Administrativos } from "types/AdministrativosTypes";
 
-const MedicoSchema: Schema = new Schema<Medico>(
+const AdministrativosSchema: Schema = new Schema<Administrativos>(
   {
     cedula: {
       type: String,
@@ -78,6 +78,11 @@ const MedicoSchema: Schema = new Schema<Medico>(
       enum: ["Masculino", "Femenino", "Otro"],
       default: "Otro",
     },
+    profesion: {
+      type: String,
+      required: [true, "La profesión es obligatoria"],
+      trim: true,
+    },
     usuario: {
       type: Schema.Types.ObjectId,
       ref: "Users",
@@ -87,25 +92,24 @@ const MedicoSchema: Schema = new Schema<Medico>(
     estado: {
       type: String,
       enum: ["Activo", "Inactivo"],
-      default: "Inactivo",
+      default: "Activo",
     },
   },
   {
-    timestamps: true, // Automatically add createdAt and updatedAt
+    timestamps: true,
     versionKey: false,
   }
 );
 
-// Method to get basic medico info (for the list)
-MedicoSchema.methods.getBasicInfo = function () {
+AdministrativosSchema.methods.getBasicInfo = function () {
   return {
-    _id: this._id, // Usamos el _id generado por MongoDB
+    _id: this._id,
     cedula: this.cedula,
     primerNombre: this.primerNombre,
     primerApellido: this.primerApellido,
-    especialidad: this.especialidad,
+    profesion: this.profesion,
     estado: this.estado,
   };
 };
 
-export const MedicoModel = mongoose.model<Medico>("Medico", MedicoSchema);
+export const AdministrativosModel = mongoose.model<Administrativos>("Administrativos", AdministrativosSchema);

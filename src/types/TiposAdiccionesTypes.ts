@@ -2,6 +2,7 @@ import { Document } from "mongoose";
 import { Query, Repository } from "./RepositoryTypes";
 
 export interface TiposAdiccion extends Document {
+  getBasicInfo(): any;
   nombreAdiccion: string; // Nombre de la adicción
   descripcion: string; // Descripción de la adicción
   estado: "Activo" | "Inactivo"; // Status for logical deletion

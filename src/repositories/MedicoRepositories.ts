@@ -9,23 +9,23 @@ export class MedicoRepository implements IMedicoRepository {
   }
 
   async find(query?: Query): Promise<Medico[]> {
-    return await MedicoModel.find(query || {}).exec();
+    return await MedicoModel.find(query || {}).populate("usuario").exec();
   }
 
   async findActive(query?: Query): Promise<Medico[]> {
-    return await MedicoModel.find({ ...query, estado: "Activo" }).exec();
+    return await MedicoModel.find({ ...query, estado: "Activo" }).populate("usuario").exec();
   }
 
   async findOne(query: Query): Promise<Medico | null> {
-    return await MedicoModel.findOne(query).exec();
+    return await MedicoModel.findOne(query).populate("usuario").exec();
   }
 
   async findById(id: string): Promise<Medico | null> {
-    return await MedicoModel.findById(id).exec();
+    return await MedicoModel.findById(id).populate("usuario").exec();
   }
 
   async update(id: string, data: Partial<Medico>): Promise<Medico | null> {
-    return await MedicoModel.findByIdAndUpdate(id, data, { new: true, runValidators: true }).exec();
+    return await MedicoModel.findByIdAndUpdate(id, data, { new: true, runValidators: true }).populate("usuario").exec();
   }
 
   async delete(id: string): Promise<boolean> {

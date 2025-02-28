@@ -1,5 +1,6 @@
-import { Document } from "mongoose";
+import { Document, Types } from "mongoose";
 import { Query, Repository } from "./RepositoryTypes";
+import { User } from "./UsersTypes";
 
 export interface Medico extends Document {
   getBasicInfo(): any;
@@ -16,6 +17,8 @@ export interface Medico extends Document {
   telefono: string; // Landline phone
   celular: string; // Cell phone
   genero: string; // Gender
+  especialidad: string;
+  usuario: Types.ObjectId | User; // Relación con Users para autenticación
   estado: "Activo" | "Inactivo"; // Status for logical deletion
 }
 

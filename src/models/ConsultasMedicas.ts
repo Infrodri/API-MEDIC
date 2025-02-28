@@ -3,13 +3,31 @@ import { ConsultasMedicas } from "types/ConsultasMedicasTypes";
 
 const ConsultasMedicasSchema: Schema = new Schema<ConsultasMedicas>(
   {
-    paciente: { type: mongoose.Schema.Types.ObjectId, ref: 'Paciente' },
-     medico: { type: mongoose.Schema.Types.ObjectId, ref: 'Medico' },
-    fichaMedica: { type: mongoose.Schema.Types.ObjectId, ref: 'FichasMedicas' },
+    paciente: {
+      type: Schema.Types.ObjectId,
+      ref: "Paciente",
+      required: [true, "El paciente es obligatorio"],
+      index: true,
+    },
+    medico: {
+      type: Schema.Types.ObjectId,
+      ref: "Medico",
+      required: [true, "El médico es obligatorio"],
+    },
+    fichaMedica: {
+      type: Schema.Types.ObjectId,
+      ref: "FichasMedicas",
+      required: [true, "La ficha médica es obligatoria"],
+    },
+    especialidad: {
+      type: Schema.Types.ObjectId,
+      ref: "Especialidades", // Nueva relación
+      required: [true, "La especialidad es obligatoria"],
+    },
     fecha: {
       type: Date,
       required: [true, "La fecha es obligatoria"],
-      default: Date.now, // Fecha por defecto es la actual
+      default: Date.now,
     },
     motivo: {
       type: String,
@@ -28,18 +46,18 @@ const ConsultasMedicasSchema: Schema = new Schema<ConsultasMedicas>(
     },
   },
   {
-    timestamps: true, // Automatically add createdAt and updatedAt
+    timestamps: true,
     versionKey: false,
   }
 );
 
-// Method to get basic consultas médicas info (for the list)
 ConsultasMedicasSchema.methods.getBasicInfo = function () {
   return {
-    _id: this._id, // Usamos el _id generado por MongoDB
-    paciente: this.paciente.nombre,
-    medico: this.medico.primerApellido,
+    _id: this._id,
+    paciente: this.paciente,
+    medico: this.medico,
     fichaMedica: this.fichaMedica,
+    especialidad: this.especialidad, // Incluyo especialidad
     fecha: this.fecha,
     estado: this.estado,
   };

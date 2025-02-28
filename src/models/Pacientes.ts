@@ -56,7 +56,7 @@ const PacienteSchema: Schema = new Schema<Paciente>(
     estado: {
       type: String,
       enum: ["Activo", "Inactivo"],
-      default: "Activo",
+      default: "Inactivo",
     },
   },
   {

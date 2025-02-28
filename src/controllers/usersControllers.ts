@@ -41,34 +41,27 @@ export const createUser = async (req: Request, res: Response) => {
     res.status(400).json(error);
   }
 };
+
 export const updateUser = async (req: Request, res: Response) => {
   try {
-    console.log("ID del usuario a actualizar:", req.params.id);
-    console.log("Datos a actualizar:", req.body);
-    const result = await userService.updateUser(req.params.id, req.body);
-    if (!result) return res.status(404).json({ message: "Not user Found" });
+    const users = await userService.updateUser(req.params.id, req.body);
+    if (!users) return res.status(404).json({ message: "Not user Found" });
 
-    res.json(result);
+    res.json(users);
   } catch (error) {
     console.log("error :>> ", error);
     res.status(500).json(error);
   }
 };
 
-
 export const deleteUser = async (req: Request, res: Response) => {
   try {
-    console.log("ID del usuario a eliminar:", req.params.id);
-    const success = await userService.deleteUser(req.params.id);
-    
-    if (!success) {
-      console.log("No se encontró el usuario para eliminar.");
-      return res.status(404).json({ message: "Not user Found" });
-    }
+    const users = await userService.deleteUser(req.params.id);
+    if (!users) return res.status(404).json({ message: "Not user Found" });
 
-    res.json({ message: "Usuario eliminado con éxito" });
+    res.json(users);
   } catch (error) {
-    console.log("Error al eliminar:", error);
-    res.status(500).json({ message: "Error al eliminar el usuario", error });
+    console.log("error :>> ", error);
+    res.status(500).json(error);
   }
 };

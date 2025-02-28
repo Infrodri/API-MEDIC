@@ -1,6 +1,6 @@
 import { Query } from "types/RepositoryTypes";
 import { IFichasMedicasRepository, IFichasMedicasService, FichasMedicas } from "types/FichasMedicasTypes";
-
+import { PacienteModel } from "@models/Pacientes";
 export class FichasMedicasService implements IFichasMedicasService {
   private fichasMedicasRepository: IFichasMedicasRepository;
 
@@ -13,8 +13,15 @@ export class FichasMedicasService implements IFichasMedicasService {
       ...fichaData,
       estado: "Activo", // Default status is Active
     });
+// Activar estado del paciente
+    const paciente = await PacienteModel.findById(fichaData.paciente);
+    if (paciente) {
+      paciente.estado = "Activo";
+      await paciente.save();
+    }
+
     return { ficha: newFicha, message: "Ficha médica registrada con éxito" };
-  }
+    }
 
   async findFichasMedicas(query?: Query): Promise<FichasMedicas[]> {
     return this.fichasMedicasRepository.findActive(query);

@@ -3,11 +3,14 @@ import { Query, Repository } from "./RepositoryTypes";
 import { Medico } from "types/MedicoTypes";
 import { Paciente } from "types/PacientesTypes";
 import { FichasMedicas } from "types/FichasMedicasTypes";
+import { Especialidades } from "./EspecialidadesTypes";
 
 export interface ConsultasMedicas extends Document {
-  paciente?: Paciente[];// Relación con Paciente
-  medico?: Medico[]; // Relación con Medico
-  fichaMedica?: FichasMedicas[]; // Relación con FichaMedica
+  getBasicInfo(): any;
+  paciente: Types.ObjectId | Paciente; // Relación con Paciente
+  medico: Types.ObjectId | Medico; // Relación con Medico
+  fichaMedica: Types.ObjectId | FichasMedicas; // Relación con FichaMedica
+  especialidad: Types.ObjectId | Especialidades; // Nueva relación con Especialidades
   fecha: Date; // Fecha de la consulta
   motivo: string; // Motivo de la consulta
   observaciones: string; // Observaciones de la consulta
@@ -20,6 +23,7 @@ export interface IConsultasMedicasRepository extends Repository<ConsultasMedicas
 }
 
 export interface IConsultasMedicasService {
+  concludeConsulta(id: string, medicoId: any): { success: any; message: any; } | PromiseLike<{ success: any; message: any; }>;
   createConsultasMedicas(consulta: ConsultasMedicas): Promise<{ consulta: ConsultasMedicas; message: string }>;
   findConsultasMedicas(query?: Query): Promise<ConsultasMedicas[]>;
   findConsultasMedicasById(id: string): Promise<ConsultasMedicas | null>;
