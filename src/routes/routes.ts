@@ -59,7 +59,7 @@ export default () => {
   // Rutas de Pacientes
   router.get("/pacientes", verifyToken, getPermissons, findPacientes);
   router.get("/pacientes/:id", verifyToken, getPermissons, findPacienteById);
-  router.post("/pacientes", verifyToken, getPermissons, checkRoles, createPaciente);
+  router.post("/pacientes", verifyToken, getPermissons,  createPaciente);
   router.put("/pacientes/:id", verifyToken, getPermissons, updatePaciente);
   router.delete("/pacientes/:id", verifyToken, getPermissons, deletePaciente);
   router.patch("/pacientes/:id/soft-delete", verifyToken, getPermissons, softDeletePaciente);
@@ -67,7 +67,7 @@ export default () => {
   // Rutas de Médicos
   router.get("/medicos", verifyToken, getPermissons, findMedicos);
   router.get("/medicos/:id", verifyToken, getPermissons, findMedicoById);
-  router.post("/medicos", verifyToken, getPermissons, checkRoles, createMedico);
+  router.post("/medicos", verifyToken, getPermissons,  createMedico);
   router.put("/medicos/:id", verifyToken, getPermissons, updateMedico);
   router.delete("/medicos/:id", verifyToken, getPermissons, deleteMedico);
   router.patch("/medicos/:id/soft-delete", verifyToken, getPermissons, softDeleteMedico);
@@ -75,7 +75,7 @@ export default () => {
   // Rutas de Tipos de Adicciones
   router.get("/tipos-adicciones", verifyToken, getPermissons, findTiposAdicciones);
   router.get("/tipos-adicciones/:id", verifyToken, getPermissons, findTiposAdiccionById);
-  router.post("/tipos-adicciones", verifyToken, getPermissons, checkRoles, createTiposAdiccion);
+  router.post("/tipos-adicciones", verifyToken, getPermissons,  createTiposAdiccion);
   router.put("/tipos-adicciones/:id", verifyToken, getPermissons, updateTiposAdiccion);
   router.delete("/tipos-adicciones/:id", verifyToken, getPermissons, deleteTiposAdiccion);
   router.patch("/tipos-adicciones/:id/soft-delete", verifyToken, getPermissons, softDeleteTiposAdiccion);
@@ -83,7 +83,7 @@ export default () => {
   // Rutas de Tipos Obstétricos Ginecológicos
   router.get("/tipos-obstetricos-ginecologicos", verifyToken, getPermissons, findTiposObstetricosGinecologicos);
   router.get("/tipos-obstetricos-ginecologicos/:id", verifyToken, getPermissons, findTiposObstetricosGinecologicosById);
-  router.post("/tipos-obstetricos-ginecologicos", verifyToken, getPermissons, checkRoles, createTiposObstetricosGinecologicos);
+  router.post("/tipos-obstetricos-ginecologicos", verifyToken, getPermissons, createTiposObstetricosGinecologicos);
   router.put("/tipos-obstetricos-ginecologicos/:id", verifyToken, getPermissons, updateTiposObstetricosGinecologicos);
   router.delete("/tipos-obstetricos-ginecologicos/:id", verifyToken, getPermissons, deleteTiposObstetricosGinecologicos);
   router.patch("/tipos-obstetricos-ginecologicos/:id/soft-delete", verifyToken, getPermissons, softDeleteTiposObstetricosGinecologicos);
@@ -91,7 +91,7 @@ export default () => {
   // Rutas de Tipos de Operaciones Quirúrgicas
   router.get("/tipos-operaciones-quirurgicas", verifyToken, getPermissons, findTiposOperacionesQuirurgicas);
   router.get("/tipos-operaciones-quirurgicas/:id", verifyToken, getPermissons, findTiposOperacionesQuirurgicasById);
-  router.post("/tipos-operaciones-quirurgicas", verifyToken, getPermissons, checkRoles, createTiposOperacionesQuirurgicas);
+  router.post("/tipos-operaciones-quirurgicas", verifyToken, getPermissons, createTiposOperacionesQuirurgicas);
   router.put("/tipos-operaciones-quirurgicas/:id", verifyToken, getPermissons, updateTiposOperacionesQuirurgicas);
   router.delete("/tipos-operaciones-quirurgicas/:id", verifyToken, getPermissons, deleteTiposOperacionesQuirurgicas);
   router.patch("/tipos-operaciones-quirurgicas/:id/soft-delete", verifyToken, getPermissons, softDeleteTiposOperacionesQuirurgicas);
@@ -99,7 +99,7 @@ export default () => {
   // Rutas de Exámenes Médicos
   router.get("/examenes-medicos", verifyToken, getPermissons, findExamenesMedicos);
   router.get("/examenes-medicos/:id", verifyToken, getPermissons, findExamenesMedicosById);
-  router.post("/examenes-medicos", verifyToken, getPermissons, checkRoles, createExamenesMedicos);
+  router.post("/examenes-medicos", verifyToken, getPermissons, createExamenesMedicos);
   router.put("/examenes-medicos/:id", verifyToken, getPermissons, updateExamenesMedicos);
   router.delete("/examenes-medicos/:id", verifyToken, getPermissons, deleteExamenesMedicos);
   router.patch("/examenes-medicos/:id/soft-delete", verifyToken, getPermissons, softDeleteExamenesMedicos);
@@ -107,7 +107,7 @@ export default () => {
   // Rutas de Fichas Médicas
   router.get("/fichas-medicas", verifyToken, getPermissons, findFichasMedicas);
   router.get("/fichas-medicas/:id", verifyToken, getPermissons, findFichasMedicasById);
-  router.post("/fichas-medicas", verifyToken, getPermissons, checkRoles, createFichasMedicas);
+  router.post("/fichas-medicas", verifyToken, getPermissons, createFichasMedicas);
   router.put("/fichas-medicas/:id", verifyToken, getPermissons, updateFichasMedicas);
   router.delete("/fichas-medicas/:id", verifyToken, getPermissons, deleteFichasMedicas);
   router.patch("/fichas-medicas/:id/soft-delete", verifyToken, getPermissons, softDeleteFichasMedicas);
@@ -115,7 +115,7 @@ export default () => {
   // Rutas de Consultas Médicas
   router.get("/consultas-medicas", verifyToken, getPermissons, findConsultasMedicas);
   router.get("/consultas-medicas/:id", verifyToken, getPermissons, findConsultasMedicasById);
-  router.post("/consultas-medicas", verifyToken, getPermissons, checkRoles, createConsultasMedicas);
+  router.post("/consultas-medicas", verifyToken, getPermissons, createConsultasMedicas);
   router.put("/consultas-medicas/:id", verifyToken, getPermissons, updateConsultasMedicas);
   router.delete("/consultas-medicas/:id", verifyToken, getPermissons, deleteConsultasMedicas);
   router.patch("/consultas-medicas/:id/soft-delete", verifyToken, getPermissons, softDeleteConsultasMedicas);
@@ -123,7 +123,7 @@ export default () => {
   // Rutas de Recetas Médicas
   router.get("/recetas-medicas", verifyToken, getPermissons, findRecetasMedicas);
   router.get("/recetas-medicas/:id", verifyToken, getPermissons, findRecetasMedicasById);
-  router.post("/recetas-medicas", verifyToken, getPermissons, checkRoles, createRecetasMedicas);
+  router.post("/recetas-medicas", verifyToken, getPermissons, createRecetasMedicas);
   router.put("/recetas-medicas/:id", verifyToken, getPermissons, updateRecetasMedicas);
   router.delete("/recetas-medicas/:id", verifyToken, getPermissons, deleteRecetasMedicas);
   router.patch("/recetas-medicas/:id/soft-delete", verifyToken, getPermissons, softDeleteRecetasMedicas);
@@ -131,7 +131,7 @@ export default () => {
   // Rutas de Medicamentos
   router.get("/medicamentos", verifyToken, getPermissons, findMedicamentos);
   router.get("/medicamentos/:id", verifyToken, getPermissons, findMedicamentosById);
-  router.post("/medicamentos", verifyToken, getPermissons, checkRoles, createMedicamentos);
+  router.post("/medicamentos", verifyToken, getPermissons, createMedicamentos);
   router.put("/medicamentos/:id", verifyToken, getPermissons, updateMedicamentos);
   router.delete("/medicamentos/:id", verifyToken, getPermissons, deleteMedicamentos);
   router.patch("/medicamentos/:id/soft-delete", verifyToken, getPermissons, softDeleteMedicamentos);
@@ -139,7 +139,7 @@ export default () => {
   // Rutas de Paciente-Adicciones
   router.get("/paciente-adicciones", verifyToken, getPermissons, findPacienteAdicciones);
   router.get("/paciente-adicciones/:id", verifyToken, getPermissons, findPacienteAdiccionesById);
-  router.post("/paciente-adicciones", verifyToken, getPermissons, checkRoles, createPacienteAdicciones);
+  router.post("/paciente-adicciones", verifyToken, getPermissons, createPacienteAdicciones);
   router.put("/paciente-adicciones/:id", verifyToken, getPermissons, updatePacienteAdicciones);
   router.delete("/paciente-adicciones/:id", verifyToken, getPermissons, deletePacienteAdicciones);
   router.patch("/paciente-adicciones/:id/soft-delete", verifyToken, getPermissons, softDeletePacienteAdicciones);
@@ -147,7 +147,7 @@ export default () => {
   // Rutas de Paciente-Obstétricos/Ginecológicos
   router.get("/paciente-obstetricos-ginecologicos", verifyToken, getPermissons, findPacienteObstetricosGinecologicos);
   router.get("/paciente-obstetricos-ginecologicos/:id", verifyToken, getPermissons, findPacienteObstetricosGinecologicosById);
-  router.post("/paciente-obstetricos-ginecologicos", verifyToken, getPermissons, checkRoles, createPacienteObstetricosGinecologicos);
+  router.post("/paciente-obstetricos-ginecologicos", verifyToken, getPermissons, createPacienteObstetricosGinecologicos);
   router.put("/paciente-obstetricos-ginecologicos/:id", verifyToken, getPermissons, updatePacienteObstetricosGinecologicos);
   router.delete("/paciente-obstetricos-ginecologicos/:id", verifyToken, getPermissons, deletePacienteObstetricosGinecologicos);
   router.patch("/paciente-obstetricos-ginecologicos/:id/soft-delete", verifyToken, getPermissons, softDeletePacienteObstetricosGinecologicos);
@@ -155,7 +155,7 @@ export default () => {
   // Rutas de Paciente-Operaciones
   router.get("/paciente-operaciones", verifyToken, getPermissons, findPacienteOperaciones);
   router.get("/paciente-operaciones/:id", verifyToken, getPermissons, findPacienteOperacionesById);
-  router.post("/paciente-operaciones", verifyToken, getPermissons, checkRoles, createPacienteOperaciones);
+  router.post("/paciente-operaciones", verifyToken, getPermissons, createPacienteOperaciones);
   router.put("/paciente-operaciones/:id", verifyToken, getPermissons, updatePacienteOperaciones);
   router.delete("/paciente-operaciones/:id", verifyToken, getPermissons, deletePacienteOperaciones);
   router.patch("/paciente-operaciones/:id/soft-delete", verifyToken, getPermissons, softDeletePacienteOperaciones);
@@ -163,7 +163,7 @@ export default () => {
   // Rutas de Recetas-Medicamentos
   router.get("/recetas-medicamentos", verifyToken, getPermissons, findRecetasMedicamentos);
   router.get("/recetas-medicamentos/:id", verifyToken, getPermissons, findRecetasMedicamentosById);
-  router.post("/recetas-medicamentos", verifyToken, getPermissons, checkRoles, createRecetasMedicamentos);
+  router.post("/recetas-medicamentos", verifyToken, getPermissons, createRecetasMedicamentos);
   router.put("/recetas-medicamentos/:id", verifyToken, getPermissons, updateRecetasMedicamentos);
   router.delete("/recetas-medicamentos/:id", verifyToken, getPermissons, deleteRecetasMedicamentos);
   router.patch("/recetas-medicamentos/:id/soft-delete", verifyToken, getPermissons, softDeleteRecetasMedicamentos);
@@ -171,7 +171,7 @@ export default () => {
   // Rutas de Paciente-Exámenes
   router.get("/paciente-examenes", verifyToken, getPermissons, findPacienteExamenes);
   router.get("/paciente-examenes/:id", verifyToken, getPermissons, findPacienteExamenesById);
-  router.post("/paciente-examenes", verifyToken, getPermissons, checkRoles, createPacienteExamenes);
+  router.post("/paciente-examenes", verifyToken, getPermissons, createPacienteExamenes);
   router.put("/paciente-examenes/:id", verifyToken, getPermissons, updatePacienteExamenes);
   router.delete("/paciente-examenes/:id", verifyToken, getPermissons, deletePacienteExamenes);
   router.patch("/paciente-examenes/:id/soft-delete", verifyToken, getPermissons, softDeletePacienteExamenes);
@@ -179,7 +179,7 @@ export default () => {
   // Rutas de Permisos
   router.get("/permisos", verifyToken, getPermissons, findPermisos); // Listar permisos (activos)
   router.get("/permisos/:id", verifyToken, getPermissons, findPermisosById); // Obtener permiso por ID
-  router.post("/permisos", verifyToken, getPermissons, checkRoles, createPermisos); // Crear permiso
+  router.post("/permisos", verifyToken, getPermissons, createPermisos); // Crear permiso
   router.put("/permisos/:id", verifyToken, getPermissons, updatePermisos); // Actualizar permiso
   router.delete("/permisos/:id", verifyToken, getPermissons, deletePermisos); // Eliminar físicamente (si aplica)
   router.patch("/permisos/:id/soft-delete", verifyToken, getPermissons, softDeletePermisos); // Eliminar lógicamente (cambiar a Inactivo)
@@ -187,7 +187,7 @@ export default () => {
   // Rutas de Usuario-Roles
   router.get("/usuario-roles", verifyToken, getPermissons, findUsuarioRoles); // Listar relaciones (activas)
   router.get("/usuario-roles/:id", verifyToken, getPermissons, findUsuarioRolesById); // Obtener relación por ID
-  router.post("/usuario-roles", verifyToken, getPermissons, checkRoles, createUsuarioRoles); // Crear relación
+  router.post("/usuario-roles", verifyToken, getPermissons, createUsuarioRoles); // Crear relación
   router.put("/usuario-roles/:id", verifyToken, getPermissons, updateUsuarioRoles); // Actualizar relación
   router.delete("/usuario-roles/:id", verifyToken, getPermissons, deleteUsuarioRoles); // Eliminar físicamente (si aplica)
   router.patch("/usuario-roles/:id/soft-delete", verifyToken, getPermissons, softDeleteUsuarioRoles); // Eliminar lógicamente (cambiar a Inactivo)
@@ -195,7 +195,7 @@ export default () => {
   // Rutas de Roles-Permisos
   router.get("/roles-permisos", verifyToken, getPermissons, findRolesPermisos); // Listar relaciones (activas)
   router.get("/roles-permisos/:id", verifyToken, getPermissons, findRolesPermisosById); // Obtener relación por ID
-  router.post("/roles-permisos", verifyToken, getPermissons, checkRoles, createRolesPermisos); // Crear relación
+  router.post("/roles-permisos", verifyToken, getPermissons, createRolesPermisos); // Crear relación
   router.put("/roles-permisos/:id", verifyToken, getPermissons, updateRolesPermisos); // Actualizar relación
   router.delete("/roles-permisos/:id", verifyToken, getPermissons, deleteRolesPermisos); // Eliminar físicamente (si aplica)
   router.patch("/roles-permisos/:id/soft-delete", verifyToken, getPermissons, softDeleteRolesPermisos); // Eliminar lógicamente (cambiar a Inactivo)

@@ -3,16 +3,8 @@ import { FichasMedicas } from "types/FichasMedicasTypes";
 
 const FichasMedicasSchema: Schema = new Schema<FichasMedicas>(
   {
-    paciente: {
-      type: Schema.Types.ObjectId,
-      ref: "Paciente", // Relación con la colección Pacientes
-      required: [true, "El paciente es obligatorio"],
-    },
-    medico: {
-      type: Schema.Types.ObjectId,
-      ref: "Medico", // Relación con la colección Medicos
-      required: [true, "El médico es obligatorio"],
-    },
+    paciente: { type: mongoose.Schema.Types.ObjectId, ref: 'Paciente' },
+     medico: { type: mongoose.Schema.Types.ObjectId, ref: 'Medico' },
     fecha: {
       type: Date,
       required: [true, "La fecha es obligatoria"],
@@ -39,8 +31,8 @@ const FichasMedicasSchema: Schema = new Schema<FichasMedicas>(
 FichasMedicasSchema.methods.getBasicInfo = function () {
   return {
     _id: this._id, // Usamos el _id generado por MongoDB
-    paciente: this.paciente,
-    medico: this.medico,
+    paciente: this.paciente.nombre,
+    medico: this.medico.primerApellido,
     fecha: this.fecha,
     estado: this.estado,
   };

@@ -93,6 +93,7 @@ const MedicoSchema: Schema = new Schema<Medico>(
 // Method to get basic medico info (for the list)
 MedicoSchema.methods.getBasicInfo = function () {
   return {
+    _id: this._id, // Usamos el _id generado por MongoDB
     cedula: this.cedula,
     primerNombre: this.primerNombre,
     primerApellido: this.primerApellido,

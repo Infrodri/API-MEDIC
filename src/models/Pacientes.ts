@@ -68,6 +68,8 @@ const PacienteSchema: Schema = new Schema<Paciente>(
 // Method to get basic patient info (for the list)
 PacienteSchema.methods.getBasicInfo = function () {
   return {
+    _id: this._id, // Usamos el _id generado por MongoDB
+
     nombre: this.nombre,
     apellido: this.apellido,
     cedula: this.cedula,

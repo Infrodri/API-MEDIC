@@ -9,8 +9,9 @@ export class PacienteService implements IPacienteService {
   }
 
   async createPaciente(pacienteData: Omit<Paciente, keyof Document>): Promise<{ paciente: Paciente; message: string }> {
-    // Usamos los datos proporcionados, pero dejamos que Mongoose añada las propiedades de Document automáticamente
-    const newPaciente = await this.pacienteRepository.create(pacienteData as Paciente);
+    const newPaciente = await this.pacienteRepository.create({...pacienteData,
+      estado: "Activo", // Default status is Active
+    });
     return { paciente: newPaciente, message: "Paciente registrado con éxito" };
   }
 

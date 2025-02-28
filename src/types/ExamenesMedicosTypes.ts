@@ -4,11 +4,10 @@ import { Medico } from "types/MedicoTypes";
 import { Paciente } from "types/PacientesTypes";
 
 export interface ExamenesMedicos extends Document {
-  getBasicInfo(): any;
   nombreExamen: string; // Nombre del examen médico
   descripcion: string; // Descripción del examen
-  medico: Types.ObjectId | Medico; // Relación con Medico que realiza/prescribe el examen
-  paciente: Types.ObjectId | Paciente; // Relación con Paciente al que se le realiza el examen
+  medico?: Medico[]; // Relación con Medico que realiza/prescribe el examen
+  paciente?: Paciente[]; // Relación con Paciente al que se le realiza el examen
   estado: "Activo" | "Inactivo"; // Status for logical deletion
 }
 

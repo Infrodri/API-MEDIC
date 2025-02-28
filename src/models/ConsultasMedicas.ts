@@ -3,21 +3,9 @@ import { ConsultasMedicas } from "types/ConsultasMedicasTypes";
 
 const ConsultasMedicasSchema: Schema = new Schema<ConsultasMedicas>(
   {
-    paciente: {
-      type: Schema.Types.ObjectId,
-      ref: "Paciente", // Relación con Pacientes
-      required: [true, "El paciente es obligatorio"],
-    },
-    medico: {
-      type: Schema.Types.ObjectId,
-      ref: "Medico", // Relación con Medicos
-      required: [true, "El médico es obligatorio"],
-    },
-    fichaMedica: {
-      type: Schema.Types.ObjectId,
-      ref: "FichasMedicas", // Relación con FichasMedicas
-      required: [true, "La ficha médica es obligatoria"],
-    },
+    paciente: { type: mongoose.Schema.Types.ObjectId, ref: 'Paciente' },
+     medico: { type: mongoose.Schema.Types.ObjectId, ref: 'Medico' },
+    fichaMedica: { type: mongoose.Schema.Types.ObjectId, ref: 'FichasMedicas' },
     fecha: {
       type: Date,
       required: [true, "La fecha es obligatoria"],
@@ -49,8 +37,8 @@ const ConsultasMedicasSchema: Schema = new Schema<ConsultasMedicas>(
 ConsultasMedicasSchema.methods.getBasicInfo = function () {
   return {
     _id: this._id, // Usamos el _id generado por MongoDB
-    paciente: this.paciente,
-    medico: this.medico,
+    paciente: this.paciente.nombre,
+    medico: this.medico.primerApellido,
     fichaMedica: this.fichaMedica,
     fecha: this.fecha,
     estado: this.estado,

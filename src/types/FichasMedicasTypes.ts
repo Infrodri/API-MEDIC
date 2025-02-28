@@ -4,9 +4,8 @@ import { Medico } from "types/MedicoTypes";
 import { Paciente } from "types/PacientesTypes";
 
 export interface FichasMedicas extends Document {
-  getBasicInfo(): any;
-  paciente: Types.ObjectId | Paciente; // Relación con Paciente
-  medico: Types.ObjectId | Medico; // Relación con Medico
+  paciente?: Paciente[];// Relación con Paciente
+  medico?: Medico[]; // Relación con Medico
   fecha: Date; // Fecha de la ficha
   diagnostico: string; // Diagnóstico médico
   estado: "Activo" | "Inactivo"; // Status for logical deletion

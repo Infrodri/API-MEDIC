@@ -14,16 +14,8 @@ const ExamenesMedicosSchema: Schema = new Schema<ExamenesMedicos>(
       required: [true, "La descripción es obligatoria"],
       trim: true,
     },
-    medico: {
-      type: Schema.Types.ObjectId,
-      ref: "Medico", // Relación con la colección Medicos
-      required: [true, "El médico es obligatorio"],
-    },
-    paciente: {
-      type: Schema.Types.ObjectId,
-      ref: "Paciente", // Relación con la colección Pacientes
-      required: [true, "El paciente es obligatorio"],
-    },
+    medico: { type: mongoose.Schema.Types.ObjectId, ref: 'Medico' },
+    paciente: { type: mongoose.Schema.Types.ObjectId, ref: 'Paciente' },
     estado: {
       type: String,
       enum: ["Activo", "Inactivo"],
@@ -36,13 +28,13 @@ const ExamenesMedicosSchema: Schema = new Schema<ExamenesMedicos>(
   }
 );
 
-// Method to get basic examenes médicos info (for the list)
+// Método para obtener solo la información básica (usando solo los ObjectIds de las referencias)
 ExamenesMedicosSchema.methods.getBasicInfo = function () {
   return {
     _id: this._id, // Usamos el _id generado por MongoDB
     nombreExamen: this.nombreExamen,
-    medico: this.medico,
-    paciente: this.paciente,
+    medico: this.medico.primerApellido,  // Aquí ya contiene el ObjectId del médico
+    paciente: this.paciente.nombre, // Aquí ya contiene el ObjectId del paciente
     estado: this.estado,
   };
 };

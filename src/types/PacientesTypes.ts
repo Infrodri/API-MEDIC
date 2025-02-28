@@ -12,14 +12,6 @@ export interface Paciente extends Document {
   cedula: string; // ID number
   estado: "Activo" | "Inactivo"; // Status for logical deletion
 
-
-// Agrega el método getBasicInfo a la interfaz
-getBasicInfo(): {
-    nombre: string;
-    apellido: string;
-    cedula: string;
-    estado: "Activo" | "Inactivo";
-  };
 }
 
 export interface IPacienteRepository extends Repository<Paciente> {

@@ -5,10 +5,9 @@ import { Paciente } from "types/PacientesTypes";
 import { FichasMedicas } from "types/FichasMedicasTypes";
 
 export interface ConsultasMedicas extends Document {
-  getBasicInfo(): any;
-  paciente: Types.ObjectId | Paciente; // Relación con Paciente
-  medico: Types.ObjectId | Medico; // Relación con Medico
-  fichaMedica: Types.ObjectId | FichasMedicas; // Relación con FichaMedica
+  paciente?: Paciente[];// Relación con Paciente
+  medico?: Medico[]; // Relación con Medico
+  fichaMedica?: FichasMedicas[]; // Relación con FichaMedica
   fecha: Date; // Fecha de la consulta
   motivo: string; // Motivo de la consulta
   observaciones: string; // Observaciones de la consulta
