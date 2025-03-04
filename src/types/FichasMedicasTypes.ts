@@ -2,10 +2,14 @@ import { Document, Types } from "mongoose";
 import { Query, Repository } from "./RepositoryTypes";
 import { Medico } from "types/MedicoTypes";
 import { Paciente } from "types/PacientesTypes";
+import { Especialidades } from "./EspecialidadesTypes";
 
 export interface FichasMedicas extends Document {
+  getBasicInfo(): any;
   paciente?: Paciente[];// Relación con Paciente
   medico?: Medico[]; // Relación con Medico
+  especialidad?: Especialidades[]; // Relación con Medico
+
   fecha: Date; // Fecha de la ficha
   diagnostico: string; // Diagnóstico médico
   estado: "Activo" | "Inactivo"; // Status for logical deletion

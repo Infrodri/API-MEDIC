@@ -2,6 +2,7 @@ import { Document } from "mongoose";
 import { Query, Repository } from "./RepositoryTypes";
 
 export interface Paciente extends Document {
+  getBasicInfo(): any;
   nombre: string; // Name
   apellido: string; // Last name
   fechaNacimiento: Date; // Birth date

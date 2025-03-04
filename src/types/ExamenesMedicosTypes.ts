@@ -4,6 +4,7 @@ import { Medico } from "types/MedicoTypes";
 import { Paciente } from "types/PacientesTypes";
 
 export interface ExamenesMedicos extends Document {
+  getBasicInfo(): any;
   nombreExamen: string; // Nombre del examen médico
   descripcion: string; // Descripción del examen
   medico?: Medico[]; // Relación con Medico que realiza/prescribe el examen

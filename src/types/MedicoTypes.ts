@@ -18,7 +18,6 @@ export interface Medico extends Document {
   celular: string; // Cell phone
   genero: string; // Gender
   especialidad: string;
-  usuario: Types.ObjectId | User; // Relación con Users para autenticación
   estado: "Activo" | "Inactivo"; // Status for logical deletion
 }
 
