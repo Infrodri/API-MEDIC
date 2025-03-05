@@ -1,7 +1,20 @@
 import { loginUser,  registerUser } from "@controllers/auth/authControllers";
 import { createRoles, deleteRoles, findRoles, findRolesById,  updateRoles } from "@controllers/rolesControllers";
 import { createUser, deleteUser, findUsers, findUsersById,  updateUser } from "@controllers/usersControllers";import { createPaciente, deletePaciente, findPacientes, findPacienteById, softDeletePaciente, updatePaciente } from "@controllers/pacientesControllers";
-import { createMedico, deleteMedico, findMedicos, findMedicoById, softDeleteMedico, updateMedico } from "@controllers/medicosControllers";
+import {
+  findMedicos,
+  findMedicoById,
+  createMedico,
+  updateMedico,
+  softDeleteMedico,
+  deleteMedico,
+  getDoctorsBySpecialty,
+  getActiveDoctorsToday,
+  getTotalDoctors,
+  getDoctorsBySpecialtyId,
+  getDoctorsByUserId,
+  getDoctorsWithMultipleSpecialties,
+} from "@controllers/medicosControllers";
 import { createTiposAdiccion, deleteTiposAdiccion, findTiposAdicciones, findTiposAdiccionById, softDeleteTiposAdiccion, updateTiposAdiccion } from "@controllers/tiposAdiccionesControllers";
 import { createTiposObstetricosGinecologicos, deleteTiposObstetricosGinecologicos, findTiposObstetricosGinecologicos, findTiposObstetricosGinecologicosById, softDeleteTiposObstetricosGinecologicos, updateTiposObstetricosGinecologicos } from "@controllers/tiposObstetricosGinecologicosControllers";
 import { createTiposOperacionesQuirurgicas, deleteTiposOperacionesQuirurgicas, findTiposOperacionesQuirurgicas, findTiposOperacionesQuirurgicasById, softDeleteTiposOperacionesQuirurgicas, updateTiposOperacionesQuirurgicas } from "@controllers/tiposOperacionesQuirurgicasControllers";
@@ -57,15 +70,22 @@ export default () => {
   router.delete("/pacientes/:id", verifyToken, getPermissons, deletePaciente);
   router.patch("/pacientes/:id/soft-delete", verifyToken, getPermissons, softDeletePaciente);
 
-  // Rutas de Médicos
-  router.get("/medicos", verifyToken, getPermissons, findMedicos);
-  router.get("/medicos/:id", verifyToken, getPermissons, findMedicoById);
-  router.post("/medicos", verifyToken, getPermissons, createMedico);
-  router.put("/medicos/:id", verifyToken, getPermissons, updateMedico);
-  router.delete("/medicos/:id", verifyToken, getPermissons, deleteMedico);
-  router.patch("/medicos/:id/soft-delete", verifyToken, getPermissons, softDeleteMedico);
+// Rutas de Médicos (movidas bajo /medicos con middlewares)
+// Rutas de Médicos
+router.get("/medicos", verifyToken, getPermissons, findMedicos);
+router.get("/medicos/stats/specialty", verifyToken, getPermissons, getDoctorsBySpecialty);
+router.get("/medicos/stats/active-today", verifyToken, getPermissons, getActiveDoctorsToday);
+router.get("/medicos/stats/total", verifyToken, getPermissons, getTotalDoctors);
+router.get("/medicos/multiple-specialties", verifyToken, getPermissons, getDoctorsWithMultipleSpecialties); // Movida antes de :id
+router.get("/medicos/by-specialty/:especialidadId", verifyToken, getPermissons, getDoctorsBySpecialtyId);
+router.get("/medicos/by-user/:userId", verifyToken, getPermissons, getDoctorsByUserId);
+router.get("/medicos/:id", verifyToken, getPermissons, findMedicoById); // :id al final
+router.post("/medicos", verifyToken, getPermissons, createMedico);
+router.put("/medicos/:id", verifyToken, getPermissons, updateMedico);
+router.delete("/medicos/:id/soft", verifyToken, getPermissons, softDeleteMedico);
+router.delete("/medicos/:id", verifyToken, getPermissons, deleteMedico); 
 
-  // Rutas de Tipos de Adicciones
+// Rutas de Tipos de Adicciones
   router.get("/tipos-adicciones", verifyToken, getPermissons, findTiposAdicciones);
   router.get("/tipos-adicciones/:id", verifyToken, getPermissons, findTiposAdiccionById);
   router.post("/tipos-adicciones", verifyToken, getPermissons, createTiposAdiccion);

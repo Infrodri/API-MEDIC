@@ -1,3 +1,4 @@
+// src/models/Medicos.ts
 import mongoose, { Schema } from "mongoose";
 import { Medico } from "types/MedicoTypes";
 
@@ -8,7 +9,7 @@ const MedicoSchema: Schema = new Schema<Medico>(
       required: [true, "La cédula es obligatoria"],
       unique: true,
       trim: true,
-      match: [/^\d{10}$/, "Formato de cédula inválido"], // Example validation for ID (10 digits)
+      match: [/^\d{10}$/, "Formato de cédula inválido"],
     },
     primerNombre: {
       type: String,
@@ -35,7 +36,7 @@ const MedicoSchema: Schema = new Schema<Medico>(
       required: [true, "La fecha de nacimiento es obligatoria"],
       validate: {
         validator: function (value: Date) {
-          return value <= new Date(); // Ensures date is not in the future
+          return value <= new Date();
         },
         message: "La fecha de nacimiento no puede ser futura",
       },
@@ -64,13 +65,13 @@ const MedicoSchema: Schema = new Schema<Medico>(
       type: String,
       required: [true, "El teléfono es obligatorio"],
       trim: true,
-      match: [/^\d{7,10}$/, "Formato de teléfono inválido"], // Example validation for phone (7-10 digits)
+      match: [/^\d{7,10}$/, "Formato de teléfono inválido"],
     },
     celular: {
       type: String,
       required: [true, "El celular es obligatorio"],
       trim: true,
-      match: [/^\d{10}$/, "Formato de celular inválido"], // Example validation for cell phone (10 digits)
+      match: [/^\d{10}$/, "Formato de celular inválido"],
     },
     genero: {
       type: String,
@@ -78,28 +79,37 @@ const MedicoSchema: Schema = new Schema<Medico>(
       enum: ["Masculino", "Femenino", "Otro"],
       default: "Otro",
     },
-
-
+    especialidades: [{
+      type: Schema.Types.ObjectId,
+      ref: "Especialidades",
+      required: [true, "Al menos una especialidad es obligatoria"],
+    }],
+    usuario: {
+      type: Schema.Types.ObjectId,
+      ref: "User",
+      required: [true, "El usuario asociado es obligatorio"],
+    },
     estado: {
       type: String,
       enum: ["Activo", "Inactivo"],
-      default: "Inactivo",
+      default: "Activo",
     },
   },
   {
-    timestamps: true, // Automatically add createdAt and updatedAt
+    timestamps: true,
     versionKey: false,
   }
 );
 
-// Method to get basic medico info (for the list)
 MedicoSchema.methods.getBasicInfo = function () {
   return {
-    _id: this._id, // Usamos el _id generado por MongoDB
+    _id: this._id,
     cedula: this.cedula,
     primerNombre: this.primerNombre,
     primerApellido: this.primerApellido,
     estado: this.estado,
+    especialidades: this.especialidades,
+    usuario: this.usuario,
   };
 };
 

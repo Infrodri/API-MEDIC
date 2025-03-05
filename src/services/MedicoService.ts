@@ -1,3 +1,4 @@
+// src/services/MedicoService.ts
 import { Query } from "types/RepositoryTypes";
 import { IMedicoRepository, IMedicoService, Medico } from "types/MedicoTypes";
 
@@ -11,7 +12,7 @@ export class MedicoService implements IMedicoService {
   async createMedico(medicoData: Omit<Medico, keyof Document>): Promise<{ medico: Medico; message: string }> {
     const newMedico = await this.medicoRepository.create({
       ...medicoData,
-      estado: "Activo", // Default status is Active
+      estado: "Activo",
     });
     return { medico: newMedico, message: "Médico registrado con éxito" };
   }
@@ -49,5 +50,30 @@ export class MedicoService implements IMedicoService {
     medico.estado = "Inactivo";
     await this.medicoRepository.update(id, medico);
     return { success: true, message: "Médico cambiado a estado Inactivo" };
+  }
+
+  async getDoctorsBySpecialty(): Promise<{ especialidad: string; count: number }[]> {
+    return await this.medicoRepository.countBySpecialty();
+  }
+
+  async getActiveDoctorsToday(): Promise<number> {
+    return await this.medicoRepository.countActiveToday();
+  }
+
+  async getTotalDoctors(): Promise<number> {
+    return await this.medicoRepository.countTotal();
+  }
+
+  // Nuevos métodos
+  async getDoctorsBySpecialtyId(especialidadId: string): Promise<Medico[]> {
+    return await this.medicoRepository.findBySpecialty(especialidadId);
+  }
+
+  async getDoctorsByUserId(userId: string): Promise<Medico[]> {
+    return await this.medicoRepository.findByUser(userId);
+  }
+
+  async getDoctorsWithMultipleSpecialties(): Promise<Medico[]> {
+    return await this.medicoRepository.findWithMultipleSpecialties();
   }
 }
