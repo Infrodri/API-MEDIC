@@ -1,26 +1,27 @@
+// src/models/PacienteExamenes.ts
 import mongoose, { Schema } from "mongoose";
-import { PacienteExamenes } from "types/PacienteExamenesTypes";
+import { PacienteExamen } from "types/PacienteExamenesTypes";
 
-const PacienteExamenesSchema: Schema = new Schema<PacienteExamenes>(
+const PacienteExamenSchema: Schema = new Schema<PacienteExamen>(
   {
     paciente: {
       type: Schema.Types.ObjectId,
-      ref: "Paciente", // Relación con Pacientes
+      ref: "Paciente",
       required: [true, "El paciente es obligatorio"],
     },
-    examen: {
+    examenMedico: {
       type: Schema.Types.ObjectId,
-      ref: "ExamenesMedicos", // Relación con ExamenesMedicos
-      required: [true, "El examen es obligatorio"],
+      ref: "ExamenesMedico",
+      required: [true, "El examen médico es obligatorio"],
     },
-    fecha: {
+    fechaRealizacion: {
       type: Date,
-      required: [true, "La fecha es obligatoria"],
+      required: [true, "La fecha de realización es obligatoria"],
     },
     resultado: {
       type: String,
-      required: [true, "El resultado es obligatorio"],
       trim: true,
+      default: "",
     },
     estado: {
       type: String,
@@ -29,20 +30,20 @@ const PacienteExamenesSchema: Schema = new Schema<PacienteExamenes>(
     },
   },
   {
-    timestamps: true, // Automatically add createdAt and updatedAt
+    timestamps: true,
     versionKey: false,
   }
 );
 
-// Method to get basic paciente-exámenes info (for the list)
-PacienteExamenesSchema.methods.getBasicInfo = function () {
+PacienteExamenSchema.methods.getBasicInfo = function () {
   return {
-    _id: this._id, // Usamos el _id generado por MongoDB
+    _id: this._id,
     paciente: this.paciente,
-    examen: this.examen,
-    fecha: this.fecha,
+    examenMedico: this.examenMedico,
+    fechaRealizacion: this.fechaRealizacion,
+    resultado: this.resultado,
     estado: this.estado,
   };
 };
 
-export const PacienteExamenesModel = mongoose.model<PacienteExamenes>("PacienteExamenes", PacienteExamenesSchema);
+export const PacienteExamenModel = mongoose.model<PacienteExamen>("PacienteExamen", PacienteExamenSchema);

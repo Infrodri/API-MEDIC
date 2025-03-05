@@ -1,28 +1,31 @@
+// src/types/PacienteExamenesTypes.ts
 import { Document, Types } from "mongoose";
 import { Query, Repository } from "./RepositoryTypes";
-import { Paciente } from "types/PacientesTypes";
-import { ExamenesMedicos } from "types/ExamenesMedicosTypes";
+import { Paciente } from "./PacientesTypes";
 
-export interface PacienteExamenes extends Document {
+export interface PacienteExamen extends Document {
   getBasicInfo(): any;
-  paciente: Types.ObjectId | Paciente; // Relación con Paciente
-  examen: Types.ObjectId | ExamenesMedicos; // Relación con ExamenesMedicos
-  fecha: Date; // Fecha del examen
-  resultado: string; // Resultado del examen
-  estado: "Activo" | "Inactivo"; // Status for logical deletion
+  paciente: Types.ObjectId | Paciente;
+  examenMedico: Types.ObjectId;
+  fechaRealizacion: Date;
+  resultado: string;
+  notas: string;
+  estado: "Activo" | "Inactivo";
 }
 
-export interface IPacienteExamenesRepository extends Repository<PacienteExamenes> {
-  findOne(query: Query): Promise<PacienteExamenes | null>;
-  findActive(query?: Query): Promise<PacienteExamenes[]>; // Method to find only active registros
+
+export interface IPacienteExamenRepository extends Repository<PacienteExamen> {
+  findOne(query: Query): Promise<PacienteExamen | null>;
+  findActive(query?: Query): Promise<PacienteExamen[]>;
+  findByPaciente(pacienteId: string): Promise<PacienteExamen[]>;
 }
 
-export interface IPacienteExamenesService {
-  createPacienteExamenes(pacienteExamen: PacienteExamenes): Promise<{ pacienteExamen: PacienteExamenes; message: string }>;
-  findPacienteExamenes(query?: Query): Promise<PacienteExamenes[]>;
-  findPacienteExamenesById(id: string): Promise<PacienteExamenes | null>;
-  findPacienteExamenesByPaciente(pacienteId: string): Promise<PacienteExamenes[]>;
-  updatePacienteExamenes(id: string, pacienteExamen: Partial<PacienteExamenes>): Promise<{ pacienteExamen: PacienteExamenes | null; message: string }>;
-  deletePacienteExamenes(id: string): Promise<{ success: boolean; message: string }>;
-  softDeletePacienteExamenes(id: string): Promise<{ success: boolean; message: string }>; // Soft delete (change status)
+export interface IPacienteExamenService {
+  createPacienteExamen(pacienteExamen: PacienteExamen): Promise<{ pacienteExamen: PacienteExamen; message: string }>;
+  findPacienteExamenes(query?: Query): Promise<PacienteExamen[]>;
+  findPacienteExamenById(id: string): Promise<PacienteExamen | null>;
+  findPacienteExamenesByPaciente(pacienteId: string): Promise<PacienteExamen[]>;
+  updatePacienteExamen(id: string, pacienteExamen: Partial<PacienteExamen>): Promise<{ pacienteExamen: PacienteExamen | null; message: string }>;
+  deletePacienteExamen(id: string): Promise<{ success: boolean; message: string }>;
+  softDeletePacienteExamen(id: string): Promise<{ success: boolean; message: string }>;
 }

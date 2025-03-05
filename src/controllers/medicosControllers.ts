@@ -1,4 +1,5 @@
 // src/controllers/medicosControllers.ts
+import { SesionMedicoModel } from "@models/SesionMedico";
 import { MedicoRepository } from "@repositories/MedicoRepositories";
 import { MedicoService } from "@services/MedicoService";
 import { Request, Response } from "express";
@@ -150,5 +151,18 @@ export const getDoctorsWithMultipleSpecialties = async (req: Request, res: Respo
   } catch (error) {
     console.log("error :>> ", error);
     res.status(500).json({ error: "Error al obtener médicos con múltiples especialidades", details: error });
+  }
+};
+// src/controllers/medicosControllers.ts
+export const exportSessionHistory = async (req: Request, res: Response) => {
+  try {
+    const { medicoId } = req.params;
+    const sesiones = await SesionMedicoModel.find({ medico: medicoId }).populate("medico");
+    if (!sesiones.length) return res.status(404).json({ message: "No se encontraron sesiones para este médico" });
+
+    res.json({ sesiones, message: "Historial de sesiones exportado con éxito" });
+  } catch (error) {
+    console.log("error :>> ", error);
+    res.status(500).json({ error: "Error al exportar historial de sesiones", details: error });
   }
 };

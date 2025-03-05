@@ -21,6 +21,7 @@ export interface Medico extends Document {
   especialidades: Types.ObjectId[];
   usuario: Types.ObjectId;
   estado: "Activo" | "Inactivo";
+  estaActivo: boolean; // Nuevo campo
 }
 
 export interface IMedicoRepository extends Repository<Medico> {

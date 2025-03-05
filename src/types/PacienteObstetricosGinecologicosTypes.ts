@@ -1,28 +1,29 @@
+// src/types/PacienteObstetricosGinecologicosTypes.ts
 import { Document, Types } from "mongoose";
 import { Query, Repository } from "./RepositoryTypes";
-import { Paciente } from "types/PacientesTypes";
-import { TiposObstetricosGinecologicos } from "types/TiposObstetricosGinecologicosTypes";
+import { Paciente } from "./PacientesTypes";
 
-export interface PacienteObstetricosGinecologicos extends Document {
+export interface PacienteObstetricoGinecologico extends Document {
   getBasicInfo(): any;
-  paciente: Types.ObjectId | Paciente; // Relación con Paciente
-  tipoObstetricoGinecologico: Types.ObjectId | TiposObstetricosGinecologicos; // Relación con TiposObstetricosGinecologicos
-  fecha: Date; // Fecha del registro
-  observaciones: string; // Observaciones relacionadas
-  estado: "Activo" | "Inactivo"; // Status for logical deletion
+  paciente: Types.ObjectId | Paciente;
+  tipoObstetricoGinecologico: Types.ObjectId;
+  fechaEvento: Date;
+  detalles: string;
+  estado: "Activo" | "Inactivo";
 }
 
-export interface IPacienteObstetricosGinecologicosRepository extends Repository<PacienteObstetricosGinecologicos> {
-  findOne(query: Query): Promise<PacienteObstetricosGinecologicos | null>;
-  findActive(query?: Query): Promise<PacienteObstetricosGinecologicos[]>; // Method to find only active registros
+export interface IPacienteObstetricoGinecologicoRepository extends Repository<PacienteObstetricoGinecologico> {
+  findOne(query: Query): Promise<PacienteObstetricoGinecologico | null>;
+  findActive(query?: Query): Promise<PacienteObstetricoGinecologico[]>;
+  findByPaciente(pacienteId: string): Promise<PacienteObstetricoGinecologico[]>;
 }
 
-export interface IPacienteObstetricosGinecologicosService {
-  createPacienteObstetricosGinecologicos(pacienteOG: PacienteObstetricosGinecologicos): Promise<{ pacienteOG: PacienteObstetricosGinecologicos; message: string }>;
-  findPacienteObstetricosGinecologicos(query?: Query): Promise<PacienteObstetricosGinecologicos[]>;
-  findPacienteObstetricosGinecologicosById(id: string): Promise<PacienteObstetricosGinecologicos | null>;
-  findPacienteObstetricosGinecologicosByPaciente(pacienteId: string): Promise<PacienteObstetricosGinecologicos[]>;
-  updatePacienteObstetricosGinecologicos(id: string, pacienteOG: Partial<PacienteObstetricosGinecologicos>): Promise<{ pacienteOG: PacienteObstetricosGinecologicos | null; message: string }>;
-  deletePacienteObstetricosGinecologicos(id: string): Promise<{ success: boolean; message: string }>;
-  softDeletePacienteObstetricosGinecologicos(id: string): Promise<{ success: boolean; message: string }>; // Soft delete (change status)
+export interface IPacienteObstetricoGinecologicoService {
+  createPacienteObstetricoGinecologico(pacienteObstetricoGinecologico: PacienteObstetricoGinecologico): Promise<{ pacienteObstetricoGinecologico: PacienteObstetricoGinecologico; message: string }>;
+  findPacienteObstetricosGinecologicos(query?: Query): Promise<PacienteObstetricoGinecologico[]>;
+  findPacienteObstetricoGinecologicoById(id: string): Promise<PacienteObstetricoGinecologico | null>;
+  findPacienteObstetricosGinecologicosByPaciente(pacienteId: string): Promise<PacienteObstetricoGinecologico[]>;
+  updatePacienteObstetricoGinecologico(id: string, pacienteObstetricoGinecologico: Partial<PacienteObstetricoGinecologico>): Promise<{ pacienteObstetricoGinecologico: PacienteObstetricoGinecologico | null; message: string }>;
+  deletePacienteObstetricoGinecologico(id: string): Promise<{ success: boolean; message: string }>;
+  softDeletePacienteObstetricoGinecologico(id: string): Promise<{ success: boolean; message: string }>;
 }

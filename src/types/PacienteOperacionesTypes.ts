@@ -1,29 +1,29 @@
+// src/types/PacienteOperacionesTypes.ts
 import { Document, Types } from "mongoose";
 import { Query, Repository } from "./RepositoryTypes";
-import { Paciente } from "types/PacientesTypes";
-import { TiposOperacionesQuirurgicas } from "types/TiposOperacionesQuirurgicasTypes";
+import { Paciente } from "./PacientesTypes";
 
-export interface PacienteOperaciones extends Document {
-  getBasicInfo // Method to find only active registros
-      (): any;
-  paciente: Types.ObjectId | Paciente; // Relación con Paciente
-  tipoOperacion: Types.ObjectId | TiposOperacionesQuirurgicas; // Relación con TiposOperacionesQuirurgicas
-  fechaOperacion: Date; // Fecha de la operación
-  resultado: string; // Resultado de la operación
-  estado: "Activo" | "Inactivo"; // Status for logical deletion
+export interface PacienteOperacion extends Document {
+  getBasicInfo(): any;
+  paciente: Types.ObjectId | Paciente;
+  tipoOperacionQuirurgica: Types.ObjectId;
+  fechaOperacion: Date;
+  notas: string;
+  estado: "Activo" | "Inactivo";
 }
 
-export interface IPacienteOperacionesRepository extends Repository<PacienteOperaciones> {
-  findOne(query: Query): Promise<PacienteOperaciones | null>;
-  findActive(query?: Query): Promise<PacienteOperaciones[]>; // Method to find only active registros
+export interface IPacienteOperacionRepository extends Repository<PacienteOperacion> {
+  findOne(query: Query): Promise<PacienteOperacion | null>;
+  findActive(query?: Query): Promise<PacienteOperacion[]>;
+  findByPaciente(pacienteId: string): Promise<PacienteOperacion[]>;
 }
 
-export interface IPacienteOperacionesService {
-  createPacienteOperaciones(pacienteOp: PacienteOperaciones): Promise<{ pacienteOp: PacienteOperaciones; message: string }>;
-  findPacienteOperaciones(query?: Query): Promise<PacienteOperaciones[]>;
-  findPacienteOperacionesById(id: string): Promise<PacienteOperaciones | null>;
-  findPacienteOperacionesByPaciente(pacienteId: string): Promise<PacienteOperaciones[]>;
-  updatePacienteOperaciones(id: string, pacienteOp: Partial<PacienteOperaciones>): Promise<{ pacienteOp: PacienteOperaciones | null; message: string }>;
-  deletePacienteOperaciones(id: string): Promise<{ success: boolean; message: string }>;
-  softDeletePacienteOperaciones(id: string): Promise<{ success: boolean; message: string }>; // Soft delete (change status)
+export interface IPacienteOperacionService {
+  createPacienteOperacion(pacienteOperacion: PacienteOperacion): Promise<{ pacienteOperacion: PacienteOperacion; message: string }>;
+  findPacienteOperaciones(query?: Query): Promise<PacienteOperacion[]>;
+  findPacienteOperacionById(id: string): Promise<PacienteOperacion | null>;
+  findPacienteOperacionesByPaciente(pacienteId: string): Promise<PacienteOperacion[]>;
+  updatePacienteOperacion(id: string, pacienteOperacion: Partial<PacienteOperacion>): Promise<{ pacienteOperacion: PacienteOperacion | null; message: string }>;
+  deletePacienteOperacion(id: string): Promise<{ success: boolean; message: string }>;
+  softDeletePacienteOperacion(id: string): Promise<{ success: boolean; message: string }>;
 }

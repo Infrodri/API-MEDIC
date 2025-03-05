@@ -94,6 +94,10 @@ const MedicoSchema: Schema = new Schema<Medico>(
       enum: ["Activo", "Inactivo"],
       default: "Activo",
     },
+    estaActivo: {  // Nuevo campo para rastrear sesión activa
+      type: Boolean,
+      default: false,
+    },
   },
   {
     timestamps: true,
@@ -108,6 +112,7 @@ MedicoSchema.methods.getBasicInfo = function () {
     primerNombre: this.primerNombre,
     primerApellido: this.primerApellido,
     estado: this.estado,
+    estaActivo: this.estaActivo, // Incluir en la info básica
     especialidades: this.especialidades,
     usuario: this.usuario,
   };

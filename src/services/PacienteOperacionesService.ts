@@ -1,53 +1,54 @@
+// src/services/PacienteOperacionesService.ts
 import { Query } from "types/RepositoryTypes";
-import { IPacienteOperacionesRepository, IPacienteOperacionesService, PacienteOperaciones } from "types/PacienteOperacionesTypes";
+import { IPacienteOperacionRepository, IPacienteOperacionService, PacienteOperacion } from "types/PacienteOperacionesTypes";
 
-export class PacienteOperacionesService implements IPacienteOperacionesService {
-  private pacienteOperacionesRepository: IPacienteOperacionesRepository;
+export class PacienteOperacionService implements IPacienteOperacionService {
+  private pacienteOperacionRepository: IPacienteOperacionRepository;
 
-  constructor(pacienteOperacionesRepository: IPacienteOperacionesRepository) {
-    this.pacienteOperacionesRepository = pacienteOperacionesRepository;
+  constructor(pacienteOperacionRepository: IPacienteOperacionRepository) {
+    this.pacienteOperacionRepository = pacienteOperacionRepository;
   }
 
-  async createPacienteOperaciones(pacienteOpData: Omit<PacienteOperaciones, keyof Document>): Promise<{ pacienteOp: PacienteOperaciones; message: string }> {
-    const newPacienteOp = await this.pacienteOperacionesRepository.create({
-      ...pacienteOpData,
-      estado: "Activo", // Default status is Active
+  async createPacienteOperacion(pacienteOperacionData: Omit<PacienteOperacion, keyof Document>): Promise<{ pacienteOperacion: PacienteOperacion; message: string }> {
+    const newPacienteOperacion = await this.pacienteOperacionRepository.create({
+      ...pacienteOperacionData,
+      estado: "Activo",
     });
-    return { pacienteOp: newPacienteOp, message: "Relación paciente-operación registrada con éxito" };
+    return { pacienteOperacion: newPacienteOperacion, message: "Operación del paciente registrada con éxito" };
   }
 
-  async findPacienteOperaciones(query?: Query): Promise<PacienteOperaciones[]> {
-    return this.pacienteOperacionesRepository.findActive(query);
+  async findPacienteOperaciones(query?: Query): Promise<PacienteOperacion[]> {
+    return this.pacienteOperacionRepository.findActive(query);
   }
 
-  async findPacienteOperacionesById(id: string): Promise<PacienteOperaciones | null> {
-    return this.pacienteOperacionesRepository.findById(id);
+  async findPacienteOperacionById(id: string): Promise<PacienteOperacion | null> {
+    return this.pacienteOperacionRepository.findById(id);
   }
 
-  async findPacienteOperacionesByPaciente(pacienteId: string): Promise<PacienteOperaciones[]> {
-    return this.pacienteOperacionesRepository.findActive({ paciente: pacienteId });
+  async findPacienteOperacionesByPaciente(pacienteId: string): Promise<PacienteOperacion[]> {
+    return this.pacienteOperacionRepository.findByPaciente(pacienteId);
   }
 
-  async updatePacienteOperaciones(id: string, pacienteOp: Partial<PacienteOperaciones>): Promise<{ pacienteOp: PacienteOperaciones | null; message: string }> {
-    const updatedPacienteOp = await this.pacienteOperacionesRepository.update(id, pacienteOp);
-    if (!updatedPacienteOp) {
-      return { pacienteOp: null, message: "Relación paciente-operación no encontrada" };
+  async updatePacienteOperacion(id: string, pacienteOperacion: Partial<PacienteOperacion>): Promise<{ pacienteOperacion: PacienteOperacion | null; message: string }> {
+    const updatedPacienteOperacion = await this.pacienteOperacionRepository.update(id, pacienteOperacion);
+    if (!updatedPacienteOperacion) {
+      return { pacienteOperacion: null, message: "Operación del paciente no encontrada" };
     }
-    return { pacienteOp: updatedPacienteOp, message: "Relación paciente-operación actualizada con éxito" };
+    return { pacienteOperacion: updatedPacienteOperacion, message: "Operación del paciente actualizada con éxito" };
   }
 
-  async deletePacienteOperaciones(id: string): Promise<{ success: boolean; message: string }> {
-    const deleted = await this.pacienteOperacionesRepository.delete(id);
-    return { success: deleted, message: deleted ? "Relación paciente-operación eliminada físicamente" : "Relación paciente-operación no encontrada" };
+  async deletePacienteOperacion(id: string): Promise<{ success: boolean; message: string }> {
+    const deleted = await this.pacienteOperacionRepository.delete(id);
+    return { success: deleted, message: deleted ? "Operación del paciente eliminada físicamente" : "Operación del paciente no encontrada" };
   }
 
-  async softDeletePacienteOperaciones(id: string): Promise<{ success: boolean; message: string }> {
-    const pacienteOp = await this.pacienteOperacionesRepository.findById(id);
-    if (!pacienteOp) {
-      return { success: false, message: "Relación paciente-operación no encontrada" };
+  async softDeletePacienteOperacion(id: string): Promise<{ success: boolean; message: string }> {
+    const pacienteOperacion = await this.pacienteOperacionRepository.findById(id);
+    if (!pacienteOperacion) {
+      return { success: false, message: "Operación del paciente no encontrada" };
     }
-    pacienteOp.estado = "Inactivo";
-    await this.pacienteOperacionesRepository.update(id, pacienteOp);
-    return { success: true, message: "Relación paciente-operación cambiada a estado Inactivo" };
+    pacienteOperacion.estado = "Inactivo";
+    await this.pacienteOperacionRepository.update(id, pacienteOperacion);
+    return { success: true, message: "Operación del paciente cambiada a estado Inactivo" };
   }
 }

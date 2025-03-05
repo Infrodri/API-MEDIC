@@ -1,53 +1,54 @@
+// src/services/PacienteObstetricosGinecologicosService.ts
 import { Query } from "types/RepositoryTypes";
-import { IPacienteObstetricosGinecologicosRepository, IPacienteObstetricosGinecologicosService, PacienteObstetricosGinecologicos } from "types/PacienteObstetricosGinecologicosTypes";
+import { IPacienteObstetricoGinecologicoRepository, IPacienteObstetricoGinecologicoService, PacienteObstetricoGinecologico } from "types/PacienteObstetricosGinecologicosTypes";
 
-export class PacienteObstetricosGinecologicosService implements IPacienteObstetricosGinecologicosService {
-  private pacienteObstetricosGinecologicosRepository: IPacienteObstetricosGinecologicosRepository;
+export class PacienteObstetricoGinecologicoService implements IPacienteObstetricoGinecologicoService {
+  private pacienteObstetricoGinecologicoRepository: IPacienteObstetricoGinecologicoRepository;
 
-  constructor(pacienteObstetricosGinecologicosRepository: IPacienteObstetricosGinecologicosRepository) {
-    this.pacienteObstetricosGinecologicosRepository = pacienteObstetricosGinecologicosRepository;
+  constructor(pacienteObstetricoGinecologicoRepository: IPacienteObstetricoGinecologicoRepository) {
+    this.pacienteObstetricoGinecologicoRepository = pacienteObstetricoGinecologicoRepository;
   }
 
-  async createPacienteObstetricosGinecologicos(pacienteOGData: Omit<PacienteObstetricosGinecologicos, keyof Document>): Promise<{ pacienteOG: PacienteObstetricosGinecologicos; message: string }> {
-    const newPacienteOG = await this.pacienteObstetricosGinecologicosRepository.create({
-      ...pacienteOGData,
-      estado: "Activo", // Default status is Active
+  async createPacienteObstetricoGinecologico(pacienteObstetricoGinecologicoData: Omit<PacienteObstetricoGinecologico, keyof Document>): Promise<{ pacienteObstetricoGinecologico: PacienteObstetricoGinecologico; message: string }> {
+    const newPacienteObstetricoGinecologico = await this.pacienteObstetricoGinecologicoRepository.create({
+      ...pacienteObstetricoGinecologicoData,
+      estado: "Activo",
     });
-    return { pacienteOG: newPacienteOG, message: "Relación paciente-obstétrico/ginecológico registrada con éxito" };
+    return { pacienteObstetricoGinecologico: newPacienteObstetricoGinecologico, message: "Registro obstétrico/ginecológico del paciente creado con éxito" };
   }
 
-  async findPacienteObstetricosGinecologicos(query?: Query): Promise<PacienteObstetricosGinecologicos[]> {
-    return this.pacienteObstetricosGinecologicosRepository.findActive(query);
+  async findPacienteObstetricosGinecologicos(query?: Query): Promise<PacienteObstetricoGinecologico[]> {
+    return this.pacienteObstetricoGinecologicoRepository.findActive(query);
   }
 
-  async findPacienteObstetricosGinecologicosById(id: string): Promise<PacienteObstetricosGinecologicos | null> {
-    return this.pacienteObstetricosGinecologicosRepository.findById(id);
+  async findPacienteObstetricoGinecologicoById(id: string): Promise<PacienteObstetricoGinecologico | null> {
+    return this.pacienteObstetricoGinecologicoRepository.findById(id);
   }
 
-  async findPacienteObstetricosGinecologicosByPaciente(pacienteId: string): Promise<PacienteObstetricosGinecologicos[]> {
-    return this.pacienteObstetricosGinecologicosRepository.findActive({ paciente: pacienteId });
+  async findPacienteObstetricosGinecologicosByPaciente(pacienteId: string): Promise<PacienteObstetricoGinecologico[]> {
+    return this.pacienteObstetricoGinecologicoRepository.findByPaciente(pacienteId);
   }
 
-  async updatePacienteObstetricosGinecologicos(id: string, pacienteOG: Partial<PacienteObstetricosGinecologicos>): Promise<{ pacienteOG: PacienteObstetricosGinecologicos | null; message: string }> {
-    const updatedPacienteOG = await this.pacienteObstetricosGinecologicosRepository.update(id, pacienteOG);
-    if (!updatedPacienteOG) {
-      return { pacienteOG: null, message: "Relación paciente-obstétrico/ginecológico no encontrada" };
+  async updatePacienteObstetricoGinecologico(id: string, pacienteObstetricoGinecologico: Partial<PacienteObstetricoGinecologico>): Promise<{ pacienteObstetricoGinecologico: PacienteObstetricoGinecologico | null; message: string }> {
+    const updatedPacienteObstetricoGinecologico = await this.pacienteObstetricoGinecologicoRepository.update(id, pacienteObstetricoGinecologico);
+    if (!updatedPacienteObstetricoGinecologico) {
+      return { pacienteObstetricoGinecologico: null, message: "Registro obstétrico/ginecológico del paciente no encontrado" };
     }
-    return { pacienteOG: updatedPacienteOG, message: "Relación paciente-obstétrico/ginecológico actualizada con éxito" };
+    return { pacienteObstetricoGinecologico: updatedPacienteObstetricoGinecologico, message: "Registro obstétrico/ginecológico del paciente actualizado con éxito" };
   }
 
-  async deletePacienteObstetricosGinecologicos(id: string): Promise<{ success: boolean; message: string }> {
-    const deleted = await this.pacienteObstetricosGinecologicosRepository.delete(id);
-    return { success: deleted, message: deleted ? "Relación paciente-obstétrico/ginecológico eliminada físicamente" : "Relación paciente-obstétrico/ginecológico no encontrada" };
+  async deletePacienteObstetricoGinecologico(id: string): Promise<{ success: boolean; message: string }> {
+    const deleted = await this.pacienteObstetricoGinecologicoRepository.delete(id);
+    return { success: deleted, message: deleted ? "Registro obstétrico/ginecológico del paciente eliminado físicamente" : "Registro obstétrico/ginecológico del paciente no encontrado" };
   }
 
-  async softDeletePacienteObstetricosGinecologicos(id: string): Promise<{ success: boolean; message: string }> {
-    const pacienteOG = await this.pacienteObstetricosGinecologicosRepository.findById(id);
-    if (!pacienteOG) {
-      return { success: false, message: "Relación paciente-obstétrico/ginecológico no encontrada" };
+  async softDeletePacienteObstetricoGinecologico(id: string): Promise<{ success: boolean; message: string }> {
+    const pacienteObstetricoGinecologico = await this.pacienteObstetricoGinecologicoRepository.findById(id);
+    if (!pacienteObstetricoGinecologico) {
+      return { success: false, message: "Registro obstétrico/ginecológico del paciente no encontrado" };
     }
-    pacienteOG.estado = "Inactivo";
-    await this.pacienteObstetricosGinecologicosRepository.update(id, pacienteOG);
-    return { success: true, message: "Relación paciente-obstétrico/ginecológico cambiada a estado Inactivo" };
+    pacienteObstetricoGinecologico.estado = "Inactivo";
+    await this.pacienteObstetricoGinecologicoRepository.update(id, pacienteObstetricoGinecologico);
+    return { success: true, message: "Registro obstétrico/ginecológico del paciente cambiado a estado Inactivo" };
   }
 }

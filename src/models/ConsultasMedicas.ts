@@ -1,3 +1,4 @@
+// src/models/ConsultasMedicas.ts
 import mongoose, { Schema } from "mongoose";
 import { ConsultasMedicas } from "types/ConsultasMedicasTypes";
 
@@ -7,7 +8,6 @@ const ConsultasMedicasSchema: Schema = new Schema<ConsultasMedicas>(
       type: Schema.Types.ObjectId,
       ref: "Paciente",
       required: [true, "El paciente es obligatorio"],
-      index: true,
     },
     medico: {
       type: Schema.Types.ObjectId,
@@ -21,13 +21,12 @@ const ConsultasMedicasSchema: Schema = new Schema<ConsultasMedicas>(
     },
     especialidad: {
       type: Schema.Types.ObjectId,
-      ref: "Especialidades", // Nueva relación
+      ref: "Especialidades",
       required: [true, "La especialidad es obligatoria"],
     },
     fecha: {
       type: Date,
       required: [true, "La fecha es obligatoria"],
-      default: Date.now,
     },
     motivo: {
       type: String,
@@ -36,13 +35,22 @@ const ConsultasMedicasSchema: Schema = new Schema<ConsultasMedicas>(
     },
     observaciones: {
       type: String,
-      required: [true, "Las observaciones son obligatorias"],
       trim: true,
+      default: "",
     },
     estado: {
       type: String,
       enum: ["Activo", "Inactivo"],
       default: "Activo",
+    },
+    estadoConsulta: { // Nuevo campo para el estado funcional
+      type: String,
+      enum: ["Pendiente", "Concluida", "Derivada"],
+      default: "Pendiente",
+    },
+    medicoDerivado: { // Para derivaciones
+      type: Schema.Types.ObjectId,
+      ref: "Medico",
     },
   },
   {
@@ -56,10 +64,10 @@ ConsultasMedicasSchema.methods.getBasicInfo = function () {
     _id: this._id,
     paciente: this.paciente,
     medico: this.medico,
-    fichaMedica: this.fichaMedica,
-    especialidad: this.especialidad, // Incluyo especialidad
     fecha: this.fecha,
+    motivo: this.motivo,
     estado: this.estado,
+    estadoConsulta: this.estadoConsulta,
   };
 };
 

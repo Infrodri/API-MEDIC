@@ -1,80 +1,87 @@
-import { PacienteObstetricosGinecologicosRepository } from "@repositories/PacienteObstetricosGinecologicosRepositories";
-import { PacienteObstetricosGinecologicosService } from "@services/PacienteObstetricosGinecologicosService";
+// src/controllers/pacienteObstetricosGinecologicosControllers.ts
+import { PacienteObstetricoGinecologicoRepository } from "@repositories/PacienteObstetricosGinecologicosRepositories";
+import { PacienteObstetricoGinecologicoService } from "@services/PacienteObstetricosGinecologicosService";
 import { Request, Response } from "express";
-import { IPacienteObstetricosGinecologicosRepository, IPacienteObstetricosGinecologicosService, PacienteObstetricosGinecologicos } from "types/PacienteObstetricosGinecologicosTypes";
+import { IPacienteObstetricoGinecologicoRepository, IPacienteObstetricoGinecologicoService, PacienteObstetricoGinecologico } from "types/PacienteObstetricosGinecologicosTypes";
 
-const pacienteObstetricosGinecologicosRepository: IPacienteObstetricosGinecologicosRepository = new PacienteObstetricosGinecologicosRepository();
-const pacienteObstetricosGinecologicosService: IPacienteObstetricosGinecologicosService = new PacienteObstetricosGinecologicosService(pacienteObstetricosGinecologicosRepository);
+const pacienteObstetricoGinecologicoRepository: IPacienteObstetricoGinecologicoRepository = new PacienteObstetricoGinecologicoRepository();
+const pacienteObstetricoGinecologicoService: IPacienteObstetricoGinecologicoService = new PacienteObstetricoGinecologicoService(pacienteObstetricoGinecologicoRepository);
+
+export const createPacienteObstetricoGinecologico = async (req: Request, res: Response) => {
+  try {
+    const newPacienteObstetricoGinecologico: Omit<PacienteObstetricoGinecologico, keyof Document> = req.body;
+    const { pacienteObstetricoGinecologico, message } = await pacienteObstetricoGinecologicoService.createPacienteObstetricoGinecologico(newPacienteObstetricoGinecologico);
+    res.status(201).json({ pacienteObstetricoGinecologico, message });
+  } catch (error) {
+    console.log("error :>> ", error);
+    res.status(400).json({ error: "Error al crear registro obstétrico/ginecológico del paciente", details: error });
+  }
+};
 
 export const findPacienteObstetricosGinecologicos = async (req: Request, res: Response) => {
   try {
-    const pacientesOG = await pacienteObstetricosGinecologicosService.findPacienteObstetricosGinecologicos();
-    const basicInfoList = pacientesOG.map((pacienteOG) => pacienteOG.getBasicInfo());
-    if (basicInfoList.length === 0) return res.status(404).json({ message: "No hay relaciones paciente-obstétrico/ginecológico encontradas." });
-
-    res.json({ pacientesOG: basicInfoList, message: "Lista de relaciones paciente-obstétrico/ginecológico obtenida con éxito" });
+    const pacienteObstetricosGinecologicos = await pacienteObstetricoGinecologicoService.findPacienteObstetricosGinecologicos();
+    const basicInfoList = pacienteObstetricosGinecologicos.map((registro) => registro.getBasicInfo());
+    if (basicInfoList.length === 0) return res.status(404).json({ message: "No hay registros obstétricos/ginecológicos encontrados." });
+    res.json({ pacienteObstetricosGinecologicos: basicInfoList, message: "Lista de registros obstétricos/ginecológicos obtenida con éxito" });
   } catch (error) {
     console.log("error :>> ", error);
-    res.status(500).json({ error: "Error al obtener relaciones paciente-obstétrico/ginecológico", details: error });
+    res.status(500).json({ error: "Error al obtener registros obstétricos/ginecológicos", details: error });
   }
 };
 
-export const findPacienteObstetricosGinecologicosById = async (req: Request, res: Response) => {
+export const findPacienteObstetricoGinecologicoById = async (req: Request, res: Response) => {
   try {
-    const pacienteOG = await pacienteObstetricosGinecologicosService.findPacienteObstetricosGinecologicosById(req.params.id);
-    if (!pacienteOG) return res.status(404).json({ message: "Relación paciente-obstétrico/ginecológico no encontrada" });
-
-    res.json({ pacienteOG, message: "Relación paciente-obstétrico/ginecológico encontrada con éxito" });
+    const pacienteObstetricoGinecologico = await pacienteObstetricoGinecologicoService.findPacienteObstetricoGinecologicoById(req.params.id);
+    if (!pacienteObstetricoGinecologico) return res.status(404).json({ message: "Registro obstétrico/ginecológico no encontrado" });
+    res.json({ pacienteObstetricoGinecologico, message: "Registro obstétrico/ginecológico encontrado con éxito" });
   } catch (error) {
     console.log("error :>> ", error);
-    res.status(500).json({ error: "Error al obtener relación paciente-obstétrico/ginecológico", details: error });
+    res.status(500).json({ error: "Error al obtener registro obstétrico/ginecológico", details: error });
   }
 };
 
-export const createPacienteObstetricosGinecologicos = async (req: Request, res: Response) => {
+export const findPacienteObstetricosGinecologicosByPaciente = async (req: Request, res: Response) => {
   try {
-    const newPacienteOG: Omit<PacienteObstetricosGinecologicos, keyof Document> = req.body;
-    const { pacienteOG, message } = await pacienteObstetricosGinecologicosService.createPacienteObstetricosGinecologicos(newPacienteOG);
-
-    res.status(201).json({ pacienteOG, message });
+    const pacienteObstetricosGinecologicos = await pacienteObstetricoGinecologicoService.findPacienteObstetricosGinecologicosByPaciente(req.params.pacienteId);
+    const basicInfoList = pacienteObstetricosGinecologicos.map((registro) => registro.getBasicInfo());
+    if (basicInfoList.length === 0) return res.status(404).json({ message: "No hay registros obstétricos/ginecológicos para este paciente" });
+    res.json({ pacienteObstetricosGinecologicos: basicInfoList, message: "Registros obstétricos/ginecológicos del paciente obtenidos con éxito" });
   } catch (error) {
     console.log("error :>> ", error);
-    res.status(400).json({ error: "Error al crear relación paciente-obstétrico/ginecológico", details: error });
+    res.status(500).json({ error: "Error al obtener registros obstétricos/ginecológicos por paciente", details: error });
   }
 };
 
-export const updatePacienteObstetricosGinecologicos = async (req: Request, res: Response) => {
+export const updatePacienteObstetricoGinecologico = async (req: Request, res: Response) => {
   try {
-    const { pacienteOG, message } = await pacienteObstetricosGinecologicosService.updatePacienteObstetricosGinecologicos(req.params.id, req.body);
-    if (!pacienteOG) return res.status(404).json({ message: "Relación paciente-obstétrico/ginecológico no encontrada" });
-
-    res.json({ pacienteOG, message });
+    const { pacienteObstetricoGinecologico, message } = await pacienteObstetricoGinecologicoService.updatePacienteObstetricoGinecologico(req.params.id, req.body);
+    if (!pacienteObstetricoGinecologico) return res.status(404).json({ message: "Registro obstétrico/ginecológico no encontrado" });
+    res.json({ pacienteObstetricoGinecologico, message });
   } catch (error) {
     console.log("error :>> ", error);
-    res.status(500).json({ error: "Error al actualizar relación paciente-obstétrico/ginecológico", details: error });
+    res.status(500).json({ error: "Error al actualizar registro obstétrico/ginecológico", details: error });
   }
 };
 
-export const softDeletePacienteObstetricosGinecologicos = async (req: Request, res: Response) => {
+export const deletePacienteObstetricoGinecologico = async (req: Request, res: Response) => {
   try {
-    const { success, message } = await pacienteObstetricosGinecologicosService.softDeletePacienteObstetricosGinecologicos(req.params.id);
-    if (!success) return res.status(404).json({ message: "Relación paciente-obstétrico/ginecológico no encontrada" });
-
+    const { success, message } = await pacienteObstetricoGinecologicoService.deletePacienteObstetricoGinecologico(req.params.id);
+    if (!success) return res.status(404).json({ message: "Registro obstétrico/ginecológico no encontrado" });
     res.json({ success, message });
   } catch (error) {
     console.log("error :>> ", error);
-    res.status(500).json({ error: "Error al eliminar relación paciente-obstétrico/ginecológico", details: error });
+    res.status(500).json({ error: "Error al eliminar registro obstétrico/ginecológico físicamente", details: error });
   }
 };
 
-export const deletePacienteObstetricosGinecologicos = async (req: Request, res: Response) => {
+export const softDeletePacienteObstetricoGinecologico = async (req: Request, res: Response) => {
   try {
-    const { success, message } = await pacienteObstetricosGinecologicosService.deletePacienteObstetricosGinecologicos(req.params.id);
-    if (!success) return res.status(404).json({ message: "Relación paciente-obstétrico/ginecológico no encontrada" });
-
+    const { success, message } = await pacienteObstetricoGinecologicoService.softDeletePacienteObstetricoGinecologico(req.params.id);
+    if (!success) return res.status(404).json({ message: "Registro obstétrico/ginecológico no encontrado" });
     res.json({ success, message });
   } catch (error) {
     console.log("error :>> ", error);
-    res.status(500).json({ error: "Error al eliminar relación paciente-obstétrico/ginecológico físicamente", details: error });
+    res.status(500).json({ error: "Error al eliminar registro obstétrico/ginecológico", details: error });
   }
 };

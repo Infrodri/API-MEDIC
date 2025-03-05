@@ -1,45 +1,61 @@
-# Crear una nueva relación paciente-adicción
+# Crear un tipo de adicción (necesario para la relación)
+POST http://localhost:4000/api/v1/tipos-adicciones HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer <tu-token>
+
+{
+    "nombre": "Alcoholismo",
+    "descripcion": "Dependencia al alcohol"
+}
+
+# Respuesta: {"_id": "67c7804f46481074013e0214", ...}
+
+###
+
+# Crear una adicción para un paciente
 POST http://localhost:4000/api/v1/paciente-adicciones HTTP/1.1
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3YzA4MzgxOTdjN2VhYzQzYmEzNzM3ZiIsImVtYWlsIjoiYWRtaW5AdGVzdC5jb20iLCJ1c2VybmFtZSI6ImFkbWluIiwiaWF0IjoxNzQwNzIxNTg1LCJleHAiOjE3NDEwODE1ODV9.X3b3zSiszSInn2QkVkh2_xjoh19aez5m-8S-WCIcix4
+Authorization: Bearer <tu-token>
 
 {
-  "paciente": "67c1480aff8a064058786d3d", 
-  "tipoAdiccion": "67c14cb55d292f781c0b5162",  
-  "fechaInicio": "2023-01-15",
-  "fechaFin": "2024-12-31"
+    "paciente": "67c7801b46481074013e0210",
+    "tipoAdiccion": "67c7804f46481074013e0214",
+    "fechaInicio": "2020-01-01",
+    "fechaFin": null,
+    "notas": "Paciente en tratamiento"
 }
 
+# Respuesta: {"_id": "67c7807a46481074013e0218", ...}
+
 ###
-# Listar todas las relaciones paciente-adicciones
+
+# Listar todas las adicciones activas
 GET http://localhost:4000/api/v1/paciente-adicciones HTTP/1.1
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3YzA4MzgxOTdjN2VhYzQzYmEzNzM3ZiIsImVtYWlsIjoiYWRtaW5AdGVzdC5jb20iLCJ1c2VybmFtZSI6ImFkbWluIiwiaWF0IjoxNzQwNzIxNTg1LCJleHAiOjE3NDEwODE1ODV9.X3b3zSiszSInn2QkVkh2_xjoh19aez5m-8S-WCIcix4
+Authorization: Bearer <tu-token>
 
 ###
-# Obtener una relación paciente-adicción por ID
-GET http://localhost:4000/api/v1/paciente-adicciones/67bc130a7d9eab592d2d02cf HTTP/1.1
+
+# Listar adicciones por paciente
+GET http://localhost:4000/api/v1/paciente-adicciones/paciente/67c7801b46481074013e0210 HTTP/1.1
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3YmMxNWNjOTA2OTUyOTE4Y2FiZjYzMSIsImVtYWlsIjoidGVzdEB0ZXN0LmNvbSIsInVzZXJuYW1lIjoidGVzdCIsImlhdCI6MTc0MDQyOTQ1NCwiZXhwIjoxNzQwNDMzMDU0fQ.bjveHow1X4ycarXRLCwPsplGh8KkS-ooho5nsQDp2MA
+Authorization: Bearer <tu-token>
 
 ###
-# Actualizar una relación paciente-adicción
-PUT http://localhost:4000/api/v1/paciente-adicciones/67009a72d4d2db15547140a1 HTTP/1.1
+
+# Actualizar una adicción
+PUT http://localhost:4000/api/v1/paciente-adicciones/67c7807a46481074013e0218 HTTP/1.1
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3MDA5YTVhZDRkMmRiMTU1NDcxNDA5OSIsImVtYWlsIjoiYWRtaW5AdGVzdC5jb20iLCJ1c2VybmFtZSI6ImFkbWluIiwiaWF0IjoxNzI4MDk5NzY5LCJleHAiOjE3MjgxMDMzNjl9.reKeBCmX--AwQ3y0Yl90nK5jMrJypWX0k67PlrnrX4U
+Authorization: Bearer <tu-token>
 
 {
-  "fechaFin": "2025-01-15"
+    "fechaFin": "2025-03-05",
+    "notas": "Tratamiento concluido"
 }
 
 ###
-# Eliminar lógicamente una relación paciente-adicción (cambiar a Inactivo)
-PATCH http://localhost:4000/api/v1/paciente-adicciones/67bc14f2906952918cabf625/soft-delete HTTP/1.1
-Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3YmMxNTEzOTA2OTUyOTE4Y2FiZjYyOCIsImVtYWlsIjoiYWRtaW5AdGVzdC5jb20iLCJ1c2VybmFtZSI6ImFkbWluIiwiaWF0IjoxNzQwNDMwNDg2LCJleHAiOjE3NDA0MzQwODZ9.BgTY0C7SDKRdsQkhz6kGbudEZNxte0MpRvgt-QudT2o
 
-###
-# Eliminar físicamente una relación paciente-adicción (si aplica, aunque prefieres eliminaciones lógicas)
-DELETE http://localhost:4000/api/v1/paciente-adicciones/67bc14f2906952918cabf625 HTTP/1.1
+# Eliminar lógicamente una adicción
+PATCH http://localhost:4000/api/v1/paciente-adicciones/67c7807a46481074013e0218/soft-delete HTTP/1.1
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3YmMxNTEzOTA2OTUyOTE4Y2FiZjYyOCIsImVtYWlsIjoiYWRtaW5AdGVzdC5jb20iLCJ1c2VybmFtZSI6ImFkbWluIiwiaWF0IjoxNzQwNDMwNDg2LCJleHAiOjE3NDA0MzQwODZ9.BgTY0C7SDKRdsQkhz6kGbudEZNxte0MpRvgt-QudT2o
+Authorization: Bearer <tu-token>

@@ -1,5 +1,8 @@
+// src/services/ConsultasMedicasService.ts
+import { PacienteModel } from "@models/Pacientes";
 import { Query } from "types/RepositoryTypes";
 import { IConsultasMedicasRepository, IConsultasMedicasService, ConsultasMedicas } from "types/ConsultasMedicasTypes";
+import { ConsultasMedicasRepository } from "@repositories/ConsultasMedicasRepositories";
 
 export class ConsultasMedicasService implements IConsultasMedicasService {
   private consultasMedicasRepository: IConsultasMedicasRepository;
@@ -7,14 +10,12 @@ export class ConsultasMedicasService implements IConsultasMedicasService {
   constructor(consultasMedicasRepository: IConsultasMedicasRepository) {
     this.consultasMedicasRepository = consultasMedicasRepository;
   }
-  concludeConsulta(id: string, medicoId: any): { success: any; message: any; } | PromiseLike<{ success: any; message: any; }> {
-    throw new Error("Method not implemented.");
-  }
 
   async createConsultasMedicas(consultaData: Omit<ConsultasMedicas, keyof Document>): Promise<{ consulta: ConsultasMedicas; message: string }> {
     const newConsulta = await this.consultasMedicasRepository.create({
       ...consultaData,
-      estado: "Activo", // Default status is Active
+      estado: "Activo",
+      estadoConsulta: "Pendiente",
     });
     return { consulta: newConsulta, message: "Consulta médica registrada con éxito" };
   }
@@ -53,5 +54,55 @@ export class ConsultasMedicasService implements IConsultasMedicasService {
     await this.consultasMedicasRepository.update(id, consulta);
     return { success: true, message: "Consulta médica cambiada a estado Inactivo" };
   }
-  
+
+  async concludeConsulta(id: string): Promise<{ consulta: ConsultasMedicas; message: string }> {
+    const consulta = await this.consultasMedicasRepository.findById(id);
+    if (!consulta) throw new Error("Consulta no encontrada");
+
+    consulta.estadoConsulta = "Concluida";
+    await this.consultasMedicasRepository.update(id, consulta);
+
+    const paciente = await PacienteModel.findById(consulta.paciente);
+    if (paciente) {
+      paciente.estadoAtencion = "Atendido";
+      await paciente.save();
+    }
+
+    return { consulta, message: "Consulta concluida con éxito" };
+  }
+
+  async deriveConsultaMedica(id: string, medicoId: string): Promise<{ consulta: ConsultasMedicas; message: string }> {
+    const consulta = await this.consultasMedicasRepository.findById(id);
+    if (!consulta) throw new Error("Consulta no encontrada");
+
+    consulta.estadoConsulta = "Derivada";
+    consulta.medicoDerivado = medicoId as any;
+    await this.consultasMedicasRepository.update(id, consulta);
+
+    const paciente = await PacienteModel.findById(consulta.paciente);
+    if (paciente) {
+      paciente.estadoAtencion = "Derivado";
+      await paciente.save();
+    }
+
+    return { consulta, message: "Consulta derivada con éxito" };
+  }
+
+  async reassignConsultaMedica(id: string, medicoId: string): Promise<{ consulta: ConsultasMedicas; message: string }> {
+    const consulta = await this.consultasMedicasRepository.findById(id);
+    if (!consulta) throw new Error("Consulta no encontrada");
+
+    consulta.medico = medicoId as any;
+    consulta.estadoConsulta = "Pendiente";
+    consulta.medicoDerivado = undefined;
+    await this.consultasMedicasRepository.update(id, consulta);
+
+    const paciente = await PacienteModel.findById(consulta.paciente);
+    if (paciente) {
+      paciente.estadoAtencion = "Pendiente";
+      await paciente.save();
+    }
+
+    return { consulta, message: "Consulta reasignada con éxito" };
+  }
 }

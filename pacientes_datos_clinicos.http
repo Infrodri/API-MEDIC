@@ -1,0 +1,267 @@
+# Crear un paciente (necesario para las relaciones)
+POST http://localhost:4000/api/v1/pacientes HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer <tu-token>
+
+{
+    "primerNombre": "María",
+    "segundoNombre": "Luisa",
+    "primerApellido": "Gómez",
+    "segundoApellido": "Pérez",
+    "fechaNacimiento": "1990-03-15",
+    "direccion": "Calle 10, Colonia Norte",
+    "telefono": "912345678",
+    "celular": "0954321678",
+    "genero": "Femenino"
+}
+
+# Respuesta: {"_id": "67c7801b46481074013e0210", ...}
+
+###
+
+# Crear un tipo de adicción
+POST http://localhost:4000/api/v1/tipos-adicciones HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer <tu-token>
+
+{
+    "nombre": "Alcoholismo",
+    "descripcion": "Dependencia al alcohol"
+}
+
+# Respuesta: {"_id": "67c7804f46481074013e0214", ...}
+
+###
+
+# Crear una adicción para el paciente
+POST http://localhost:4000/api/v1/paciente-adicciones HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer <tu-token>
+
+{
+    "paciente": "67c7801b46481074013e0210",
+    "tipoAdiccion": "67c7804f46481074013e0214",
+    "fechaInicio": "2020-01-01",
+    "fechaFin": null
+}
+
+# Respuesta: {"_id": "67c7807a46481074013e0218", ...}
+
+###
+
+# Listar todas las adicciones activas
+GET http://localhost:4000/api/v1/paciente-adicciones HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer <tu-token>
+
+###
+
+# Listar adicciones por paciente
+GET http://localhost:4000/api/v1/paciente-adicciones/paciente/67c7801b46481074013e0210 HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer <tu-token>
+
+###
+
+# Actualizar una adicción
+PUT http://localhost:4000/api/v1/paciente-adicciones/67c7807a46481074013e0218 HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer <tu-token>
+
+{
+    "fechaFin": "2025-03-05",
+    "notas": "Tratamiento concluido"
+}
+
+###
+
+# Eliminar lógicamente una adicción
+PATCH http://localhost:4000/api/v1/paciente-adicciones/67c7807a46481074013e0218/soft-delete HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer <tu-token>
+
+###
+
+# Crear un examen médico
+POST http://localhost:4000/api/v1/examenes-medicos HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer <tu-token>
+
+{
+    "nombre": "Análisis de sangre",
+    "descripcion": "Examen de sangre general"
+}
+
+# Respuesta: {"_id": "67c7808f46481074013e0220", ...}
+
+###
+
+# Crear un examen para el paciente
+POST http://localhost:4000/api/v1/paciente-examenes HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer <tu-token>
+
+{
+    "paciente": "67c7801b46481074013e0210",
+    "examenMedico": "67c7808f46481074013e0220",
+    "fechaRealizacion": "2025-03-05",
+    "resultado": "Normal"
+}
+
+# Respuesta: {"_id": "67c7809a46481074013e0224", ...}
+
+###
+
+# Listar todos los exámenes activos
+GET http://localhost:4000/api/v1/paciente-examenes HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer <tu-token>
+
+###
+
+# Listar exámenes por paciente
+GET http://localhost:4000/api/v1/paciente-examenes/paciente/67c7801b46481074013e0210 HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer <tu-token>
+
+###
+
+# Actualizar un examen
+PUT http://localhost:4000/api/v1/paciente-examenes/67c7809a46481074013e0224 HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer <tu-token>
+
+{
+    "resultado": "Resultados revisados"
+}
+
+###
+
+# Eliminar lógicamente un examen
+PATCH http://localhost:4000/api/v1/paciente-examenes/67c7809a46481074013e0224/soft-delete HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer <tu-token>
+
+###
+
+# Crear un tipo obstétrico/ginecológico
+POST http://localhost:4000/api/v1/tipos-obstetricos-ginecologicos HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer <tu-token>
+
+{
+    "nombre": "Embarazo",
+    "descripcion": "Gestación normal"
+}
+
+# Respuesta: {"_id": "67c780a546481074013e0228", ...}
+
+###
+
+# Crear un registro obstétrico/ginecológico
+POST http://localhost:4000/api/v1/paciente-obstetricos-ginecologicos HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer <tu-token>
+
+{
+    "paciente": "67c7801b46481074013e0210",
+    "tipoObstetricoGinecologico": "67c780a546481074013e0228",
+    "fechaEvento": "2024-06-01",
+    "detalles": "Embarazo de 6 meses"
+}
+
+# Respuesta: {"_id": "67c780b046481074013e022c", ...}
+
+###
+
+# Listar todos los registros obstétricos/ginecológicos activos
+GET http://localhost:4000/api/v1/paciente-obstetricos-ginecologicos HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer <tu-token>
+
+###
+
+# Listar registros obstétricos/ginecológicos por paciente
+GET http://localhost:4000/api/v1/paciente-obstetricos-ginecologicos/paciente/67c7801b46481074013e0210 HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer <tu-token>
+
+###
+
+# Actualizar un registro obstétrico/ginecológico
+PUT http://localhost:4000/api/v1/paciente-obstetricos-ginecologicos/67c780b046481074013e022c HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer <tu-token>
+
+{
+    "detalles": "Parto exitoso"
+}
+
+###
+
+# Eliminar lógicamente un registro obstétrico/ginecológico
+PATCH http://localhost:4000/api/v1/paciente-obstetricos-ginecologicos/67c780b046481074013e022c/soft-delete HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer <tu-token>
+
+###
+
+# Crear un tipo de operación quirúrgica
+POST http://localhost:4000/api/v1/tipos-operaciones-quirurgicas HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer <tu-token>
+
+{
+    "nombre": "Apendicectomía",
+    "descripcion": "Extracción del apéndice"
+}
+
+# Respuesta: {"_id": "67c780c546481074013e0230", ...}
+
+###
+
+# Crear una operación para el paciente
+POST http://localhost:4000/api/v1/paciente-operaciones HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer <tu-token>
+
+{
+    "paciente": "67c7801b46481074013e0210",
+    "tipoOperacionQuirurgica": "67c780c546481074013e0230",
+    "fechaOperacion": "2025-03-06",
+    "notas": "Recuperación normal"
+}
+
+# Respuesta: {"_id": "67c780d046481074013e0234", ...}
+
+###
+
+# Listar todas las operaciones activas
+GET http://localhost:4000/api/v1/paciente-operaciones HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer <tu-token>
+
+###
+
+# Listar operaciones por paciente
+GET http://localhost:4000/api/v1/paciente-operaciones/paciente/67c7801b46481074013e0210 HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer <tu-token>
+
+###
+
+# Actualizar una operación
+PUT http://localhost:4000/api/v1/paciente-operaciones/67c780d046481074013e0234 HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer <tu-token>
+
+{
+    "notas": "Recuperación completa"
+}
+
+###
+
+# Eliminar lógicamente una operación
+PATCH http://localhost:4000/api/v1/paciente-operaciones/67c780d046481074013e0234/soft-delete HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer <tu-token>

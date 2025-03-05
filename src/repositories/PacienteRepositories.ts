@@ -1,6 +1,7 @@
+// src/repositories/PacienteRepositories.ts
 import { PacienteModel } from "@models/Pacientes";
-import { Query } from "types/RepositoryTypes";
 import { IPacienteRepository, Paciente } from "types/PacientesTypes";
+import { Query } from "types/RepositoryTypes";
 
 export class PacienteRepository implements IPacienteRepository {
   async create(data: Paciente): Promise<Paciente> {
@@ -31,5 +32,9 @@ export class PacienteRepository implements IPacienteRepository {
   async delete(id: string): Promise<boolean> {
     const deleted = await PacienteModel.findByIdAndDelete(id).exec();
     return deleted !== null;
+  }
+
+  async findByEstadoAtencion(estado: string): Promise<Paciente[]> {
+    return await PacienteModel.find({ estadoAtencion: estado, estado: "Activo" }).exec();
   }
 }

@@ -1,80 +1,87 @@
-import { PacienteOperacionesRepository } from "@repositories/PacienteOperacionesRepositories";
-import { PacienteOperacionesService } from "@services/PacienteOperacionesService";
+// src/controllers/pacienteOperacionesControllers.ts
+import { PacienteOperacionRepository } from "@repositories/PacienteOperacionesRepositories";
+import { PacienteOperacionService } from "@services/PacienteOperacionesService";
 import { Request, Response } from "express";
-import { IPacienteOperacionesRepository, IPacienteOperacionesService, PacienteOperaciones } from "types/PacienteOperacionesTypes";
+import { IPacienteOperacionRepository, IPacienteOperacionService, PacienteOperacion } from "types/PacienteOperacionesTypes";
 
-const pacienteOperacionesRepository: IPacienteOperacionesRepository = new PacienteOperacionesRepository();
-const pacienteOperacionesService: IPacienteOperacionesService = new PacienteOperacionesService(pacienteOperacionesRepository);
+const pacienteOperacionRepository: IPacienteOperacionRepository = new PacienteOperacionRepository();
+const pacienteOperacionService: IPacienteOperacionService = new PacienteOperacionService(pacienteOperacionRepository);
+
+export const createPacienteOperacion = async (req: Request, res: Response) => {
+  try {
+    const newPacienteOperacion: Omit<PacienteOperacion, keyof Document> = req.body;
+    const { pacienteOperacion, message } = await pacienteOperacionService.createPacienteOperacion(newPacienteOperacion);
+    res.status(201).json({ pacienteOperacion, message });
+  } catch (error) {
+    console.log("error :>> ", error);
+    res.status(400).json({ error: "Error al crear operación del paciente", details: error });
+  }
+};
 
 export const findPacienteOperaciones = async (req: Request, res: Response) => {
   try {
-    const pacientesOps = await pacienteOperacionesService.findPacienteOperaciones();
-    const basicInfoList = pacientesOps.map((pacienteOp) => pacienteOp.getBasicInfo());
-    if (basicInfoList.length === 0) return res.status(404).json({ message: "No hay relaciones paciente-operaciones encontradas." });
-
-    res.json({ pacientesOps: basicInfoList, message: "Lista de relaciones paciente-operaciones obtenida con éxito" });
+    const pacienteOperaciones = await pacienteOperacionService.findPacienteOperaciones();
+    const basicInfoList = pacienteOperaciones.map((operacion) => operacion.getBasicInfo());
+    if (basicInfoList.length === 0) return res.status(404).json({ message: "No hay operaciones de pacientes encontradas." });
+    res.json({ pacienteOperaciones: basicInfoList, message: "Lista de operaciones de pacientes obtenida con éxito" });
   } catch (error) {
     console.log("error :>> ", error);
-    res.status(500).json({ error: "Error al obtener relaciones paciente-operaciones", details: error });
+    res.status(500).json({ error: "Error al obtener operaciones de pacientes", details: error });
   }
 };
 
-export const findPacienteOperacionesById = async (req: Request, res: Response) => {
+export const findPacienteOperacionById = async (req: Request, res: Response) => {
   try {
-    const pacienteOp = await pacienteOperacionesService.findPacienteOperacionesById(req.params.id);
-    if (!pacienteOp) return res.status(404).json({ message: "Relación paciente-operación no encontrada" });
-
-    res.json({ pacienteOp, message: "Relación paciente-operación encontrada con éxito" });
+    const pacienteOperacion = await pacienteOperacionService.findPacienteOperacionById(req.params.id);
+    if (!pacienteOperacion) return res.status(404).json({ message: "Operación del paciente no encontrada" });
+    res.json({ pacienteOperacion, message: "Operación del paciente encontrada con éxito" });
   } catch (error) {
     console.log("error :>> ", error);
-    res.status(500).json({ error: "Error al obtener relación paciente-operación", details: error });
+    res.status(500).json({ error: "Error al obtener operación del paciente", details: error });
   }
 };
 
-export const createPacienteOperaciones = async (req: Request, res: Response) => {
+export const findPacienteOperacionesByPaciente = async (req: Request, res: Response) => {
   try {
-    const newPacienteOp: Omit<PacienteOperaciones, keyof Document> = req.body;
-    const { pacienteOp, message } = await pacienteOperacionesService.createPacienteOperaciones(newPacienteOp);
-
-    res.status(201).json({ pacienteOp, message });
+    const pacienteOperaciones = await pacienteOperacionService.findPacienteOperacionesByPaciente(req.params.pacienteId);
+    const basicInfoList = pacienteOperaciones.map((operacion) => operacion.getBasicInfo());
+    if (basicInfoList.length === 0) return res.status(404).json({ message: "No hay operaciones para este paciente" });
+    res.json({ pacienteOperaciones: basicInfoList, message: "Operaciones del paciente obtenidas con éxito" });
   } catch (error) {
     console.log("error :>> ", error);
-    res.status(400).json({ error: "Error al crear relación paciente-operación", details: error });
+    res.status(500).json({ error: "Error al obtener operaciones por paciente", details: error });
   }
 };
 
-export const updatePacienteOperaciones = async (req: Request, res: Response) => {
+export const updatePacienteOperacion = async (req: Request, res: Response) => {
   try {
-    const { pacienteOp, message } = await pacienteOperacionesService.updatePacienteOperaciones(req.params.id, req.body);
-    if (!pacienteOp) return res.status(404).json({ message: "Relación paciente-operación no encontrada" });
-
-    res.json({ pacienteOp, message });
+    const { pacienteOperacion, message } = await pacienteOperacionService.updatePacienteOperacion(req.params.id, req.body);
+    if (!pacienteOperacion) return res.status(404).json({ message: "Operación del paciente no encontrada" });
+    res.json({ pacienteOperacion, message });
   } catch (error) {
     console.log("error :>> ", error);
-    res.status(500).json({ error: "Error al actualizar relación paciente-operación", details: error });
+    res.status(500).json({ error: "Error al actualizar operación del paciente", details: error });
   }
 };
 
-export const softDeletePacienteOperaciones = async (req: Request, res: Response) => {
+export const deletePacienteOperacion = async (req: Request, res: Response) => {
   try {
-    const { success, message } = await pacienteOperacionesService.softDeletePacienteOperaciones(req.params.id);
-    if (!success) return res.status(404).json({ message: "Relación paciente-operación no encontrada" });
-
+    const { success, message } = await pacienteOperacionService.deletePacienteOperacion(req.params.id);
+    if (!success) return res.status(404).json({ message: "Operación del paciente no encontrada" });
     res.json({ success, message });
   } catch (error) {
     console.log("error :>> ", error);
-    res.status(500).json({ error: "Error al eliminar relación paciente-operación", details: error });
+    res.status(500).json({ error: "Error al eliminar operación del paciente físicamente", details: error });
   }
 };
 
-export const deletePacienteOperaciones = async (req: Request, res: Response) => {
+export const softDeletePacienteOperacion = async (req: Request, res: Response) => {
   try {
-    const { success, message } = await pacienteOperacionesService.deletePacienteOperaciones(req.params.id);
-    if (!success) return res.status(404).json({ message: "Relación paciente-operación no encontrada" });
-
+    const { success, message } = await pacienteOperacionService.softDeletePacienteOperacion(req.params.id);
+    if (!success) return res.status(404).json({ message: "Operación del paciente no encontrada" });
     res.json({ success, message });
   } catch (error) {
     console.log("error :>> ", error);
-    res.status(500).json({ error: "Error al eliminar relación paciente-operación físicamente", details: error });
+    res.status(500).json({ error: "Error al eliminar operación del paciente", details: error });
   }
 };

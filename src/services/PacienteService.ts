@@ -1,5 +1,11 @@
+// src/services/PacienteService.ts
+import { ConsultasMedicasModel } from "@models/ConsultasMedicas";
+import { PacienteAdiccionModel } from "@models/PacienteAdicciones";
+import { PacienteExamenModel } from "@models/PacienteExamenes";
+import { PacienteObstetricoGinecologicoModel } from "@models/PacienteObstetricosGinecologicos";
+import { PacienteOperacionModel } from "@models/PacienteOperaciones";
+import { HistorialMedico, IPacienteRepository, IPacienteService, Paciente } from "types/PacientesTypes";
 import { Query } from "types/RepositoryTypes";
-import { IPacienteRepository, IPacienteService, Paciente } from "types/PacientesTypes";
 
 export class PacienteService implements IPacienteService {
   private pacienteRepository: IPacienteRepository;
@@ -9,12 +15,14 @@ export class PacienteService implements IPacienteService {
   }
 
   async createPaciente(pacienteData: Omit<Paciente, keyof Document>): Promise<{ paciente: Paciente; message: string }> {
-    const newPaciente = await this.pacienteRepository.create({...pacienteData,
-      estado: "Activo", // Default status is Active
+    const newPaciente = await this.pacienteRepository.create({
+      ...pacienteData,
+      estado: "Activo",
+      estadoAtencion: "Pendiente",
     });
     return { paciente: newPaciente, message: "Paciente registrado con éxito" };
   }
-  
+
   async findPacientes(query?: Query): Promise<Paciente[]> {
     return this.pacienteRepository.findActive(query);
   }
@@ -23,8 +31,8 @@ export class PacienteService implements IPacienteService {
     return this.pacienteRepository.findById(id);
   }
 
-  async findPacienteByCedula(cedula: string): Promise<Paciente | null> {
-    return this.pacienteRepository.findOne({ cedula, estado: "Activo" });
+  async findPacientesByEstadoAtencion(estado: string): Promise<Paciente[]> {
+    return this.pacienteRepository.findByEstadoAtencion(estado);
   }
 
   async updatePaciente(id: string, paciente: Partial<Paciente>): Promise<{ paciente: Paciente | null; message: string }> {
@@ -48,5 +56,36 @@ export class PacienteService implements IPacienteService {
     paciente.estado = "Inactivo";
     await this.pacienteRepository.update(id, paciente);
     return { success: true, message: "Paciente cambiado a estado Inactivo" };
+  }
+
+  async getHistorialMedico(pacienteId: string): Promise<HistorialMedico> {
+    const paciente = await this.pacienteRepository.findById(pacienteId);
+    if (!paciente) throw new Error("Paciente no encontrado");
+
+    const adicciones = await PacienteAdiccionModel.find({ paciente: pacienteId, estado: "Activo" })
+      .populate("tipoAdiccion")
+      .exec();
+    const examenes = await PacienteExamenModel.find({ paciente: pacienteId, estado: "Activo" })
+      .populate("examenMedico")
+      .exec();
+    const obstetricosGinecologicos = await PacienteObstetricoGinecologicoModel.find({ paciente: pacienteId, estado: "Activo" })
+      .populate("tipoObstetricoGinecologico")
+      .exec();
+    const operaciones = await PacienteOperacionModel.find({ paciente: pacienteId, estado: "Activo" })
+      .populate("tipoOperacionQuirurgica")
+      .exec();
+    const consultas = await ConsultasMedicasModel.find({ paciente: pacienteId, estado: "Activo" })
+      .populate("medico")
+      .populate("especialidad")
+      .exec();
+
+    return {
+      paciente,
+      adicciones,
+      examenes,
+      obstetricosGinecologicos,
+      operaciones,
+      consultas,
+    };
   }
 }

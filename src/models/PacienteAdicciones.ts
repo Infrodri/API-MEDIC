@@ -1,16 +1,17 @@
+// src/models/PacienteAdicciones.ts
 import mongoose, { Schema } from "mongoose";
-import { PacienteAdicciones } from "types/PacienteAdiccionesTypes";
+import { PacienteAdiccion } from "types/PacienteAdiccionesTypes";
 
-const PacienteAdiccionesSchema: Schema = new Schema<PacienteAdicciones>(
+const PacienteAdiccionSchema: Schema = new Schema<PacienteAdiccion>(
   {
     paciente: {
       type: Schema.Types.ObjectId,
-      ref: "Paciente", // Relación con Pacientes
+      ref: "Paciente",
       required: [true, "El paciente es obligatorio"],
     },
     tipoAdiccion: {
       type: Schema.Types.ObjectId,
-      ref: "TiposAdicciones", // Relación con TiposAdicciones
+      ref: "TiposAdiccion",
       required: [true, "El tipo de adicción es obligatorio"],
     },
     fechaInicio: {
@@ -19,7 +20,7 @@ const PacienteAdiccionesSchema: Schema = new Schema<PacienteAdicciones>(
     },
     fechaFin: {
       type: Date,
-      required: false, // Opcional
+      required: false,
     },
     estado: {
       type: String,
@@ -28,15 +29,14 @@ const PacienteAdiccionesSchema: Schema = new Schema<PacienteAdicciones>(
     },
   },
   {
-    timestamps: true, // Automatically add createdAt and updatedAt
+    timestamps: true,
     versionKey: false,
   }
 );
 
-// Method to get basic paciente-adicciones info (for the list)
-PacienteAdiccionesSchema.methods.getBasicInfo = function () {
+PacienteAdiccionSchema.methods.getBasicInfo = function () {
   return {
-    _id: this._id, // Usamos el _id generado por MongoDB
+    _id: this._id,
     paciente: this.paciente,
     tipoAdiccion: this.tipoAdiccion,
     fechaInicio: this.fechaInicio,
@@ -45,4 +45,4 @@ PacienteAdiccionesSchema.methods.getBasicInfo = function () {
   };
 };
 
-export const PacienteAdiccionesModel = mongoose.model<PacienteAdicciones>("PacienteAdicciones", PacienteAdiccionesSchema);
+export const PacienteAdiccionModel = mongoose.model<PacienteAdiccion>("PacienteAdiccion", PacienteAdiccionSchema);

@@ -1,26 +1,27 @@
+// src/models/PacienteObstetricosGinecologicos.ts
 import mongoose, { Schema } from "mongoose";
-import { PacienteObstetricosGinecologicos } from "types/PacienteObstetricosGinecologicosTypes";
+import { PacienteObstetricoGinecologico } from "types/PacienteObstetricosGinecologicosTypes";
 
-const PacienteObstetricosGinecologicosSchema: Schema = new Schema<PacienteObstetricosGinecologicos>(
+const PacienteObstetricoGinecologicoSchema: Schema = new Schema<PacienteObstetricoGinecologico>(
   {
     paciente: {
       type: Schema.Types.ObjectId,
-      ref: "Paciente", // Relación con Pacientes
+      ref: "Paciente",
       required: [true, "El paciente es obligatorio"],
     },
     tipoObstetricoGinecologico: {
       type: Schema.Types.ObjectId,
-      ref: "TiposObstetricosGinecologicos", // Relación con TiposObstetricosGinecologicos
+      ref: "TiposObstetricosGinecologicos",
       required: [true, "El tipo obstétrico/ginecológico es obligatorio"],
     },
-    fecha: {
+    fechaEvento: {
       type: Date,
-      required: [true, "La fecha es obligatoria"],
+      required: [true, "La fecha del evento es obligatoria"],
     },
-    observaciones: {
+    detalles: {
       type: String,
-      required: [true, "Las observaciones son obligatorias"],
       trim: true,
+      default: "",
     },
     estado: {
       type: String,
@@ -29,20 +30,20 @@ const PacienteObstetricosGinecologicosSchema: Schema = new Schema<PacienteObstet
     },
   },
   {
-    timestamps: true, // Automatically add createdAt and updatedAt
+    timestamps: true,
     versionKey: false,
   }
 );
 
-// Method to get basic paciente-obstétricos/ginecológicos info (for the list)
-PacienteObstetricosGinecologicosSchema.methods.getBasicInfo = function () {
+PacienteObstetricoGinecologicoSchema.methods.getBasicInfo = function () {
   return {
-    _id: this._id, // Usamos el _id generado por MongoDB
+    _id: this._id,
     paciente: this.paciente,
     tipoObstetricoGinecologico: this.tipoObstetricoGinecologico,
-    fecha: this.fecha,
+    fechaEvento: this.fechaEvento,
+    detalles: this.detalles,
     estado: this.estado,
   };
 };
 
-export const PacienteObstetricosGinecologicosModel = mongoose.model<PacienteObstetricosGinecologicos>("PacienteObstetricosGinecologicos", PacienteObstetricosGinecologicosSchema);
+export const PacienteObstetricoGinecologicoModel = mongoose.model<PacienteObstetricoGinecologico>("PacienteObstetricoGinecologico", PacienteObstetricoGinecologicoSchema);

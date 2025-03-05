@@ -1,28 +1,31 @@
+// src/types/PacienteAdiccionesTypes.ts
 import { Document, Types } from "mongoose";
 import { Query, Repository } from "./RepositoryTypes";
-import { Paciente } from "types/PacientesTypes";
 import { TiposAdiccion } from "types/TiposAdiccionesTypes";
+import { Paciente } from "./PacientesTypes";
 
-export interface PacienteAdicciones extends Document {
+export interface PacienteAdiccion extends Document {
   getBasicInfo(): any;
-  paciente: Types.ObjectId | Paciente; // Relación con Paciente
-  tipoAdiccion: Types.ObjectId | TiposAdiccion; // Relación con TiposAdicciones
-  fechaInicio: Date; // Fecha de inicio de la adicción
-  fechaFin?: Date; // Fecha de fin de la adicción (opcional)
-  estado: "Activo" | "Inactivo"; // Status for logical deletion
+  paciente: Types.ObjectId | Paciente;
+  tipoAdiccion: Types.ObjectId | TiposAdiccion;
+  fechaInicio: Date;
+  fechaFin?: Date;
+  notas: string;
+  estado: "Activo" | "Inactivo";
 }
 
-export interface IPacienteAdiccionesRepository extends Repository<PacienteAdicciones> {
-  findOne(query: Query): Promise<PacienteAdicciones | null>;
-  findActive(query?: Query): Promise<PacienteAdicciones[]>; // Method to find only active registros
+export interface IPacienteAdiccionRepository extends Repository<PacienteAdiccion> {
+  findOne(query: Query): Promise<PacienteAdiccion | null>;
+  findActive(query?: Query): Promise<PacienteAdiccion[]>;
+  findByPaciente(pacienteId: string): Promise<PacienteAdiccion[]>;
 }
 
-export interface IPacienteAdiccionesService {
-  createPacienteAdicciones(pacienteAdiccion: PacienteAdicciones): Promise<{ pacienteAdiccion: PacienteAdicciones; message: string }>;
-  findPacienteAdicciones(query?: Query): Promise<PacienteAdicciones[]>;
-  findPacienteAdiccionesById(id: string): Promise<PacienteAdicciones | null>;
-  findPacienteAdiccionesByPaciente(pacienteId: string): Promise<PacienteAdicciones[]>;
-  updatePacienteAdicciones(id: string, pacienteAdiccion: Partial<PacienteAdicciones>): Promise<{ pacienteAdiccion: PacienteAdicciones | null; message: string }>;
-  deletePacienteAdicciones(id: string): Promise<{ success: boolean; message: string }>;
-  softDeletePacienteAdicciones(id: string): Promise<{ success: boolean; message: string }>; // Soft delete (change status)
+export interface IPacienteAdiccionService {
+  createPacienteAdiccion(pacienteAdiccion: PacienteAdiccion): Promise<{ pacienteAdiccion: PacienteAdiccion; message: string }>;
+  findPacienteAdicciones(query?: Query): Promise<PacienteAdiccion[]>;
+  findPacienteAdiccionById(id: string): Promise<PacienteAdiccion | null>;
+  findPacienteAdiccionesByPaciente(pacienteId: string): Promise<PacienteAdiccion[]>;
+  updatePacienteAdiccion(id: string, pacienteAdiccion: Partial<PacienteAdiccion>): Promise<{ pacienteAdiccion: PacienteAdiccion | null; message: string }>;
+  deletePacienteAdiccion(id: string): Promise<{ success: boolean; message: string }>;
+  softDeletePacienteAdiccion(id: string): Promise<{ success: boolean; message: string }>;
 }

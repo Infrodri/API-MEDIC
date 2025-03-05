@@ -1,26 +1,27 @@
+// src/models/PacienteOperaciones.ts
 import mongoose, { Schema } from "mongoose";
-import { PacienteOperaciones } from "types/PacienteOperacionesTypes";
+import { PacienteOperacion } from "types/PacienteOperacionesTypes";
 
-const PacienteOperacionesSchema: Schema = new Schema<PacienteOperaciones>(
+const PacienteOperacionSchema: Schema = new Schema<PacienteOperacion>(
   {
     paciente: {
       type: Schema.Types.ObjectId,
-      ref: "Paciente", // Relación con Pacientes
+      ref: "Paciente",
       required: [true, "El paciente es obligatorio"],
     },
-    tipoOperacion: {
+    tipoOperacionQuirurgica: {
       type: Schema.Types.ObjectId,
-      ref: "TiposOperacionesQuirurgicas", // Relación con TiposOperacionesQuirurgicas
-      required: [true, "El tipo de operación es obligatorio"],
+      ref: "TiposOperacionesQuirurgicas",
+      required: [true, "El tipo de operación quirúrgica es obligatorio"],
     },
     fechaOperacion: {
       type: Date,
-      required: [true, "La fecha de operación es obligatoria"],
+      required: [true, "La fecha de la operación es obligatoria"],
     },
-    resultado: {
+    notas: {
       type: String,
-      required: [true, "El resultado es obligatorio"],
       trim: true,
+      default: "",
     },
     estado: {
       type: String,
@@ -29,20 +30,20 @@ const PacienteOperacionesSchema: Schema = new Schema<PacienteOperaciones>(
     },
   },
   {
-    timestamps: true, // Automatically add createdAt and updatedAt
+    timestamps: true,
     versionKey: false,
   }
 );
 
-// Method to get basic paciente-operaciones info (for the list)
-PacienteOperacionesSchema.methods.getBasicInfo = function () {
+PacienteOperacionSchema.methods.getBasicInfo = function () {
   return {
-    _id: this._id, // Usamos el _id generado por MongoDB
+    _id: this._id,
     paciente: this.paciente,
-    tipoOperacion: this.tipoOperacion,
+    tipoOperacionQuirurgica: this.tipoOperacionQuirurgica,
     fechaOperacion: this.fechaOperacion,
+    notas: this.notas,
     estado: this.estado,
   };
 };
 
-export const PacienteOperacionesModel = mongoose.model<PacienteOperaciones>("PacienteOperaciones", PacienteOperacionesSchema);
+export const PacienteOperacionModel = mongoose.model<PacienteOperacion>("PacienteOperacion", PacienteOperacionSchema);

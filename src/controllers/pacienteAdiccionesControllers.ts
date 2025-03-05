@@ -1,80 +1,87 @@
-import { PacienteAdiccionesRepository } from "@repositories/PacienteAdiccionesRepositories";
-import { PacienteAdiccionesService } from "@services/PacienteAdiccionesService";
+// src/controllers/pacienteAdiccionesControllers.ts
+import { PacienteAdiccionRepository } from "@repositories/PacienteAdiccionesRepositories";
+import { PacienteAdiccionService } from "@services/PacienteAdiccionesService";
 import { Request, Response } from "express";
-import { IPacienteAdiccionesRepository, IPacienteAdiccionesService, PacienteAdicciones } from "types/PacienteAdiccionesTypes";
+import { IPacienteAdiccionRepository, IPacienteAdiccionService, PacienteAdiccion } from "types/PacienteAdiccionesTypes";
 
-const pacienteAdiccionesRepository: IPacienteAdiccionesRepository = new PacienteAdiccionesRepository();
-const pacienteAdiccionesService: IPacienteAdiccionesService = new PacienteAdiccionesService(pacienteAdiccionesRepository);
+const pacienteAdiccionRepository: IPacienteAdiccionRepository = new PacienteAdiccionRepository();
+const pacienteAdiccionService: IPacienteAdiccionService = new PacienteAdiccionService(pacienteAdiccionRepository);
 
-export const findPacienteAdicciones = async (req: Request, res: Response) => {
+export const createPacienteAdiccion = async (req: Request, res: Response) => {
   try {
-    const pacientesAdicciones = await pacienteAdiccionesService.findPacienteAdicciones();
-    const basicInfoList = pacientesAdicciones.map((pacienteAdiccion) => pacienteAdiccion.getBasicInfo());
-    if (basicInfoList.length === 0) return res.status(404).json({ message: "No hay relaciones paciente-adicciones encontradas." });
-
-    res.json({ pacientesAdicciones: basicInfoList, message: "Lista de relaciones paciente-adicciones obtenida con éxito" });
-  } catch (error) {
-    console.log("error :>> ", error);
-    res.status(500).json({ error: "Error al obtener relaciones paciente-adicciones", details: error });
-  }
-};
-
-export const findPacienteAdiccionesById = async (req: Request, res: Response) => {
-  try {
-    const pacienteAdiccion = await pacienteAdiccionesService.findPacienteAdiccionesById(req.params.id);
-    if (!pacienteAdiccion) return res.status(404).json({ message: "Relación paciente-adicción no encontrada" });
-
-    res.json({ pacienteAdiccion, message: "Relación paciente-adicción encontrada con éxito" });
-  } catch (error) {
-    console.log("error :>> ", error);
-    res.status(500).json({ error: "Error al obtener relación paciente-adicción", details: error });
-  }
-};
-
-export const createPacienteAdicciones = async (req: Request, res: Response) => {
-  try {
-    const newPacienteAdiccion: Omit<PacienteAdicciones, keyof Document> = req.body;
-    const { pacienteAdiccion, message } = await pacienteAdiccionesService.createPacienteAdicciones(newPacienteAdiccion);
-
+    const newPacienteAdiccion: Omit<PacienteAdiccion, keyof Document> = req.body;
+    const { pacienteAdiccion, message } = await pacienteAdiccionService.createPacienteAdiccion(newPacienteAdiccion);
     res.status(201).json({ pacienteAdiccion, message });
   } catch (error) {
     console.log("error :>> ", error);
-    res.status(400).json({ error: "Error al crear relación paciente-adicción", details: error });
+    res.status(400).json({ error: "Error al crear adicción del paciente", details: error });
   }
 };
 
-export const updatePacienteAdicciones = async (req: Request, res: Response) => {
+export const findPacienteAdicciones = async (req: Request, res: Response) => {
   try {
-    const { pacienteAdiccion, message } = await pacienteAdiccionesService.updatePacienteAdicciones(req.params.id, req.body);
-    if (!pacienteAdiccion) return res.status(404).json({ message: "Relación paciente-adicción no encontrada" });
+    const pacienteAdicciones = await pacienteAdiccionService.findPacienteAdicciones();
+    const basicInfoList = pacienteAdicciones.map((adiccion) => adiccion.getBasicInfo());
+    if (basicInfoList.length === 0) return res.status(404).json({ message: "No hay adicciones de pacientes encontradas." });
+    res.json({ pacienteAdicciones: basicInfoList, message: "Lista de adicciones de pacientes obtenida con éxito" });
+  } catch (error) {
+    console.log("error :>> ", error);
+    res.status(500).json({ error: "Error al obtener adicciones de pacientes", details: error });
+  }
+};
 
+export const findPacienteAdiccionById = async (req: Request, res: Response) => {
+  try {
+    const pacienteAdiccion = await pacienteAdiccionService.findPacienteAdiccionById(req.params.id);
+    if (!pacienteAdiccion) return res.status(404).json({ message: "Adicción del paciente no encontrada" });
+    res.json({ pacienteAdiccion, message: "Adicción del paciente encontrada con éxito" });
+  } catch (error) {
+    console.log("error :>> ", error);
+    res.status(500).json({ error: "Error al obtener adicción del paciente", details: error });
+  }
+};
+
+export const findPacienteAdiccionesByPaciente = async (req: Request, res: Response) => {
+  try {
+    const pacienteAdicciones = await pacienteAdiccionService.findPacienteAdiccionesByPaciente(req.params.pacienteId);
+    const basicInfoList = pacienteAdicciones.map((adiccion) => adiccion.getBasicInfo());
+    if (basicInfoList.length === 0) return res.status(404).json({ message: "No hay adicciones para este paciente" });
+    res.json({ pacienteAdicciones: basicInfoList, message: "Adicciones del paciente obtenidas con éxito" });
+  } catch (error) {
+    console.log("error :>> ", error);
+    res.status(500).json({ error: "Error al obtener adicciones por paciente", details: error });
+  }
+};
+
+export const updatePacienteAdiccion = async (req: Request, res: Response) => {
+  try {
+    const { pacienteAdiccion, message } = await pacienteAdiccionService.updatePacienteAdiccion(req.params.id, req.body);
+    if (!pacienteAdiccion) return res.status(404).json({ message: "Adicción del paciente no encontrada" });
     res.json({ pacienteAdiccion, message });
   } catch (error) {
     console.log("error :>> ", error);
-    res.status(500).json({ error: "Error al actualizar relación paciente-adicción", details: error });
+    res.status(500).json({ error: "Error al actualizar adicción del paciente", details: error });
   }
 };
 
-export const softDeletePacienteAdicciones = async (req: Request, res: Response) => {
+export const deletePacienteAdiccion = async (req: Request, res: Response) => {
   try {
-    const { success, message } = await pacienteAdiccionesService.softDeletePacienteAdicciones(req.params.id);
-    if (!success) return res.status(404).json({ message: "Relación paciente-adicción no encontrada" });
-
+    const { success, message } = await pacienteAdiccionService.deletePacienteAdiccion(req.params.id);
+    if (!success) return res.status(404).json({ message: "Adicción del paciente no encontrada" });
     res.json({ success, message });
   } catch (error) {
     console.log("error :>> ", error);
-    res.status(500).json({ error: "Error al eliminar relación paciente-adicción", details: error });
+    res.status(500).json({ error: "Error al eliminar adicción del paciente físicamente", details: error });
   }
 };
 
-export const deletePacienteAdicciones = async (req: Request, res: Response) => {
+export const softDeletePacienteAdiccion = async (req: Request, res: Response) => {
   try {
-    const { success, message } = await pacienteAdiccionesService.deletePacienteAdicciones(req.params.id);
-    if (!success) return res.status(404).json({ message: "Relación paciente-adicción no encontrada" });
-
+    const { success, message } = await pacienteAdiccionService.softDeletePacienteAdiccion(req.params.id);
+    if (!success) return res.status(404).json({ message: "Adicción del paciente no encontrada" });
     res.json({ success, message });
   } catch (error) {
     console.log("error :>> ", error);
-    res.status(500).json({ error: "Error al eliminar relación paciente-adicción físicamente", details: error });
+    res.status(500).json({ error: "Error al eliminar adicción del paciente", details: error });
   }
 };

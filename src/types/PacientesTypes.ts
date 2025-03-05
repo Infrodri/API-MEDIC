@@ -1,31 +1,49 @@
-import { Document } from "mongoose";
+// src/types/PacienteTypes.ts
+import { Document, Types } from "mongoose";
 import { Query, Repository } from "./RepositoryTypes";
+import { PacienteAdiccion } from "types/PacienteAdiccionesTypes";
+import { PacienteExamen } from "types/PacienteExamenesTypes";
+import { PacienteObstetricoGinecologico } from "types/PacienteObstetricosGinecologicosTypes";
+import { PacienteOperacion } from "types/PacienteOperacionesTypes";
+import { ConsultasMedicas } from "types/ConsultasMedicasTypes";
 
 export interface Paciente extends Document {
   getBasicInfo(): any;
-  nombre: string; // Name
-  apellido: string; // Last name
-  fechaNacimiento: Date; // Birth date
-  direccion: string; // Address
-  telefono: string; // Phone
-  celular: string; // Cell phone
-  genero: string; // Gender
-  cedula: string; // ID number
-  estado: "Activo" | "Inactivo"; // Status for logical deletion
+  primerNombre: string;
+  segundoNombre: string;
+  primerApellido: string;
+  segundoApellido: string;
+  fechaNacimiento: Date;
+  direccion: string;
+  telefono: string;
+  celular: string;
+  genero: string;
+  estado: "Activo" | "Inactivo";
+  estadoAtencion: "Pendiente" | "Atendido" | "Derivado";
+}
 
+export interface HistorialMedico {
+  paciente: Paciente;
+  adicciones: PacienteAdiccion[];
+  examenes: PacienteExamen[];
+  obstetricosGinecologicos: PacienteObstetricoGinecologico[];
+  operaciones: PacienteOperacion[];
+  consultas: ConsultasMedicas[];
 }
 
 export interface IPacienteRepository extends Repository<Paciente> {
   findOne(query: Query): Promise<Paciente | null>;
-  findActive(query?: Query): Promise<Paciente[]>; // Method to find only active patients
+  findActive(query?: Query): Promise<Paciente[]>;
+  findByEstadoAtencion(estado: string): Promise<Paciente[]>;
 }
 
 export interface IPacienteService {
   createPaciente(paciente: Paciente): Promise<{ paciente: Paciente; message: string }>;
   findPacientes(query?: Query): Promise<Paciente[]>;
   findPacienteById(id: string): Promise<Paciente | null>;
-  findPacienteByCedula(cedula: string): Promise<Paciente | null>;
+  findPacientesByEstadoAtencion(estado: string): Promise<Paciente[]>;
   updatePaciente(id: string, paciente: Partial<Paciente>): Promise<{ paciente: Paciente | null; message: string }>;
   deletePaciente(id: string): Promise<{ success: boolean; message: string }>;
-  softDeletePaciente(id: string): Promise<{ success: boolean; message: string }>; // Soft delete (change status)
+  softDeletePaciente(id: string): Promise<{ success: boolean; message: string }>;
+  getHistorialMedico(pacienteId: string): Promise<HistorialMedico>;
 }
