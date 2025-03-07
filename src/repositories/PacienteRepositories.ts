@@ -25,6 +25,17 @@ export class PacienteRepository implements IPacienteRepository {
     return await PacienteModel.findById(id).exec();
   }
 
+  async findByIdentifier(identifier: string): Promise<Paciente | null> {
+    return await PacienteModel.findOne({
+      $or: [{ cedula: identifier }, { telefono: identifier }, { celular: identifier }],
+      estado: "Activo",
+    }).exec();
+  }
+
+  async findByEstadoAtencion(estado: string): Promise<Paciente[]> {
+    return await PacienteModel.find({ estadoAtencion: estado, estado: "Activo" }).exec();
+  }
+
   async update(id: string, data: Partial<Paciente>): Promise<Paciente | null> {
     return await PacienteModel.findByIdAndUpdate(id, data, { new: true, runValidators: true }).exec();
   }
@@ -32,9 +43,5 @@ export class PacienteRepository implements IPacienteRepository {
   async delete(id: string): Promise<boolean> {
     const deleted = await PacienteModel.findByIdAndDelete(id).exec();
     return deleted !== null;
-  }
-
-  async findByEstadoAtencion(estado: string): Promise<Paciente[]> {
-    return await PacienteModel.find({ estadoAtencion: estado, estado: "Activo" }).exec();
   }
 }

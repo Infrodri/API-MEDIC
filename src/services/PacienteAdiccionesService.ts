@@ -1,4 +1,3 @@
-// src/services/PacienteAdiccionesService.ts
 import { Query } from "types/RepositoryTypes";
 import { IPacienteAdiccionRepository, IPacienteAdiccionService, PacienteAdiccion } from "types/PacienteAdiccionesTypes";
 
@@ -9,7 +8,7 @@ export class PacienteAdiccionService implements IPacienteAdiccionService {
     this.pacienteAdiccionRepository = pacienteAdiccionRepository;
   }
 
-  async createPacienteAdiccion(pacienteAdiccionData: Omit<PacienteAdiccion, keyof Document>): Promise<{ pacienteAdiccion: PacienteAdiccion; message: string }> {
+  async createPacienteAdicciones(pacienteAdiccionData: Omit<PacienteAdiccion, keyof Document>): Promise<{ pacienteAdiccion: PacienteAdiccion; message: string }> {
     const newPacienteAdiccion = await this.pacienteAdiccionRepository.create({
       ...pacienteAdiccionData,
       estado: "Activo",
@@ -21,7 +20,7 @@ export class PacienteAdiccionService implements IPacienteAdiccionService {
     return this.pacienteAdiccionRepository.findActive(query);
   }
 
-  async findPacienteAdiccionById(id: string): Promise<PacienteAdiccion | null> {
+  async findPacienteAdiccionesById(id: string): Promise<PacienteAdiccion | null> {
     return this.pacienteAdiccionRepository.findById(id);
   }
 
@@ -29,24 +28,20 @@ export class PacienteAdiccionService implements IPacienteAdiccionService {
     return this.pacienteAdiccionRepository.findByPaciente(pacienteId);
   }
 
-  async updatePacienteAdiccion(id: string, pacienteAdiccion: Partial<PacienteAdiccion>): Promise<{ pacienteAdiccion: PacienteAdiccion | null; message: string }> {
+  async updatePacienteAdicciones(id: string, pacienteAdiccion: Partial<PacienteAdiccion>): Promise<{ pacienteAdiccion: PacienteAdiccion | null; message: string }> {
     const updatedPacienteAdiccion = await this.pacienteAdiccionRepository.update(id, pacienteAdiccion);
-    if (!updatedPacienteAdiccion) {
-      return { pacienteAdiccion: null, message: "Adicción del paciente no encontrada" };
-    }
+    if (!updatedPacienteAdiccion) return { pacienteAdiccion: null, message: "Adicción del paciente no encontrada" };
     return { pacienteAdiccion: updatedPacienteAdiccion, message: "Adicción del paciente actualizada con éxito" };
   }
 
-  async deletePacienteAdiccion(id: string): Promise<{ success: boolean; message: string }> {
+  async deletePacienteAdicciones(id: string): Promise<{ success: boolean; message: string }> {
     const deleted = await this.pacienteAdiccionRepository.delete(id);
     return { success: deleted, message: deleted ? "Adicción del paciente eliminada físicamente" : "Adicción del paciente no encontrada" };
   }
 
-  async softDeletePacienteAdiccion(id: string): Promise<{ success: boolean; message: string }> {
+  async softDeletePacienteAdicciones(id: string): Promise<{ success: boolean; message: string }> {
     const pacienteAdiccion = await this.pacienteAdiccionRepository.findById(id);
-    if (!pacienteAdiccion) {
-      return { success: false, message: "Adicción del paciente no encontrada" };
-    }
+    if (!pacienteAdiccion) return { success: false, message: "Adicción del paciente no encontrada" };
     pacienteAdiccion.estado = "Inactivo";
     await this.pacienteAdiccionRepository.update(id, pacienteAdiccion);
     return { success: true, message: "Adicción del paciente cambiada a estado Inactivo" };

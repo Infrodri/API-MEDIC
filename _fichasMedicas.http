@@ -1,45 +1,75 @@
-# Crear un nuevo examen médico
-POST http://localhost:4000/api/v1/examenesmedicos HTTP/1.1
+###FIcha medica
+
+# Crear un paciente (si no existe)
+POST http://localhost:4000/api/v1/pacientes HTTP/1.1
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3YzA4MzgxOTdjN2VhYzQzYmEzNzM3ZiIsImVtYWlsIjoiYWRtaW5AdGVzdC5jb20iLCJ1c2VybmFtZSI6ImFkbWluIiwiaWF0IjoxNzQxMjMyMTk0LCJleHAiOjE3NDE1OTIxOTR9.5J7t6VVfam98n0XYkn9je0s4MX-SO4TleHgCkg2pgtg
 
 {
-  "nombre": "prueba osfsdfsdfrina",
-  "descripcion": "Examensdfsdfsdf para medir niveles de orina"
-
+  "cedula": "1234567890",
+  "primerNombre": "paciente",
+  "segundoNombre": "",
+  "primerApellido": "Pérez",
+  "segundoApellido": "Gómez",
+  "fechaNacimiento": "1990-05-20",
+  "direccion": "Calle 5, Ciudad",
+  "telefono": "912345678",
+  "celular": "0987654321",
+  "genero": "Masculino"
 }
 
+# Respuesta esperada: 201 Created con el paciente (copia el _id)
+
 ###
-# Listar todos los exámenes médicos
-GET http://localhost:4000/api/v1/examenesmedicos HTTP/1.1
+
+# Crear una ficha médica
+POST http://localhost:4000/api/v1/fichasmedicas HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3YzA4MzgxOTdjN2VhYzQzYmEzNzM3ZiIsImVtYWlsIjoiYWRtaW5AdGVzdC5jb20iLCJ1c2VybmFtZSI6ImFkbWluIiwiaWF0IjoxNzQxMjMyMTk0LCJleHAiOjE3NDE1OTIxOTR9.5J7t6VVfam98n0XYkn9je0s4MX-SO4TleHgCkg2pgtg
+{
+  "paciente": "67c8e4138553eeb28b80e5ad",
+  "medico": "67c783c543449cb8ad3460d1",
+  "especialidad": "67c7801b46481074013e0210",
+  "diagnostico": "Dolor abdominal inicial"
+}
+
+# Respuesta esperada: 201 Created con la ficha (copia el _id)67c8e5b1719e9b4339d43672
+
+###
+
+# Listar todas las fichas médicas activas
+GET http://localhost:4000/api/v1/fichasmedicas HTTP/1.1
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3YzA4MzgxOTdjN2VhYzQzYmEzNzM3ZiIsImVtYWlsIjoiYWRtaW5AdGVzdC5jb20iLCJ1c2VybmFtZSI6ImFkbWluIiwiaWF0IjoxNzQxMjMyMTk0LCJleHAiOjE3NDE1OTIxOTR9.5J7t6VVfam98n0XYkn9je0s4MX-SO4TleHgCkg2pgtg
 
 ###
-# Obtener un examen médico por ID
-GET http://localhost:4000/api/v1/examenesmedicos/67ca06293b1c6b932c585ec9 HTTP/1.1
+
+# Listar fichas médicas por paciente
+GET http://localhost:4000/api/v1/fichasmedicas/paciente/67c8e4138553eeb28b80e5ad HTTP/1.1
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3YzA4MzgxOTdjN2VhYzQzYmEzNzM3ZiIsImVtYWlsIjoiYWRtaW5AdGVzdC5jb20iLCJ1c2VybmFtZSI6ImFkbWluIiwiaWF0IjoxNzQxMjMyMTk0LCJleHAiOjE3NDE1OTIxOTR9.5J7t6VVfam98n0XYkn9je0s4MX-SO4TleHgCkg2pgtg
 
 ###
-# Actualizar un examen médico
-PUT http://localhost:4000/api/v1/examenesmedicos/67ca06293b1c6b932c585ec9 HTTP/1.1
+
+# Actualizar una ficha médica
+PUT http://localhost:4000/api/v1/fichasmedicas/67c8e5b1719e9b4339d43672 HTTP/1.1
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3YzA4MzgxOTdjN2VhYzQzYmEzNzM3ZiIsImVtYWlsIjoiYWRtaW5AdGVzdC5jb20iLCJ1c2VybmFtZSI6ImFkbWluIiwiaWF0IjoxNzQxMjMyMTk0LCJleHAiOjE3NDE1OTIxOTR9.5J7t6VVfam98n0XYkn9je0s4MX-SO4TleHgCkg2pgtg
 
 {
-  "descripcion": "Examen actualizado para incluir hemograma completo"
-
+  "diagnostico": "Dolor abdominal resuelto"
 }
 
 ###
-# Eliminar lógicamente un examen médico (cambiar a Inactivo)
-PATCH http://localhost:4000/api/v1/examenesmedicos/67ca06293b1c6b932c585ec9/soft-delete HTTP/1.1
+
+# Eliminar lógicamente una ficha médica
+PATCH http://localhost:4000/api/v1/fichasmedicas/<ficha-id>/soft-delete HTTP/1.1
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3YzA4MzgxOTdjN2VhYzQzYmEzNzM3ZiIsImVtYWlsIjoiYWRtaW5AdGVzdC5jb20iLCJ1c2VybmFtZSI6ImFkbWluIiwiaWF0IjoxNzQxMjMyMTk0LCJleHAiOjE3NDE1OTIxOTR9.5J7t6VVfam98n0XYkn9je0s4MX-SO4TleHgCkg2pgtg
 
 ###
-# Eliminar físicamente un examen médico (si aplica, aunque prefieres eliminaciones lógicas)
-DELETE http://localhost:4000/api/v1/examenesmedicos/67ca06293b1c6b932c585ec9 HTTP/1.1
+
+# Eliminar físicamente una ficha médica
+DELETE http://localhost:4000/api/v1/fichasmedicas/<ficha-id> HTTP/1.1
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3YzA4MzgxOTdjN2VhYzQzYmEzNzM3ZiIsImVtYWlsIjoiYWRtaW5AdGVzdC5jb20iLCJ1c2VybmFtZSI6ImFkbWluIiwiaWF0IjoxNzQxMjMyMTk0LCJleHAiOjE3NDE1OTIxOTR9.5J7t6VVfam98n0XYkn9je0s4MX-SO4TleHgCkg2pgtg

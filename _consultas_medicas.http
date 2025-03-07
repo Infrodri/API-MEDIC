@@ -1,0 +1,123 @@
+# Iniciar sesión como usuario con rol "admin"
+POST http://localhost:4000/api/v1/auth/login HTTP/1.1
+Content-Type: application/json
+
+{
+  "email": "admin@test.com",
+  "password": "123456"
+}
+
+# Copia el token recibido en la respuesta (se usará como <tu-token>)
+
+###
+
+# Crear una consulta médica
+POST http://localhost:4000/api/v1/consultas-medicas HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3YzA4MzgxOTdjN2VhYzQzYmEzNzM3ZiIsImVtYWlsIjoiYWRtaW5AdGVzdC5jb20iLCJ1c2VybmFtZSI6ImFkbWluIiwiaWF0IjoxNzQxMjMyMTk0LCJleHAiOjE3NDE1OTIxOTR9.5J7t6VVfam98n0XYkn9je0s4MX-SO4TleHgCkg2pgtg
+
+{
+  "paciente": "67c8e4138553eeb28b80e5ad",
+  "medico": "67c783c543449cb8ad3460d1",
+  "fichaMedica": "67c16f14efceb12b75fe87a5",
+  "especialidad": "67c7801b46481074013e0210",
+  "fecha": "2025-03-07T10:00:00Z",
+  "motivo": "Dolor abdominal persistente",
+  "observaciones": "Paciente refiere dolor desde hace 3 días"
+}
+
+# Respuesta esperada: 201 Created con la consulta (copia el _id como <consulta-id>)
+
+###
+
+# Listar todas las consultas médicas activas
+GET http://localhost:4000/api/v1/consultas-medicas HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3YzA4MzgxOTdjN2VhYzQzYmEzNzM3ZiIsImVtYWlsIjoiYWRtaW5AdGVzdC5jb20iLCJ1c2VybmFtZSI6ImFkbWluIiwiaWF0IjoxNzQxMjMyMTk0LCJleHAiOjE3NDE1OTIxOTR9.5J7t6VVfam98n0XYkn9je0s4MX-SO4TleHgCkg2pgtg
+
+# Respuesta esperada: 200 OK con la lista de consultas médicas
+
+###
+
+# Obtener una consulta médica por ID
+GET http://localhost:4000/api/v1/consultas-medicas/67ca8b00072d931e50d8009d HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3YzA4MzgxOTdjN2VhYzQzYmEzNzM3ZiIsImVtYWlsIjoiYWRtaW5AdGVzdC5jb20iLCJ1c2VybmFtZSI6ImFkbWluIiwiaWF0IjoxNzQxMjMyMTk0LCJleHAiOjE3NDE1OTIxOTR9.5J7t6VVfam98n0XYkn9je0s4MX-SO4TleHgCkg2pgtg
+
+# Respuesta esperada: 200 OK con los detalles de la consulta
+
+###
+
+# Listar consultas médicas por paciente
+GET http://localhost:4000/api/v1/consultas-medicas/paciente/67c8e4138553eeb28b80e5ad HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3YzA4MzgxOTdjN2VhYzQzYmEzNzM3ZiIsImVtYWlsIjoiYWRtaW5AdGVzdC5jb20iLCJ1c2VybmFtZSI6ImFkbWluIiwiaWF0IjoxNzQxMjMyMTk0LCJleHAiOjE3NDE1OTIxOTR9.5J7t6VVfam98n0XYkn9je0s4MX-SO4TleHgCkg2pgtg
+
+# Respuesta esperada: 200 OK con la lista de consultas del paciente
+
+###
+
+# Actualizar una consulta médica
+PUT http://localhost:4000/api/v1/consultas-medicas/67ca8b00072d931e50d8009d HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3YzA4MzgxOTdjN2VhYzQzYmEzNzM3ZiIsImVtYWlsIjoiYWRtaW5AdGVzdC5jb20iLCJ1c2VybmFtZSI6ImFkbWluIiwiaWF0IjoxNzQxMjMyMTk0LCJleHAiOjE3NDE1OTIxOTR9.5J7t6VVfam98n0XYkn9je0s4MX-SO4TleHgCkg2pgtg
+
+{
+  "observaciones": "Paciente mejoró tras analgésicos",
+  "fecha": "2025-03-07T11:00:00Z"
+}
+
+# Respuesta esperada: 200 OK con la consulta actualizada
+
+###
+
+# Concluir una consulta médica
+PATCH http://localhost:4000/api/v1/consultas-medicas/67ca8b00072d931e50d8009d/conclude HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3YzA4MzgxOTdjN2VhYzQzYmEzNzM3ZiIsImVtYWlsIjoiYWRtaW5AdGVzdC5jb20iLCJ1c2VybmFtZSI6ImFkbWluIiwiaWF0IjoxNzQxMjMyMTk0LCJleHAiOjE3NDE1OTIxOTR9.5J7t6VVfam98n0XYkn9je0s4MX-SO4TleHgCkg2pgtg
+
+# Respuesta esperada: 200 OK con la consulta marcada como "Concluida"
+
+###
+
+# Derivar una consulta médica a otro médico
+PATCH http://localhost:4000/api/v1/consultas-medicas/67ca8b00072d931e50d8009d/derive HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3YzA4MzgxOTdjN2VhYzQzYmEzNzM3ZiIsImVtYWlsIjoiYWRtaW5AdGVzdC5jb20iLCJ1c2VybmFtZSI6ImFkbWluIiwiaWF0IjoxNzQxMjMyMTk0LCJleHAiOjE3NDE1OTIxOTR9.5J7t6VVfam98n0XYkn9je0s4MX-SO4TleHgCkg2pgtg
+
+{
+  "medicoId": "67c8e996f086f15dea74aae6"
+}
+
+# Respuesta esperada: 200 OK con la consulta marcada como "Derivada" y medicoDerivado asignado
+
+###
+
+# Reasignar una consulta médica a otro médico
+PATCH http://localhost:4000/api/v1/consultas-medicas/67ca8b00072d931e50d8009d/reassign HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3YzA4MzgxOTdjN2VhYzQzYmEzNzM3ZiIsImVtYWlsIjoiYWRtaW5AdGVzdC5jb20iLCJ1c2VybmFtZSI6ImFkbWluIiwiaWF0IjoxNzQxMjMyMTk0LCJleHAiOjE3NDE1OTIxOTR9.5J7t6VVfam98n0XYkn9je0s4MX-SO4TleHgCkg2pgtg
+
+{
+  "medicoId": "67c8e996f086f15dea74aae7"
+}
+
+# Respuesta esperada: 200 OK con el médico reasignado y estadoConsulta como "Pendiente"
+
+###
+
+# Eliminar lógicamente una consulta médica
+PATCH http://localhost:4000/api/v1/consultas-medicas/<consulta-id>/soft-delete HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3YzA4MzgxOTdjN2VhYzQzYmEzNzM3ZiIsImVtYWlsIjoiYWRtaW5AdGVzdC5jb20iLCJ1c2VybmFtZSI6ImFkbWluIiwiaWF0IjoxNzQxMjMyMTk0LCJleHAiOjE3NDE1OTIxOTR9.5J7t6VVfam98n0XYkn9je0s4MX-SO4TleHgCkg2pgtg
+
+# Respuesta esperada: 200 OK con estado cambiado a "Inactivo"
+
+###
+
+# Eliminar físicamente una consulta médica
+DELETE http://localhost:4000/api/v1/consultas-medicas/<consulta-id> HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3YzA4MzgxOTdjN2VhYzQzYmEzNzM3ZiIsImVtYWlsIjoiYWRtaW5AdGVzdC5jb20iLCJ1c2VybmFtZSI6ImFkbWluIiwiaWF0IjoxNzQxMjMyMTk0LCJleHAiOjE3NDE1OTIxOTR9.5J7t6VVfam98n0XYkn9je0s4MX-SO4TleHgCkg2pgtg
+
+# Respuesta esperada: 200 OK con confirmación de eliminación

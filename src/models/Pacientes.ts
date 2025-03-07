@@ -4,41 +4,22 @@ import { Paciente } from "types/PacientesTypes";
 
 const PacienteSchema: Schema = new Schema<Paciente>(
   {
-    primerNombre: {
+    cedula: {
       type: String,
-      required: [true, "El primer nombre es obligatorio"],
+      unique: true,
+      sparse: true, // Permite valores nulos sin conflictos de unicidad
       trim: true,
     },
-    segundoNombre: {
-      type: String,
-      trim: true,
-      default: "",
-    },
-    primerApellido: {
-      type: String,
-      required: [true, "El primer apellido es obligatorio"],
-      trim: true,
-    },
-    segundoApellido: {
-      type: String,
-      trim: true,
-      default: "",
-    },
+    primerNombre: { type: String, required: [true, "El primer nombre es obligatorio"], trim: true },
+    segundoNombre: { type: String, trim: true, default: "" },
+    primerApellido: { type: String, required: [true, "El primer apellido es obligatorio"], trim: true },
+    segundoApellido: { type: String, trim: true, default: "" },
     fechaNacimiento: {
       type: Date,
       required: [true, "La fecha de nacimiento es obligatoria"],
-      validate: {
-        validator: function (value: Date) {
-          return value <= new Date();
-        },
-        message: "La fecha de nacimiento no puede ser futura",
-      },
+      validate: { validator: (v: Date) => v <= new Date(), message: "La fecha de nacimiento no puede ser futura" },
     },
-    direccion: {
-      type: String,
-      required: [true, "La dirección es obligatoria"],
-      trim: true,
-    },
+    direccion: { type: String, required: [true, "La dirección es obligatoria"], trim: true },
     telefono: {
       type: String,
       required: [true, "El teléfono es obligatorio"],
@@ -57,30 +38,22 @@ const PacienteSchema: Schema = new Schema<Paciente>(
       enum: ["Masculino", "Femenino", "Otro"],
       default: "Otro",
     },
-    estado: {
-      type: String,
-      enum: ["Activo", "Inactivo"],
-      default: "Activo",
-    },
-    estadoAtencion: {
-      type: String,
-      enum: ["Pendiente", "Atendido", "Derivado"],
-      default: "Pendiente",
-    },
+    estado: { type: String, enum: ["Activo", "Inactivo"], default: "Activo" },
+    estadoAtencion: { type: String, enum: ["Pendiente", "Atendido", "Derivado"], default: "Pendiente" },
   },
-  {
-    timestamps: true,
-    versionKey: false,
-  }
+  { timestamps: true, versionKey: false }
 );
 
 PacienteSchema.methods.getBasicInfo = function () {
   return {
     _id: this._id,
+    cedula: this.cedula,
     primerNombre: this.primerNombre,
     primerApellido: this.primerApellido,
     fechaNacimiento: this.fechaNacimiento,
-    estado: this.estado,
+    direccion: this.direccion,
+    telefono: this.estado,
+    estado: this.telefono,
     estadoAtencion: this.estadoAtencion,
   };
 };

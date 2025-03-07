@@ -1,45 +1,45 @@
-# Crear un nuevo examen médico
-POST http://localhost:4000/api/v1/examenesmedicos HTTP/1.1
+# Crear una nueva relación paciente-operación
+POST http://localhost:4000/api/v1/pacienteoperaciones HTTP/1.1
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3YzA4MzgxOTdjN2VhYzQzYmEzNzM3ZiIsImVtYWlsIjoiYWRtaW5AdGVzdC5jb20iLCJ1c2VybmFtZSI6ImFkbWluIiwiaWF0IjoxNzQxMjMyMTk0LCJleHAiOjE3NDE1OTIxOTR9.5J7t6VVfam98n0XYkn9je0s4MX-SO4TleHgCkg2pgtg
 
 {
-  "nombre": "prueba osfsdfsdfrina",
-  "descripcion": "Examensdfsdfsdf para medir niveles de orina"
-
+  "paciente": "67ca2290d33c16ae9d3e532e",  
+  "tipoOperacionQuirurgica": "67ca19ea2f165707869e96c5",  
+  "fechaOperacion": "2025-03-01",
+  "resultado": "Operación exitosa, sin complicaciones"
 }
 
 ###
-# Listar todos los exámenes médicos
-GET http://localhost:4000/api/v1/examenesmedicos HTTP/1.1
+# Listar todas las relaciones paciente-operaciones
+GET http://localhost:4000/api/v1/pacienteoperaciones HTTP/1.1
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3YzA4MzgxOTdjN2VhYzQzYmEzNzM3ZiIsImVtYWlsIjoiYWRtaW5AdGVzdC5jb20iLCJ1c2VybmFtZSI6ImFkbWluIiwiaWF0IjoxNzQxMjMyMTk0LCJleHAiOjE3NDE1OTIxOTR9.5J7t6VVfam98n0XYkn9je0s4MX-SO4TleHgCkg2pgtg
 
 ###
-# Obtener un examen médico por ID
-GET http://localhost:4000/api/v1/examenesmedicos/67ca06293b1c6b932c585ec9 HTTP/1.1
+# Obtener una relación paciente-operación por ID
+GET http://localhost:4000/api/v1/pacienteoperaciones/67ca7939f849bb0a2c45eac1 HTTP/1.1
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3YzA4MzgxOTdjN2VhYzQzYmEzNzM3ZiIsImVtYWlsIjoiYWRtaW5AdGVzdC5jb20iLCJ1c2VybmFtZSI6ImFkbWluIiwiaWF0IjoxNzQxMjMyMTk0LCJleHAiOjE3NDE1OTIxOTR9.5J7t6VVfam98n0XYkn9je0s4MX-SO4TleHgCkg2pgtg
 
 ###
-# Actualizar un examen médico
-PUT http://localhost:4000/api/v1/examenesmedicos/67ca06293b1c6b932c585ec9 HTTP/1.1
+# Actualizar una relación paciente-operación
+PUT http://localhost:4000/api/v1/pacienteoperaciones/67ca7939f849bb0a2c45eac1 HTTP/1.1
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3YzA4MzgxOTdjN2VhYzQzYmEzNzM3ZiIsImVtYWlsIjoiYWRtaW5AdGVzdC5jb20iLCJ1c2VybmFtZSI6ImFkbWluIiwiaWF0IjoxNzQxMjMyMTk0LCJleHAiOjE3NDE1OTIxOTR9.5J7t6VVfam98n0XYkn9je0s4MX-SO4TleHgCkg2pgtg
 
 {
-  "descripcion": "Examen actualizado para incluir hemograma completo"
-
+  "notas": "Operación exitosa, recuperación completa"
 }
 
 ###
-# Eliminar lógicamente un examen médico (cambiar a Inactivo)
-PATCH http://localhost:4000/api/v1/examenesmedicos/67ca06293b1c6b932c585ec9/soft-delete HTTP/1.1
+# Eliminar lógicamente una relación paciente-operación (cambiar a Inactivo)
+PATCH http://localhost:4000/api/v1/pacienteoperaciones/67bc14f2906952918cabf625/soft-delete HTTP/1.1
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3YzA4MzgxOTdjN2VhYzQzYmEzNzM3ZiIsImVtYWlsIjoiYWRtaW5AdGVzdC5jb20iLCJ1c2VybmFtZSI6ImFkbWluIiwiaWF0IjoxNzQxMjMyMTk0LCJleHAiOjE3NDE1OTIxOTR9.5J7t6VVfam98n0XYkn9je0s4MX-SO4TleHgCkg2pgtg
 
 ###
-# Eliminar físicamente un examen médico (si aplica, aunque prefieres eliminaciones lógicas)
-DELETE http://localhost:4000/api/v1/examenesmedicos/67ca06293b1c6b932c585ec9 HTTP/1.1
+# Eliminar físicamente una relación paciente-operación (si aplica, aunque prefieres eliminaciones lógicas)
+DELETE http://localhost:4000/api/v1/pacienteoperaciones/67bc14f2906952918cabf625 HTTP/1.1
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3YzA4MzgxOTdjN2VhYzQzYmEzNzM3ZiIsImVtYWlsIjoiYWRtaW5AdGVzdC5jb20iLCJ1c2VybmFtZSI6ImFkbWluIiwiaWF0IjoxNzQxMjMyMTk0LCJleHAiOjE3NDE1OTIxOTR9.5J7t6VVfam98n0XYkn9je0s4MX-SO4TleHgCkg2pgtg

@@ -1,87 +1,80 @@
-// src/controllers/pacienteExamenesControllers.ts
-import { PacienteExamenRepository } from "@repositories/PacienteExamenesRepositories";
-import { PacienteExamenService } from "@services/PacienteExamenesService";
+import { PacienteExamenesRepository } from "@repositories/PacienteExamenesRepositories";
+import { PacienteExamenesService } from "@services/PacienteExamenesService";
 import { Request, Response } from "express";
-import { IPacienteExamenRepository, IPacienteExamenService, PacienteExamen } from "types/PacienteExamenesTypes";
+import { IPacienteExamenesRepository, IPacienteExamenesService, PacienteExamenes } from "types/PacienteExamenesTypes";
 
-const pacienteExamenRepository: IPacienteExamenRepository = new PacienteExamenRepository();
-const pacienteExamenService: IPacienteExamenService = new PacienteExamenService(pacienteExamenRepository);
-
-export const createPacienteExamen = async (req: Request, res: Response) => {
-  try {
-    const newPacienteExamen: Omit<PacienteExamen, keyof Document> = req.body;
-    const { pacienteExamen, message } = await pacienteExamenService.createPacienteExamen(newPacienteExamen);
-    res.status(201).json({ pacienteExamen, message });
-  } catch (error) {
-    console.log("error :>> ", error);
-    res.status(400).json({ error: "Error al crear examen del paciente", details: error });
-  }
-};
+const pacienteExamenesRepository: IPacienteExamenesRepository = new PacienteExamenesRepository();
+const pacienteExamenesService: IPacienteExamenesService = new PacienteExamenesService(pacienteExamenesRepository);
 
 export const findPacienteExamenes = async (req: Request, res: Response) => {
   try {
-    const pacienteExamenes = await pacienteExamenService.findPacienteExamenes();
-    const basicInfoList = pacienteExamenes.map((examen) => examen.getBasicInfo());
-    if (basicInfoList.length === 0) return res.status(404).json({ message: "No hay exámenes de pacientes encontrados." });
-    res.json({ pacienteExamenes: basicInfoList, message: "Lista de exámenes de pacientes obtenida con éxito" });
+    const pacientesExamenes = await pacienteExamenesService.findPacienteExamenes();
+    const basicInfoList = pacientesExamenes.map((pacienteExamen) => pacienteExamen.getBasicInfo());
+    if (basicInfoList.length === 0) return res.status(404).json({ message: "No hay relaciones paciente-exámenes encontradas." });
+
+    res.json({ pacientesExamenes: basicInfoList, message: "Lista de relaciones paciente-exámenes obtenida con éxito" });
   } catch (error) {
     console.log("error :>> ", error);
-    res.status(500).json({ error: "Error al obtener exámenes de pacientes", details: error });
+    res.status(500).json({ error: "Error al obtener relaciones paciente-exámenes", details: error });
   }
 };
 
-export const findPacienteExamenById = async (req: Request, res: Response) => {
+export const findPacienteExamenesById = async (req: Request, res: Response) => {
   try {
-    const pacienteExamen = await pacienteExamenService.findPacienteExamenById(req.params.id);
-    if (!pacienteExamen) return res.status(404).json({ message: "Examen del paciente no encontrado" });
-    res.json({ pacienteExamen, message: "Examen del paciente encontrado con éxito" });
+    const pacienteExamen = await pacienteExamenesService.findPacienteExamenesById(req.params.id);
+    if (!pacienteExamen) return res.status(404).json({ message: "Relación paciente-examen no encontrada" });
+
+    res.json({ pacienteExamen, message: "Relación paciente-examen encontrada con éxito" });
   } catch (error) {
     console.log("error :>> ", error);
-    res.status(500).json({ error: "Error al obtener examen del paciente", details: error });
+    res.status(500).json({ error: "Error al obtener relación paciente-examen", details: error });
   }
 };
 
-export const findPacienteExamenesByPaciente = async (req: Request, res: Response) => {
+export const createPacienteExamenes = async (req: Request, res: Response) => {
   try {
-    const pacienteExamenes = await pacienteExamenService.findPacienteExamenesByPaciente(req.params.pacienteId);
-    const basicInfoList = pacienteExamenes.map((examen) => examen.getBasicInfo());
-    if (basicInfoList.length === 0) return res.status(404).json({ message: "No hay exámenes para este paciente" });
-    res.json({ pacienteExamenes: basicInfoList, message: "Exámenes del paciente obtenidos con éxito" });
+    const newPacienteExamen: Omit<PacienteExamenes, keyof Document> = req.body;
+    const { pacienteExamen, message } = await pacienteExamenesService.createPacienteExamenes(newPacienteExamen);
+
+    res.status(201).json({ pacienteExamen, message });
   } catch (error) {
     console.log("error :>> ", error);
-    res.status(500).json({ error: "Error al obtener exámenes por paciente", details: error });
+    res.status(400).json({ error: "Error al crear relación paciente-examen", details: error });
   }
 };
 
-export const updatePacienteExamen = async (req: Request, res: Response) => {
+export const updatePacienteExamenes = async (req: Request, res: Response) => {
   try {
-    const { pacienteExamen, message } = await pacienteExamenService.updatePacienteExamen(req.params.id, req.body);
-    if (!pacienteExamen) return res.status(404).json({ message: "Examen del paciente no encontrado" });
+    const { pacienteExamen, message } = await pacienteExamenesService.updatePacienteExamenes(req.params.id, req.body);
+    if (!pacienteExamen) return res.status(404).json({ message: "Relación paciente-examen no encontrada" });
+
     res.json({ pacienteExamen, message });
   } catch (error) {
     console.log("error :>> ", error);
-    res.status(500).json({ error: "Error al actualizar examen del paciente", details: error });
+    res.status(500).json({ error: "Error al actualizar relación paciente-examen", details: error });
   }
 };
 
-export const deletePacienteExamen = async (req: Request, res: Response) => {
+export const softDeletePacienteExamenes = async (req: Request, res: Response) => {
   try {
-    const { success, message } = await pacienteExamenService.deletePacienteExamen(req.params.id);
-    if (!success) return res.status(404).json({ message: "Examen del paciente no encontrado" });
+    const { success, message } = await pacienteExamenesService.softDeletePacienteExamenes(req.params.id);
+    if (!success) return res.status(404).json({ message: "Relación paciente-examen no encontrada" });
+
     res.json({ success, message });
   } catch (error) {
     console.log("error :>> ", error);
-    res.status(500).json({ error: "Error al eliminar examen del paciente físicamente", details: error });
+    res.status(500).json({ error: "Error al eliminar relación paciente-examen", details: error });
   }
 };
 
-export const softDeletePacienteExamen = async (req: Request, res: Response) => {
+export const deletePacienteExamenes = async (req: Request, res: Response) => {
   try {
-    const { success, message } = await pacienteExamenService.softDeletePacienteExamen(req.params.id);
-    if (!success) return res.status(404).json({ message: "Examen del paciente no encontrado" });
+    const { success, message } = await pacienteExamenesService.deletePacienteExamenes(req.params.id);
+    if (!success) return res.status(404).json({ message: "Relación paciente-examen no encontrada" });
+
     res.json({ success, message });
   } catch (error) {
     console.log("error :>> ", error);
-    res.status(500).json({ error: "Error al eliminar examen del paciente", details: error });
+    res.status(500).json({ error: "Error al eliminar relación paciente-examen físicamente", details: error });
   }
 };

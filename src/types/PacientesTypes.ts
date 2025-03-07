@@ -9,6 +9,7 @@ import { ConsultasMedicas } from "types/ConsultasMedicasTypes";
 
 export interface Paciente extends Document {
   getBasicInfo(): any;
+  cedula?: string; // Opcional, pero sugerido como identificador único
   primerNombre: string;
   segundoNombre: string;
   primerApellido: string;
@@ -23,7 +24,7 @@ export interface Paciente extends Document {
 }
 
 export interface HistorialMedico {
-  paciente: Paciente;
+  paciente: Paciente[];
   adicciones: PacienteAdiccion[];
   examenes: PacienteExamen[];
   obstetricosGinecologicos: PacienteObstetricoGinecologico[];
@@ -35,6 +36,7 @@ export interface IPacienteRepository extends Repository<Paciente> {
   findOne(query: Query): Promise<Paciente | null>;
   findActive(query?: Query): Promise<Paciente[]>;
   findByEstadoAtencion(estado: string): Promise<Paciente[]>;
+  findByIdentifier(identifier: string): Promise<Paciente | null>; // Nuevo método
 }
 
 export interface IPacienteService {
@@ -42,6 +44,7 @@ export interface IPacienteService {
   findPacientes(query?: Query): Promise<Paciente[]>;
   findPacienteById(id: string): Promise<Paciente | null>;
   findPacientesByEstadoAtencion(estado: string): Promise<Paciente[]>;
+  findPacienteByIdentifier(identifier: string): Promise<Paciente | null>; // Nuevo método
   updatePaciente(id: string, paciente: Partial<Paciente>): Promise<{ paciente: Paciente | null; message: string }>;
   deletePaciente(id: string): Promise<{ success: boolean; message: string }>;
   softDeletePaciente(id: string): Promise<{ success: boolean; message: string }>;

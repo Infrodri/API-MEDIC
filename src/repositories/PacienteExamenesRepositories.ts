@@ -1,58 +1,35 @@
-// src/repositories/PacienteExamenesRepositories.ts
-import { PacienteExamenModel } from "@models/PacienteExamenes";
+import { PacienteExamenesModel } from "@models/PacienteExamenes";
 import { Query } from "types/RepositoryTypes";
-import { IPacienteExamenRepository, PacienteExamen } from "types/PacienteExamenesTypes";
+import { IPacienteExamenesRepository, PacienteExamenes } from "types/PacienteExamenesTypes";
 
-export class PacienteExamenRepository implements IPacienteExamenRepository {
-  async create(data: PacienteExamen): Promise<PacienteExamen> {
-    const newPacienteExamen = new PacienteExamenModel(data);
+export class PacienteExamenesRepository implements IPacienteExamenesRepository {
+  async create(data: PacienteExamenes): Promise<PacienteExamenes> {
+    const newPacienteExamen = new PacienteExamenesModel(data);
     return await newPacienteExamen.save();
   }
 
-  async find(query?: Query): Promise<PacienteExamen[]> {
-    return await PacienteExamenModel.find(query || {})
-      .populate("paciente")
-      .populate("examenMedico")
-      .exec();
+  async find(query?: Query): Promise<PacienteExamenes[]> {
+    return await PacienteExamenesModel.find(query || {}).populate("paciente examen").exec();
   }
 
-  async findActive(query?: Query): Promise<PacienteExamen[]> {
-    return await PacienteExamenModel.find({ ...query, estado: "Activo" })
-      .populate("paciente")
-      .populate("examenMedico")
-      .exec();
+  async findActive(query?: Query): Promise<PacienteExamenes[]> {
+    return await PacienteExamenesModel.find({ ...query, estado: "Activo" }).populate("paciente examen").exec();
   }
 
-  async findOne(query: Query): Promise<PacienteExamen | null> {
-    return await PacienteExamenModel.findOne(query)
-      .populate("paciente")
-      .populate("examenMedico")
-      .exec();
+  async findOne(query: Query): Promise<PacienteExamenes | null> {
+    return await PacienteExamenesModel.findOne(query).populate("paciente examen").exec();
   }
 
-  async findById(id: string): Promise<PacienteExamen | null> {
-    return await PacienteExamenModel.findById(id)
-      .populate("paciente")
-      .populate("examenMedico")
-      .exec();
+  async findById(id: string): Promise<PacienteExamenes | null> {
+    return await PacienteExamenesModel.findById(id).populate("paciente examen").exec();
   }
 
-  async findByPaciente(pacienteId: string): Promise<PacienteExamen[]> {
-    return await PacienteExamenModel.find({ paciente: pacienteId, estado: "Activo" })
-      .populate("paciente")
-      .populate("examenMedico")
-      .exec();
-  }
-
-  async update(id: string, data: Partial<PacienteExamen>): Promise<PacienteExamen | null> {
-    return await PacienteExamenModel.findByIdAndUpdate(id, data, { new: true, runValidators: true })
-      .populate("paciente")
-      .populate("examenMedico")
-      .exec();
+  async update(id: string, data: Partial<PacienteExamenes>): Promise<PacienteExamenes | null> {
+    return await PacienteExamenesModel.findByIdAndUpdate(id, data, { new: true, runValidators: true }).populate("paciente examen").exec();
   }
 
   async delete(id: string): Promise<boolean> {
-    const deleted = await PacienteExamenModel.findByIdAndDelete(id).exec();
+    const deleted = await PacienteExamenesModel.findByIdAndDelete(id).exec();
     return deleted !== null;
   }
 }

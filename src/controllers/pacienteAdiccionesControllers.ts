@@ -1,4 +1,3 @@
-// src/controllers/pacienteAdiccionesControllers.ts
 import { PacienteAdiccionRepository } from "@repositories/PacienteAdiccionesRepositories";
 import { PacienteAdiccionService } from "@services/PacienteAdiccionesService";
 import { Request, Response } from "express";
@@ -7,14 +6,19 @@ import { IPacienteAdiccionRepository, IPacienteAdiccionService, PacienteAdiccion
 const pacienteAdiccionRepository: IPacienteAdiccionRepository = new PacienteAdiccionRepository();
 const pacienteAdiccionService: IPacienteAdiccionService = new PacienteAdiccionService(pacienteAdiccionRepository);
 
-export const createPacienteAdiccion = async (req: Request, res: Response) => {
+export const createPacienteAdicciones = async (req: Request, res: Response) => {
   try {
+    const { paciente, tipoAdiccion, fechaInicio } = req.body;
+    if (!paciente || !tipoAdiccion || !fechaInicio) {
+      return res.status(400).json({ message: "Paciente, tipo de adicción y fecha de inicio son obligatorios" });
+    }
+
     const newPacienteAdiccion: Omit<PacienteAdiccion, keyof Document> = req.body;
-    const { pacienteAdiccion, message } = await pacienteAdiccionService.createPacienteAdiccion(newPacienteAdiccion);
-    res.status(201).json({ pacienteAdiccion, message });
+    const { pacienteAdiccion, message } = await pacienteAdiccionService.createPacienteAdicciones(newPacienteAdiccion);
+    res.status(201).json({ pacienteAdiccion: pacienteAdiccion.getBasicInfo(), message });
   } catch (error) {
     console.log("error :>> ", error);
-    res.status(400).json({ error: "Error al crear adicción del paciente", details: error });
+    res.status(500).json({ error: "Error al crear adicción del paciente", details: error instanceof Error ? error.message : "Unknown error" });
   }
 };
 
@@ -22,22 +26,22 @@ export const findPacienteAdicciones = async (req: Request, res: Response) => {
   try {
     const pacienteAdicciones = await pacienteAdiccionService.findPacienteAdicciones();
     const basicInfoList = pacienteAdicciones.map((adiccion) => adiccion.getBasicInfo());
-    if (basicInfoList.length === 0) return res.status(404).json({ message: "No hay adicciones de pacientes encontradas." });
+    if (basicInfoList.length === 0) return res.status(404).json({ message: "No hay adicciones de pacientes encontradas" });
     res.json({ pacienteAdicciones: basicInfoList, message: "Lista de adicciones de pacientes obtenida con éxito" });
   } catch (error) {
     console.log("error :>> ", error);
-    res.status(500).json({ error: "Error al obtener adicciones de pacientes", details: error });
+    res.status(500).json({ error: "Error al obtener adicciones de pacientes", details: error instanceof Error ? error.message : "Unknown error" });
   }
 };
 
-export const findPacienteAdiccionById = async (req: Request, res: Response) => {
+export const findPacienteAdiccionesById = async (req: Request, res: Response) => {
   try {
-    const pacienteAdiccion = await pacienteAdiccionService.findPacienteAdiccionById(req.params.id);
+    const pacienteAdiccion = await pacienteAdiccionService.findPacienteAdiccionesById(req.params.id);
     if (!pacienteAdiccion) return res.status(404).json({ message: "Adicción del paciente no encontrada" });
-    res.json({ pacienteAdiccion, message: "Adicción del paciente encontrada con éxito" });
+    res.json({ pacienteAdiccion: pacienteAdiccion.getBasicInfo(), message: "Adicción del paciente encontrada con éxito" });
   } catch (error) {
     console.log("error :>> ", error);
-    res.status(500).json({ error: "Error al obtener adicción del paciente", details: error });
+    res.status(500).json({ error: "Error al obtener adicción del paciente", details: error instanceof Error ? error.message : "Unknown error" });
   }
 };
 
@@ -49,39 +53,39 @@ export const findPacienteAdiccionesByPaciente = async (req: Request, res: Respon
     res.json({ pacienteAdicciones: basicInfoList, message: "Adicciones del paciente obtenidas con éxito" });
   } catch (error) {
     console.log("error :>> ", error);
-    res.status(500).json({ error: "Error al obtener adicciones por paciente", details: error });
+    res.status(500).json({ error: "Error al obtener adicciones por paciente", details: error instanceof Error ? error.message : "Unknown error" });
   }
 };
 
-export const updatePacienteAdiccion = async (req: Request, res: Response) => {
+export const updatePacienteAdicciones = async (req: Request, res: Response) => {
   try {
-    const { pacienteAdiccion, message } = await pacienteAdiccionService.updatePacienteAdiccion(req.params.id, req.body);
+    const { pacienteAdiccion, message } = await pacienteAdiccionService.updatePacienteAdicciones(req.params.id, req.body);
     if (!pacienteAdiccion) return res.status(404).json({ message: "Adicción del paciente no encontrada" });
-    res.json({ pacienteAdiccion, message });
+    res.json({ pacienteAdiccion: pacienteAdiccion.getBasicInfo(), message });
   } catch (error) {
     console.log("error :>> ", error);
-    res.status(500).json({ error: "Error al actualizar adicción del paciente", details: error });
+    res.status(500).json({ error: "Error al actualizar adicción del paciente", details: error instanceof Error ? error.message : "Unknown error" });
   }
 };
 
-export const deletePacienteAdiccion = async (req: Request, res: Response) => {
+export const deletePacienteAdicciones = async (req: Request, res: Response) => {
   try {
-    const { success, message } = await pacienteAdiccionService.deletePacienteAdiccion(req.params.id);
+    const { success, message } = await pacienteAdiccionService.deletePacienteAdicciones(req.params.id);
     if (!success) return res.status(404).json({ message: "Adicción del paciente no encontrada" });
     res.json({ success, message });
   } catch (error) {
     console.log("error :>> ", error);
-    res.status(500).json({ error: "Error al eliminar adicción del paciente físicamente", details: error });
+    res.status(500).json({ error: "Error al eliminar adicción del paciente físicamente", details: error instanceof Error ? error.message : "Unknown error" });
   }
 };
 
-export const softDeletePacienteAdiccion = async (req: Request, res: Response) => {
+export const softDeletePacienteAdicciones = async (req: Request, res: Response) => {
   try {
-    const { success, message } = await pacienteAdiccionService.softDeletePacienteAdiccion(req.params.id);
+    const { success, message } = await pacienteAdiccionService.softDeletePacienteAdicciones(req.params.id);
     if (!success) return res.status(404).json({ message: "Adicción del paciente no encontrada" });
     res.json({ success, message });
   } catch (error) {
     console.log("error :>> ", error);
-    res.status(500).json({ error: "Error al eliminar adicción del paciente", details: error });
+    res.status(500).json({ error: "Error al eliminar adicción del paciente lógicamente", details: error instanceof Error ? error.message : "Unknown error" });
   }
 };

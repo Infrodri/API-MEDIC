@@ -31,6 +31,7 @@ MedicamentosSchema.methods.getBasicInfo = function () {
   return {
     _id: this._id, // Usamos el _id generado por MongoDB
     nombreMedicamento: this.nombreMedicamento,
+    descripcion: this.descripcion,
     estado: this.estado,
   };
 };

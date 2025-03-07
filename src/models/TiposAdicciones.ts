@@ -31,6 +31,7 @@ TiposAdiccionesSchema.methods.getBasicInfo = function () {
   return {
     _id: this._id, // Usamos el _id generado por MongoDB
     nombreAdiccion: this.nombreAdiccion,
+    descripcion: this.descripcion,
     estado: this.estado,
   };
 };

@@ -8,10 +8,10 @@ import { Especialidades } from "./EspecialidadesTypes";
 
 export interface ConsultasMedicas extends Document {
   getBasicInfo(): any;
-  paciente: Types.ObjectId | Paciente;
-  medico: Types.ObjectId | Medico;
-  fichaMedica: Types.ObjectId | FichasMedicas;
-  especialidad: Types.ObjectId | Especialidades;
+  paciente?: Types.ObjectId | Paciente;
+  medico?: Types.ObjectId | Medico;
+  fichaMedica?: Types.ObjectId | FichasMedicas;
+  especialidad?: Types.ObjectId | Especialidades;
   fecha: Date;
   motivo: string;
   observaciones: string;

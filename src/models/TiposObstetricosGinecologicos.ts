@@ -31,6 +31,7 @@ TiposObstetricosGinecologicosSchema.methods.getBasicInfo = function () {
   return {
     _id: this._id, // Usamos el _id generado por MongoDB
     nombreTipo: this.nombreTipo,
+    descripcion: this.descripcion,
     estado: this.estado,
   };
 };

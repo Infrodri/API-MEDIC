@@ -31,6 +31,7 @@ TiposOperacionesQuirurgicasSchema.methods.getBasicInfo = function () {
   return {
     _id: this._id, // Usamos el _id generado por MongoDB
     nombreOperacion: this.nombreOperacion,
+    descripcion: this.descripcion,
     estado: this.estado,
   };
 };

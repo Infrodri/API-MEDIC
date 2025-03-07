@@ -1,17 +1,16 @@
 // src/types/PacienteAdiccionesTypes.ts
 import { Document, Types } from "mongoose";
 import { Query, Repository } from "./RepositoryTypes";
-import { TiposAdiccion } from "types/TiposAdiccionesTypes";
 import { Paciente } from "./PacientesTypes";
+import { TiposAdiccion } from "./TiposAdiccionesTypes";
 
 export interface PacienteAdiccion extends Document {
   getBasicInfo(): any;
-  paciente: Types.ObjectId | Paciente;
-  tipoAdiccion: Types.ObjectId | TiposAdiccion;
-  fechaInicio: Date;
-  fechaFin?: Date;
-  notas: string;
-  estado: "Activo" | "Inactivo";
+  paciente: Types.ObjectId | Paciente; // Relación con Paciente
+  tipoAdiccion: Types.ObjectId | TiposAdiccion; // Relación con TiposAdicciones
+  fechaInicio: Date; // Fecha de inicio de la adicción
+  fechaFin?: Date; // Fecha de fin de la adicción (opcional)
+  estado: "Activo" | "Inactivo"; // Status for logical deletion
 }
 
 export interface IPacienteAdiccionRepository extends Repository<PacienteAdiccion> {
@@ -21,11 +20,11 @@ export interface IPacienteAdiccionRepository extends Repository<PacienteAdiccion
 }
 
 export interface IPacienteAdiccionService {
-  createPacienteAdiccion(pacienteAdiccion: PacienteAdiccion): Promise<{ pacienteAdiccion: PacienteAdiccion; message: string }>;
+  createPacienteAdicciones(pacienteAdiccion: Omit<PacienteAdiccion, keyof Document>): Promise<{ pacienteAdiccion: PacienteAdiccion; message: string }>;
   findPacienteAdicciones(query?: Query): Promise<PacienteAdiccion[]>;
-  findPacienteAdiccionById(id: string): Promise<PacienteAdiccion | null>;
+  findPacienteAdiccionesById(id: string): Promise<PacienteAdiccion | null>;
   findPacienteAdiccionesByPaciente(pacienteId: string): Promise<PacienteAdiccion[]>;
-  updatePacienteAdiccion(id: string, pacienteAdiccion: Partial<PacienteAdiccion>): Promise<{ pacienteAdiccion: PacienteAdiccion | null; message: string }>;
-  deletePacienteAdiccion(id: string): Promise<{ success: boolean; message: string }>;
-  softDeletePacienteAdiccion(id: string): Promise<{ success: boolean; message: string }>;
+  updatePacienteAdicciones(id: string, pacienteAdiccion: Partial<PacienteAdiccion>): Promise<{ pacienteAdiccion: PacienteAdiccion | null; message: string }>;
+  deletePacienteAdicciones(id: string): Promise<{ success: boolean; message: string }>;
+  softDeletePacienteAdicciones(id: string): Promise<{ success: boolean; message: string }>;
 }

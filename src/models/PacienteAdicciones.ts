@@ -11,7 +11,7 @@ const PacienteAdiccionSchema: Schema = new Schema<PacienteAdiccion>(
     },
     tipoAdiccion: {
       type: Schema.Types.ObjectId,
-      ref: "TiposAdiccion",
+      ref: "TiposAdicciones", // Coincide con el modelo registrado
       required: [true, "El tipo de adicción es obligatorio"],
     },
     fechaInicio: {
@@ -45,4 +45,4 @@ PacienteAdiccionSchema.methods.getBasicInfo = function () {
   };
 };
 
-export const PacienteAdiccionModel = mongoose.model<PacienteAdiccion>("PacienteAdiccion", PacienteAdiccionSchema);
+export const PacienteAdiccionModel = mongoose.model<PacienteAdiccion>("PacienteAdicciones", PacienteAdiccionSchema);

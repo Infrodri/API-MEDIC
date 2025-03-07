@@ -2,7 +2,6 @@
 import { PacienteModel } from "@models/Pacientes";
 import { Query } from "types/RepositoryTypes";
 import { IConsultasMedicasRepository, IConsultasMedicasService, ConsultasMedicas } from "types/ConsultasMedicasTypes";
-import { ConsultasMedicasRepository } from "@repositories/ConsultasMedicasRepositories";
 
 export class ConsultasMedicasService implements IConsultasMedicasService {
   private consultasMedicasRepository: IConsultasMedicasRepository;

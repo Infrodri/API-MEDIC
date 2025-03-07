@@ -3,7 +3,7 @@ import { ExamenesMedicos } from "types/ExamenesMedicosTypes";
 
 const ExamenesMedicosSchema: Schema = new Schema<ExamenesMedicos>(
   {
-    nombreExamen: {
+    nombre: {
       type: String,
       required: [true, "El nombre del examen es obligatorio"],
       trim: true,
@@ -14,9 +14,7 @@ const ExamenesMedicosSchema: Schema = new Schema<ExamenesMedicos>(
       required: [true, "La descripción es obligatoria"],
       trim: true,
     },
-    medico: { type: mongoose.Schema.Types.ObjectId, ref: 'Medico' },
-    paciente: { type: mongoose.Schema.Types.ObjectId, ref: 'Paciente' },
-    estado: {
+     estado: {
       type: String,
       enum: ["Activo", "Inactivo"],
       default: "Activo",
@@ -32,9 +30,8 @@ const ExamenesMedicosSchema: Schema = new Schema<ExamenesMedicos>(
 ExamenesMedicosSchema.methods.getBasicInfo = function () {
   return {
     _id: this._id, // Usamos el _id generado por MongoDB
-    nombreExamen: this.nombreExamen,
-    medico: this.medico.primerApellido,  // Aquí ya contiene el ObjectId del médico
-    paciente: this.paciente.nombre, // Aquí ya contiene el ObjectId del paciente
+    nombre: this.nombre,
+    descripcion: this.descripcion,
     estado: this.estado,
   };
 };

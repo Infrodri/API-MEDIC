@@ -1,3 +1,4 @@
+// src/models/FichasMedicas.ts
 import mongoose, { Schema } from "mongoose";
 import { FichasMedicas } from "types/FichasMedicasTypes";
 
@@ -16,7 +17,7 @@ const FichasMedicasSchema: Schema = new Schema<FichasMedicas>(
     },
     especialidad: {
       type: Schema.Types.ObjectId,
-      ref: "Especialidades", // Nueva relación
+      ref: "Especialidades",
       required: [true, "La especialidad es obligatoria"],
     },
     fecha: {
@@ -47,7 +48,7 @@ FichasMedicasSchema.methods.getBasicInfo = function () {
     _id: this._id,
     paciente: this.paciente,
     medico: this.medico,
-    especialidad: this.especialidad, // Incluyo especialidad
+    especialidad: this.especialidad,
     fecha: this.fecha,
     estado: this.estado,
   };

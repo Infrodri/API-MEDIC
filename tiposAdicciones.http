@@ -1,32 +1,32 @@
 # Crear un nuevo tipo de adicción
-POST http://localhost:4000/api/v1/tipos-adicciones HTTP/1.1
+
+# Crear un tipo de adicción
+POST http://localhost:4000/api/v1/tiposadicciones HTTP/1.1
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3YzA4MzgxOTdjN2VhYzQzYmEzNzM3ZiIsImVtYWlsIjoiYWRtaW5AdGVzdC5jb20iLCJ1c2VybmFtZSI6ImFkbWluIiwiaWF0IjoxNzQwNzIxNTg1LCJleHAiOjE3NDEwODE1ODV9.X3b3zSiszSInn2QkVkh2_xjoh19aez5m-8S-WCIcix4
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3YzA4MzgxOTdjN2VhYzQzYmEzNzM3ZiIsImVtYWlsIjoiYWRtaW5AdGVzdC5jb20iLCJ1c2VybmFtZSI6ImFkbWluIiwiaWF0IjoxNzQxMjMyMTk0LCJleHAiOjE3NDE1OTIxOTR9.5J7t6VVfam98n0XYkn9je0s4MX-SO4TleHgCkg2pgtg
 
 {
-  "nombreAdiccion": "Comida compulsiva",
-        "descripcion": "Consumo excesivo e incontrolado de alimentos, muchas veces en respuesta al estrés o emociones negativas, lo que puede llevar a problemas de salud como obesidad y diabetes."
-   
-    
+      "nombreAdiccion": "fswefw",
+      "descripcion": "Consumosfeewwe excelujuriass ."
 }
 
 ###
 # Listar todos los tipos de adicciones
-GET http://localhost:4000/api/v1/tipos-adicciones HTTP/1.1
+GET http://localhost:4000/api/v1/tiposadicciones HTTP/1.1
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3YzA4MzgxOTdjN2VhYzQzYmEzNzM3ZiIsImVtYWlsIjoiYWRtaW5AdGVzdC5jb20iLCJ1c2VybmFtZSI6ImFkbWluIiwiaWF0IjoxNzQwNzIxNTg1LCJleHAiOjE3NDEwODE1ODV9.X3b3zSiszSInn2QkVkh2_xjoh19aez5m-8S-WCIcix4
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3YzA4MzgxOTdjN2VhYzQzYmEzNzM3ZiIsImVtYWlsIjoiYWRtaW5AdGVzdC5jb20iLCJ1c2VybmFtZSI6ImFkbWluIiwiaWF0IjoxNzQxMjMyMTk0LCJleHAiOjE3NDE1OTIxOTR9.5J7t6VVfam98n0XYkn9je0s4MX-SO4TleHgCkg2pgtg
 
 ###
 # Obtener un tipo de adicción por ID
-GET http://localhost:4000/api/v1/tipos-adicciones/67c14e201d1184ae393f4af8 HTTP/1.1
+GET http://localhost:4000/api/v1/tiposadicciones/67c9fee07c04cf29265d6d56 HTTP/1.1
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3YzA4MzgxOTdjN2VhYzQzYmEzNzM3ZiIsImVtYWlsIjoiYWRtaW5AdGVzdC5jb20iLCJ1c2VybmFtZSI6ImFkbWluIiwiaWF0IjoxNzQwNzIxNTg1LCJleHAiOjE3NDEwODE1ODV9.X3b3zSiszSInn2QkVkh2_xjoh19aez5m-8S-WCIcix4
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3YzA4MzgxOTdjN2VhYzQzYmEzNzM3ZiIsImVtYWlsIjoiYWRtaW5AdGVzdC5jb20iLCJ1c2VybmFtZSI6ImFkbWluIiwiaWF0IjoxNzQxMjMyMTk0LCJleHAiOjE3NDE1OTIxOTR9.5J7t6VVfam98n0XYkn9je0s4MX-SO4TleHgCkg2pgtg
 
 ###
 # Actualizar un tipo de adicción
-PUT http://localhost:4000/api/v1/tipos-adicciones/67c14e201d1184ae393f4af8 HTTP/1.1
+PUT http://localhost:4000/api/v1/tiposadicciones/67c9fee07c04cf29265d6d56 HTTP/1.1
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3YzA4MzgxOTdjN2VhYzQzYmEzNzM3ZiIsImVtYWlsIjoiYWRtaW5AdGVzdC5jb20iLCJ1c2VybmFtZSI6ImFkbWluIiwiaWF0IjoxNzQwNzIxNTg1LCJleHAiOjE3NDEwODE1ODV9.X3b3zSiszSInn2QkVkh2_xjoh19aez5m-8S-WCIcix4
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3YzA4MzgxOTdjN2VhYzQzYmEzNzM3ZiIsImVtYWlsIjoiYWRtaW5AdGVzdC5jb20iLCJ1c2VybmFtZSI6ImFkbWluIiwiaWF0IjoxNzQxMjMyMTk0LCJleHAiOjE3NDE1OTIxOTR9.5J7t6VVfam98n0XYkn9je0s4MX-SO4TleHgCkg2pgtg
 
 {
   "descripcion": "Consumo excesivo de alcohol con dependencia crónica"
@@ -34,12 +34,12 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3YzA4MzgxO
 
 ###
 # Eliminar lógicamente un tipo de adicción (cambiar a Inactivo)
-PATCH http://localhost:4000/api/v1/tipos-adicciones/67c14e201d1184ae393f4af8/soft-delete HTTP/1.1
+PATCH http://localhost:4000/api/v1/tiposadicciones/67c9fee07c04cf29265d6d56/soft-delete HTTP/1.1
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3YzA4MzgxOTdjN2VhYzQzYmEzNzM3ZiIsImVtYWlsIjoiYWRtaW5AdGVzdC5jb20iLCJ1c2VybmFtZSI6ImFkbWluIiwiaWF0IjoxNzQwNzIxNTg1LCJleHAiOjE3NDEwODE1ODV9.X3b3zSiszSInn2QkVkh2_xjoh19aez5m-8S-WCIcix4
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3YzA4MzgxOTdjN2VhYzQzYmEzNzM3ZiIsImVtYWlsIjoiYWRtaW5AdGVzdC5jb20iLCJ1c2VybmFtZSI6ImFkbWluIiwiaWF0IjoxNzQxMjMyMTk0LCJleHAiOjE3NDE1OTIxOTR9.5J7t6VVfam98n0XYkn9je0s4MX-SO4TleHgCkg2pgtg
 
 ###
 # Eliminar físicamente un tipo de adicción (si aplica, aunque en tu sistema prefieres eliminaciones lógicas)
-DELETE http://localhost:4000/api/v1/tipos-adicciones/67c14e201d1184ae393f4af8 HTTP/1.1
+DELETE http://localhost:4000/api/v1/tiposadicciones/67c9fee07c04cf29265d6d56 HTTP/1.1
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3YzA4MzgxOTdjN2VhYzQzYmEzNzM3ZiIsImVtYWlsIjoiYWRtaW5AdGVzdC5jb20iLCJ1c2VybmFtZSI6ImFkbWluIiwiaWF0IjoxNzQwNzIxNTg1LCJleHAiOjE3NDEwODE1ODV9.X3b3zSiszSInn2QkVkh2_xjoh19aez5m-8S-WCIcix4
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3YzA4MzgxOTdjN2VhYzQzYmEzNzM3ZiIsImVtYWlsIjoiYWRtaW5AdGVzdC5jb20iLCJ1c2VybmFtZSI6ImFkbWluIiwiaWF0IjoxNzQxMjMyMTk0LCJleHAiOjE3NDE1OTIxOTR9.5J7t6VVfam98n0XYkn9je0s4MX-SO4TleHgCkg2pgtg
