@@ -1,6 +1,8 @@
 // src/models/PacienteAdicciones.ts
 import mongoose, { Schema } from "mongoose";
 import { PacienteAdiccion } from "types/PacienteAdiccionesTypes";
+import { PacienteModel } from "./Pacientes";
+import { object } from "zod";
 
 const PacienteAdiccionSchema: Schema = new Schema<PacienteAdiccion>(
   {
@@ -37,8 +39,14 @@ const PacienteAdiccionSchema: Schema = new Schema<PacienteAdiccion>(
 PacienteAdiccionSchema.methods.getBasicInfo = function () {
   return {
     _id: this._id,
-    paciente: this.paciente,
-    tipoAdiccion: this.tipoAdiccion,
+    paciente: this.paciente ? {
+      primerNombre: this.paciente.primerNombre,
+      primerApellido: this.paciente.primerApellido
+    } : null,
+    tipoAdiccion: this.tipoAdiccion? {
+      nombreAdiccion: this.tipoAdiccion.nombreAdiccion,
+      descripcion: this.tipoAdiccion.descripcion
+    } : null,
     fechaInicio: this.fechaInicio,
     fechaFin: this.fechaFin,
     estado: this.estado,

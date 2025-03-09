@@ -17,7 +17,7 @@ export class PacienteOperacionService implements IPacienteOperacionService {
     return { pacienteOperacion: newPacienteOperacion, message: "Operación del paciente registrada con éxito" };
   }
 
-  async findPacienteOperaciones(query?: Query): Promise<PacienteOperacion[]> {
+  async findPacienteOperacion(query?: Query): Promise<PacienteOperacion[]> {
     return this.pacienteOperacionRepository.findActive(query);
   }
 
@@ -25,7 +25,7 @@ export class PacienteOperacionService implements IPacienteOperacionService {
     return this.pacienteOperacionRepository.findById(id);
   }
 
-  async findPacienteOperacionesByPaciente(pacienteId: string): Promise<PacienteOperacion[]> {
+  async findPacienteOperacionByPaciente(pacienteId: string): Promise<PacienteOperacion[]> {
     return this.pacienteOperacionRepository.findByPaciente(pacienteId);
   }
 

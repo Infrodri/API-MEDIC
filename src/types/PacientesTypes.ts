@@ -2,10 +2,10 @@
 import { Document, Types } from "mongoose";
 import { Query, Repository } from "./RepositoryTypes";
 import { PacienteAdiccion } from "types/PacienteAdiccionesTypes";
-import { PacienteExamen } from "types/PacienteExamenesTypes";
 import { PacienteObstetricoGinecologico } from "types/PacienteObstetricosGinecologicosTypes";
 import { PacienteOperacion } from "types/PacienteOperacionesTypes";
 import { ConsultasMedicas } from "types/ConsultasMedicasTypes";
+import { PacienteExamenes } from "./PacienteExamenesTypes";
 
 export interface Paciente extends Document {
   getBasicInfo(): any;
@@ -26,7 +26,7 @@ export interface Paciente extends Document {
 export interface HistorialMedico {
   paciente: Paciente[];
   adicciones: PacienteAdiccion[];
-  examenes: PacienteExamen[];
+  examenes: PacienteExamenes[];
   obstetricosGinecologicos: PacienteObstetricoGinecologico[];
   operaciones: PacienteOperacion[];
   consultas: ConsultasMedicas[];

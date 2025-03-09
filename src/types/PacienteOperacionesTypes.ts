@@ -20,9 +20,9 @@ export interface IPacienteOperacionRepository extends Repository<PacienteOperaci
 
 export interface IPacienteOperacionService {
   createPacienteOperacion(pacienteOperacion: PacienteOperacion): Promise<{ pacienteOperacion: PacienteOperacion; message: string }>;
-  findPacienteOperaciones(query?: Query): Promise<PacienteOperacion[]>;
+  findPacienteOperacion(query?: Query): Promise<PacienteOperacion[]>;
   findPacienteOperacionById(id: string): Promise<PacienteOperacion | null>;
-  findPacienteOperacionesByPaciente(pacienteId: string): Promise<PacienteOperacion[]>;
+  findPacienteOperacionByPaciente(pacienteId: string): Promise<PacienteOperacion[]>;
   updatePacienteOperacion(id: string, pacienteOperacion: Partial<PacienteOperacion>): Promise<{ pacienteOperacion: PacienteOperacion | null; message: string }>;
   deletePacienteOperacion(id: string): Promise<{ success: boolean; message: string }>;
   softDeletePacienteOperacion(id: string): Promise<{ success: boolean; message: string }>;

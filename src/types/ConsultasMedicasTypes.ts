@@ -8,16 +8,17 @@ import { Especialidades } from "./EspecialidadesTypes";
 
 export interface ConsultasMedicas extends Document {
   getBasicInfo(): any;
-  paciente?: Types.ObjectId | Paciente;
-  medico?: Types.ObjectId | Medico;
-  fichaMedica?: Types.ObjectId | FichasMedicas;
-  especialidad?: Types.ObjectId | Especialidades;
+  paciente: Types.ObjectId ;
+  medico: Types.ObjectId;
+  fichaMedica: Types.ObjectId ;
+  especialidad: Types.ObjectId ;
   fecha: Date;
   motivo: string;
-  observaciones: string;
+  observaciones?: string;
   estado: "Activo" | "Inactivo";
   estadoConsulta: "Pendiente" | "Concluida" | "Derivada"; // Nuevo campo
-  medicoDerivado?: Types.ObjectId | Medico; // Nuevo campo para derivaciones
+  medicoDerivado?: Types.ObjectId ; // Nuevo campo para derivaciones
+  prioridad: "Normal" | "Alta" | "Urgente"; // Campo agregado para prioridad
 }
 
 export interface IConsultasMedicasRepository extends Repository<ConsultasMedicas> {

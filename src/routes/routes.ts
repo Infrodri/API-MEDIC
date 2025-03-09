@@ -8,7 +8,7 @@ import { createRecetasMedicas, deleteRecetasMedicas, findRecetasMedicas, findRec
 import { createMedicamentos, deleteMedicamentos, findMedicamentos, findMedicamentosById, softDeleteMedicamentos, updateMedicamentos } from "@controllers/medicamentosControllers";
 import {  createPacienteAdicciones,  findPacienteAdicciones,  findPacienteAdiccionesById,  findPacienteAdiccionesByPaciente,  updatePacienteAdicciones,  deletePacienteAdicciones,  softDeletePacienteAdicciones} from "@controllers/pacienteAdiccionesControllers";
 import {  createPacienteObstetricoGinecologico,  deletePacienteObstetricoGinecologico,  findPacienteObstetricosGinecologicos,  findPacienteObstetricoGinecologicoById,  findPacienteObstetricosGinecologicosByPaciente,  softDeletePacienteObstetricoGinecologico,  updatePacienteObstetricoGinecologico} from "@controllers/pacienteObstetricosGinecologicosControllers";
-import {  createPacienteOperacion,  deletePacienteOperacion,  findPacienteOperaciones,  findPacienteOperacionById,  findPacienteOperacionesByPaciente,  softDeletePacienteOperacion,  updatePacienteOperacion} from "@controllers/pacienteOperacionesControllers";
+import {  createPacienteOperacion,  deletePacienteOperacion,        findPacienteOperacion,        findPacienteOperacionById,        findPacienteOperacionByPaciente,        softDeletePacienteOperacion,  updatePacienteOperacion} from "@controllers/pacienteOperacionesControllers";
 import { createRecetasMedicamentos, deleteRecetasMedicamentos, findRecetasMedicamentos, findRecetasMedicamentosById, softDeleteRecetasMedicamentos, updateRecetasMedicamentos } from "@controllers/recetasMedicamentosControllers";
 import {  createPacienteExamenes,  deletePacienteExamenes,  findPacienteExamenes,  findPacienteExamenesById,    softDeletePacienteExamenes,  updatePacienteExamenes,} from "@controllers/pacienteExamenesControllers";
 import { createEspecialidades, deleteEspecialidades, findEspecialidades, findEspecialidadesById, softDeleteEspecialidades, updateEspecialidades } from "@controllers/especialidadesControllers";
@@ -31,6 +31,7 @@ import {
 import { Router } from "express";
 import {  getPermissons, verifyToken } from "middlewares/auth";
 import { checkRoles } from "middlewares/roles";
+import { getAlertas, getConsultasHoy, getDashboardStats, getMedicosActivosHoy } from "@controllers/dashboardControllers";
 
 const router = Router();
 
@@ -58,7 +59,11 @@ router.post("/auth/logout", verifyToken, logoutUser);
     router.put("/roles/:id", verifyToken, getPermissons, updateRoles);
     router.delete("/roles/:id", verifyToken, getPermissons, deleteRoles);
   
-
+// Rutas del Dashboard
+router.get("/dashboard/stats", verifyToken, getPermissons, getDashboardStats);
+router.get("/dashboard/consultas/hoy", verifyToken, getPermissons, getConsultasHoy);
+router.get("/dashboard/medicos/activos", verifyToken, getPermissons, getMedicosActivosHoy);
+router.get("/dashboard/alertas", verifyToken, getPermissons, getAlertas);
  
 
 
@@ -183,9 +188,9 @@ router.patch("/pacienteadicciones/:id/soft-delete", verifyToken, getPermissons, 
   router.patch("/paciente-obstetricos-ginecologicos/:id/soft-delete", verifyToken, getPermissons, softDeletePacienteObstetricoGinecologico);
 
   // Rutas de Paciente-Operaciones
-  router.get("/pacienteoperaciones", verifyToken, getPermissons, findPacienteOperaciones);
+  router.get("/pacienteoperaciones", verifyToken, getPermissons, findPacienteOperacion);
   router.get("/pacienteoperaciones/:id", verifyToken, getPermissons, findPacienteOperacionById);
-  router.get("/pacienteoperaciones/paciente/:pacienteId", verifyToken, getPermissons, findPacienteOperacionesByPaciente);
+  router.get("/pacienteoperaciones/paciente/:pacienteId", verifyToken, getPermissons, findPacienteOperacionByPaciente);
   router.post("/pacienteoperaciones", verifyToken, getPermissons, createPacienteOperacion);
   router.put("/pacienteoperaciones/:id", verifyToken, getPermissons, updatePacienteOperacion);
   router.delete("/pacienteoperaciones/:id", verifyToken, getPermissons, deletePacienteOperacion);

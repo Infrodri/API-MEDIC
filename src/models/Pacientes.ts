@@ -52,8 +52,8 @@ PacienteSchema.methods.getBasicInfo = function () {
     primerApellido: this.primerApellido,
     fechaNacimiento: this.fechaNacimiento,
     direccion: this.direccion,
-    telefono: this.estado,
-    estado: this.telefono,
+    telefono: this.telefono,
+    estado: this.estado,
     estadoAtencion: this.estadoAtencion,
   };
 };

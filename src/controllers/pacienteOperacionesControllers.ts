@@ -18,12 +18,12 @@ export const createPacienteOperacion = async (req: Request, res: Response) => {
   }
 };
 
-export const findPacienteOperaciones = async (req: Request, res: Response) => {
+export const findPacienteOperacion = async (req: Request, res: Response) => {
   try {
-    const pacienteOperaciones = await pacienteOperacionService.findPacienteOperaciones();
-    const basicInfoList = pacienteOperaciones.map((operacion) => operacion.getBasicInfo());
+    const pacienteOperacion = await pacienteOperacionService.findPacienteOperacion();
+    const basicInfoList = pacienteOperacion.map((operacion) => operacion.getBasicInfo());
     if (basicInfoList.length === 0) return res.status(404).json({ message: "No hay operaciones de pacientes encontradas." });
-    res.json({ pacienteOperaciones: basicInfoList, message: "Lista de operaciones de pacientes obtenida con éxito" });
+    res.json({ pacienteOperacion: basicInfoList, message: "Lista de operaciones de pacientes obtenida con éxito" });
   } catch (error) {
     console.log("error :>> ", error);
     res.status(500).json({ error: "Error al obtener operaciones de pacientes", details: error });
@@ -41,12 +41,12 @@ export const findPacienteOperacionById = async (req: Request, res: Response) => 
   }
 };
 
-export const findPacienteOperacionesByPaciente = async (req: Request, res: Response) => {
+export const findPacienteOperacionByPaciente = async (req: Request, res: Response) => {
   try {
-    const pacienteOperaciones = await pacienteOperacionService.findPacienteOperacionesByPaciente(req.params.pacienteId);
-    const basicInfoList = pacienteOperaciones.map((operacion) => operacion.getBasicInfo());
+    const pacienteOperacion = await pacienteOperacionService.findPacienteOperacionByPaciente(req.params.pacienteId);
+    const basicInfoList = pacienteOperacion.map((operacion) => operacion.getBasicInfo());
     if (basicInfoList.length === 0) return res.status(404).json({ message: "No hay operaciones para este paciente" });
-    res.json({ pacienteOperaciones: basicInfoList, message: "Operaciones del paciente obtenidas con éxito" });
+    res.json({ pacienteOperacion: basicInfoList, message: "Operaciones del paciente obtenidas con éxito" });
   } catch (error) {
     console.log("error :>> ", error);
     res.status(500).json({ error: "Error al obtener operaciones por paciente", details: error });

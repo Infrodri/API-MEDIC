@@ -1,7 +1,7 @@
 // src/services/PacienteService.ts
 import { Query } from "types/RepositoryTypes";
 import { PacienteAdiccionModel } from "@models/PacienteAdicciones";
-import { PacienteExamenModel } from "@models/PacienteExamenes";
+import { PacienteExamenesModel } from "@models/PacienteExamenes";
 import { PacienteObstetricoGinecologicoModel } from "@models/PacienteObstetricosGinecologicos";
 import { PacienteOperacionModel } from "@models/PacienteOperaciones";
 import { ConsultasMedicasModel } from "@models/ConsultasMedicas";
@@ -63,11 +63,11 @@ export class PacienteService implements IPacienteService {
     if (!paciente) throw new Error("Paciente no encontrado");
 
     const adicciones = await PacienteAdiccionModel.find({ paciente: pacienteId, estado: "Activo" }).populate("tipoAdiccion").exec();
-    const examenes = await PacienteExamenModel.find({ paciente: pacienteId, estado: "Activo" }).populate("examenMedico").exec();
+    const examenes = await PacienteExamenesModel.find({ paciente: pacienteId, estado: "Activo" }).populate("examenMedico").exec();
     const obstetricosGinecologicos = await PacienteObstetricoGinecologicoModel.find({ paciente: pacienteId, estado: "Activo" }).populate("tipoObstetricoGinecologico").exec();
     const operaciones = await PacienteOperacionModel.find({ paciente: pacienteId, estado: "Activo" }).populate("tipoOperacionQuirurgica").exec();
     const consultas = await ConsultasMedicasModel.find({ paciente: pacienteId, estado: "Activo" }).populate("medico").populate("especialidad").exec();
 
-    return { paciente, adicciones, examenes, obstetricosGinecologicos, operaciones, consultas };
+    return {paciente, adicciones, examenes, obstetricosGinecologicos, operaciones, consultas };
   }
 }

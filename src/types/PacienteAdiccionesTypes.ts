@@ -6,7 +6,7 @@ import { TiposAdiccion } from "./TiposAdiccionesTypes";
 
 export interface PacienteAdiccion extends Document {
   getBasicInfo(): any;
-  paciente: Types.ObjectId | Paciente; // Relación con Paciente
+  paciente: Types.ObjectId | Paciente ; // Relación con Paciente
   tipoAdiccion: Types.ObjectId | TiposAdiccion; // Relación con TiposAdicciones
   fechaInicio: Date; // Fecha de inicio de la adicción
   fechaFin?: Date; // Fecha de fin de la adicción (opcional)
