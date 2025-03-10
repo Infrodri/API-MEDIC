@@ -39,14 +39,8 @@ const PacienteAdiccionSchema: Schema = new Schema<PacienteAdiccion>(
 PacienteAdiccionSchema.methods.getBasicInfo = function () {
   return {
     _id: this._id,
-    paciente: this.paciente ? {
-      primerNombre: this.paciente.primerNombre,
-      primerApellido: this.paciente.primerApellido
-    } : null,
-    tipoAdiccion: this.tipoAdiccion? {
-      nombreAdiccion: this.tipoAdiccion.nombreAdiccion,
-      descripcion: this.tipoAdiccion.descripcion
-    } : null,
+    paciente: this.paciente ? { primerNombre: this.paciente.primerNombre, primerApellido: this.paciente.primerApellido } : null,
+    tipoAdiccion: this.tipoAdiccion? {nombreAdiccion: this.tipoAdiccion.nombreAdiccion, descripcion: this.tipoAdiccion.descripcion } : null,
     fechaInicio: this.fechaInicio,
     fechaFin: this.fechaFin,
     estado: this.estado,

@@ -58,4 +58,17 @@ export class ConsultasMedicasRepository implements IConsultasMedicasRepository {
     const deleted = await ConsultasMedicasModel.findByIdAndDelete(id).exec();
     return deleted !== null;
   }
+
+  // Nuevo método para verificar disponibilidad
+  async checkAvailability(medicoId: string, fecha: Date, duracion: number): Promise<boolean> {
+    const start = new Date(fecha);
+    const end = new Date(start.getTime() + duracion * 60000);
+    const conflictingCitas = await ConsultasMedicasModel.find({
+      medico: medicoId,
+      estadoConsulta: { $in: ["Pendiente", "Concluida"] },
+      fecha: { $lt: end },
+      $expr: { $gt: [{ $add: ["$fecha", { $multiply: ["$duracion", 60000] }] }, start] },
+    });
+    return conflictingCitas.length === 0;
+  }
 }

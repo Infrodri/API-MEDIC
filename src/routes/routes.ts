@@ -16,18 +16,12 @@ import { createMedico,  deleteMedico, exportSessionHistory, findMedicoById, find
 import { createTiposObstetricosGinecologicos, deleteTiposObstetricosGinecologicos, findTiposObstetricosGinecologicos, findTiposObstetricosGinecologicosById, softDeleteTiposObstetricosGinecologicos, updateTiposObstetricosGinecologicos } from "@controllers/tiposObstetricosGinecologicosControllers";
 import { createTiposOperacionesQuirurgicas, deleteTiposOperacionesQuirurgicas, findTiposOperacionesQuirurgicas, findTiposOperacionesQuirurgicasById, softDeleteTiposOperacionesQuirurgicas, updateTiposOperacionesQuirurgicas } from "@controllers/tiposOperacionesQuirurgicasControllers";
 import { createPaciente, deletePaciente, findPacienteById, findPacientes, findPacientesByEstadoAtencion, getHistorialMedico, softDeletePaciente, updatePaciente } from "@controllers/pacientesControllers";
+
 import {
-  createConsultasMedicas,
-  findConsultasMedicas,
-  findConsultasMedicasById,
-  findConsultasMedicasByPaciente,
-  updateConsultasMedicas,
-  deleteConsultasMedicas,
-  softDeleteConsultasMedicas,
-  concludeConsulta,
-  deriveConsulta,
-  reassignConsulta,
-} from "@controllers/consultasMedicasControllers";
+  createConsultasMedicas, findConsultasMedicas, findConsultasMedicasById, findConsultasMedicasByPaciente,
+  updateConsultasMedicas, deleteConsultasMedicas, softDeleteConsultasMedicas, concludeConsulta,
+  deriveConsulta, reassignConsulta, programarCita, actualizarCita, cancelarCita, listarCitasProgramadas} from "../controllers/consultasMedicasControllers";
+
 import { Router } from "express";
 import {  getPermissons, verifyToken } from "middlewares/auth";
 import { checkRoles } from "middlewares/roles";
@@ -141,16 +135,22 @@ router.patch("/tiposadicciones/:id/soft-delete", verifyToken, getPermissons, sof
 
 
 // Rutas de ConsultasMedicas
-router.post("/consultas-medicas", verifyToken, getPermissons, createConsultasMedicas);
-router.get("/consultas-medicas", verifyToken, getPermissons, findConsultasMedicas);
-router.get("/consultas-medicas/:id", verifyToken, getPermissons, findConsultasMedicasById);
-router.get("/consultas-medicas/paciente/:pacienteId", verifyToken, getPermissons, findConsultasMedicasByPaciente);
-router.put("/consultas-medicas/:id", verifyToken, getPermissons, updateConsultasMedicas);
-router.delete("/consultas-medicas/:id", verifyToken, getPermissons, deleteConsultasMedicas);
-router.patch("/consultas-medicas/:id/soft-delete", verifyToken, getPermissons, softDeleteConsultasMedicas);
-router.patch("/consultas-medicas/:id/conclude", verifyToken, getPermissons, concludeConsulta);
-router.patch("/consultas-medicas/:id/derive", verifyToken, getPermissons, deriveConsulta);
-router.patch("/consultas-medicas/:id/reassign", verifyToken, getPermissons, reassignConsulta);
+router.post("/consultasMedicas", verifyToken, getPermissons, createConsultasMedicas);
+router.get("/consultasMedicas", verifyToken, getPermissons, findConsultasMedicas);
+router.get("/consultasMedicas/:id", verifyToken, getPermissons, findConsultasMedicasById);
+router.get("/consultasMedicas/paciente/:pacienteId", verifyToken, getPermissons, findConsultasMedicasByPaciente);
+router.put("/consultasMedicas/:id", verifyToken, getPermissons, updateConsultasMedicas);
+router.delete("/consultasMedicas/:id", verifyToken, getPermissons, deleteConsultasMedicas);
+router.patch("/consultasMedicas/softDelete/:id", verifyToken, getPermissons, softDeleteConsultasMedicas);
+router.patch("/consultasMedicas/conclude/:id", verifyToken, getPermissons, concludeConsulta);
+router.patch("/consultasMedicas/derive/:id", verifyToken, getPermissons, deriveConsulta);
+router.patch("/consultasMedicas/reassign/:id", verifyToken, getPermissons, reassignConsulta);
+
+// Rutas de citas
+router.post("/citas", verifyToken, getPermissons, programarCita);
+router.put("/citas/:id", verifyToken, getPermissons, actualizarCita);
+router.delete("/citas/:id", verifyToken, getPermissons, cancelarCita);
+router.get("/citas", verifyToken, getPermissons, listarCitasProgramadas); // Nueva ruta
 
   // Rutas de Recetas Médicas
   router.get("/recetasmedicas", verifyToken, getPermissons, findRecetasMedicas);

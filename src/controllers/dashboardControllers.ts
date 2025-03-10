@@ -2,8 +2,9 @@
 import { Request, Response } from "express";
 import { ConsultasMedicasModel } from "../models/ConsultasMedicas";
 import { MedicoModel } from "../models/Medicos";
-import { Medico } from "types/MedicoTypes";
-import { Paciente } from "types/PacientesTypes";
+import { Medico } from "../types/MedicoTypes";
+import { Paciente } from "../types/PacientesTypes";
+import { Types } from "mongoose";
 
 // Helper para obtener el inicio y fin del día
 const getTodayRange = () => {
@@ -14,13 +15,22 @@ const getTodayRange = () => {
   return { start, end };
 };
 
+// Interfaz para la respuesta de especialidad
+interface EspecialidadPopulated {
+  _id: Types.ObjectId;
+  nombre: string;
+}
+
 // 1. Estadísticas del Dashboard
 export const getDashboardStats = async (req: Request, res: Response) => {
   try {
     const { start, end } = getTodayRange();
-    const totalConsultasHoy = await ConsultasMedicasModel.countDocuments({ fecha: { $gte: start, $lte: end } });
-    const consultasPendientes = await ConsultasMedicasModel.countDocuments({ estadoConsulta: "Pendiente" });
-    const totalMedicosActivos = await MedicoModel.countDocuments({ estaActivo: true });
+    
+    const [totalConsultasHoy, consultasPendientes, totalMedicosActivos] = await Promise.all([
+      ConsultasMedicasModel.countDocuments({ fecha: { $gte: start, $lte: end } }),
+      ConsultasMedicasModel.countDocuments({ estadoConsulta: "Pendiente" }),
+      MedicoModel.countDocuments({ estaActivo: true })
+    ]);
 
     res.status(200).json({
       totalConsultasHoy,
@@ -28,7 +38,11 @@ export const getDashboardStats = async (req: Request, res: Response) => {
       totalMedicosActivos,
     });
   } catch (error) {
-    res.status(500).json({ message: "Error al obtener estadísticas", error });
+    console.error("Error en getDashboardStats:", error);
+    res.status(500).json({ 
+      message: "Error al obtener estadísticas", 
+      error: error instanceof Error ? error.message : String(error) 
+    });
   }
 };
 
@@ -36,76 +50,120 @@ export const getDashboardStats = async (req: Request, res: Response) => {
 export const getConsultasHoy = async (req: Request, res: Response) => {
   try {
     const { start, end } = getTodayRange();
-    console.log("Rango de fechas:", start, end);
 
     const consultas = await ConsultasMedicasModel.find({ fecha: { $gte: start, $lte: end } })
-      .populate("paciente", "primerNombre primerApellido")
-      .populate("medico", "primerNombre primerApellido especialidades");
+      .populate<{ paciente: Paciente | null }>("paciente", "primerNombre primerApellido")
+      .populate<{ medico: Medico | null }>("medico", "primerNombre primerApellido especialidades")
+      .lean();
 
-    console.log("Consultas encontradas:", consultas.length);
-    if (consultas.length > 0) {
-      console.log("Paciente ejemplo:", consultas[0].paciente);
-      console.log("Médico ejemplo:", consultas[0].medico);
-    }
+    const formattedConsultas = consultas.map((consulta) => {
+      // Manejo seguro del paciente
+      const paciente = consulta.paciente;
+      const nombrePaciente = paciente
+        ? `${paciente.primerNombre || ''} ${paciente.primerApellido || ''}`.trim()
+        : "Paciente no encontrado";
 
-    const formattedConsultas = consultas.map((consulta) => ({
-      id: consulta._id,
-      paciente: consulta.paciente
-        ? `${consulta.paciente.primerNombre} ${consulta.paciente.primerApellido}`
-        : "Paciente no encontrado",
-      medico: consulta.medico
-        ? `${consulta.medico.primerNombre} ${consulta.medico.primerApellido}`
-        : "Médico no encontrado",
-      hora: consulta.fecha instanceof Date ? consulta.fecha.toLocaleTimeString() : "Hora no válida",
-      estado: consulta.estadoConsulta,
-      prioridad: consulta.prioridad,
-    }));
+      // Manejo seguro del médico
+      const medico = consulta.medico;
+      const nombreMedico = medico
+        ? `${medico.primerNombre || ''} ${medico.primerApellido || ''}`.trim()
+        : "Médico no encontrado";
+
+      // Formateo seguro de la fecha
+      let hora = "Hora no válida";
+      if (consulta.fecha) {
+        const fecha = new Date(consulta.fecha);
+        if (!isNaN(fecha.getTime())) {
+          hora = fecha.toLocaleTimeString();
+        }
+      }
+
+      return {
+        id: consulta._id,
+        paciente: nombrePaciente,
+        medico: nombreMedico,
+        hora,
+        estado: consulta.estadoConsulta || "No definido",
+        prioridad: consulta.prioridad || "Normal",
+      };
+    });
 
     res.status(200).json(formattedConsultas);
   } catch (error) {
     console.error("Error en getConsultasHoy:", error);
-    res.status(500).json({ message: "Error al obtener consultas del día", error });
+    res.status(500).json({ 
+      message: "Error al obtener consultas del día", 
+      error: error instanceof Error ? error.message : String(error) 
+    });
   }
 };
 
 // 3. Médicos activos
 export const getMedicosActivosHoy = async (req: Request, res: Response) => {
   try {
-    const medicos = await MedicoModel.find({ estaActivo: true })
-      .populate("especialidades", "nombre");
+    // Tipado correcto para la población de especialidades
+    interface MedicoConEspecialidades extends Omit<Medico, 'especialidades'> {
+      especialidades: EspecialidadPopulated[];
+    }
 
-    const formattedMedicos = medicos.map((medico) => ({
-      id: medico._id,
-      nombre: `${medico.primerNombre} ${medico.primerApellido}`,
-      especialidad: medico.especialidades.map((esp: any) => esp.nombre),
-    }));
+    const medicos = await MedicoModel.find({ estaActivo: true })
+      .populate<{ especialidades: EspecialidadPopulated[] }>("especialidades", "nombre")
+      .lean() as MedicoConEspecialidades[];
+
+    const formattedMedicos = medicos.map((medico) => {
+      // Extraer nombres de especialidades con seguridad de tipos
+      const especialidades = Array.isArray(medico.especialidades) 
+        ? medico.especialidades.map(esp => esp.nombre)
+        : [];
+
+      return {
+        id: medico._id,
+        nombre: `${medico.primerNombre || ''} ${medico.primerApellido || ''}`.trim() || "Nombre no disponible",
+        especialidad: especialidades.length > 0 ? especialidades : ["Sin especialidad"],
+      };
+    });
 
     res.status(200).json(formattedMedicos);
   } catch (error) {
-    res.status(500).json({ message: "Error al obtener médicos activos", error });
+    console.error("Error en getMedicosActivosHoy:", error);
+    res.status(500).json({ 
+      message: "Error al obtener médicos activos", 
+      error: error instanceof Error ? error.message : String(error) 
+    });
   }
 };
 
 // 4. Alertas
 export const getAlertas = async (req: Request, res: Response) => {
   try {
-    const consultasUrgentes = await ConsultasMedicasModel.find({ prioridad: "Urgente", estadoConsulta: "Pendiente" })
-      .populate("paciente", "primerNombre primerApellido");
+    const consultasUrgentes = await ConsultasMedicasModel.find({ 
+      prioridad: "Urgente", 
+      estadoConsulta: "Pendiente" 
+    })
+      .populate<{ paciente: Paciente | null }>("paciente", "primerNombre primerApellido")
+      .lean();
 
     const alertas = consultasUrgentes.map((consulta) => {
       const paciente = consulta.paciente;
-      const nombreCompleto = paciente 
+      const nombreCompleto = paciente
         ? `${paciente.primerNombre || ''} ${paciente.primerApellido || ''}`.trim() 
         : 'Paciente desconocido';
+          
       return {
         tipo: "consulta_urgente",
         mensaje: `Consulta urgente para ${nombreCompleto}`,
         consultaId: consulta._id,
+        fecha: consulta.fecha,
+        prioridad: consulta.prioridad
       };
     });
 
     res.status(200).json(alertas);
   } catch (error) {
-    res.status(500).json({ message: "Error al obtener alertas", error });
+    console.error("Error en getAlertas:", error);
+    res.status(500).json({ 
+      message: "Error al obtener alertas", 
+      error: error instanceof Error ? error.message : String(error)
+    });
   }
 };

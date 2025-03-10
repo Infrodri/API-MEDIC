@@ -7,6 +7,7 @@ import { IConsultasMedicasRepository, IConsultasMedicasService, ConsultasMedicas
 const consultasMedicasRepository: IConsultasMedicasRepository = new ConsultasMedicasRepository();
 const consultasMedicasService: IConsultasMedicasService = new ConsultasMedicasService(consultasMedicasRepository);
 
+// Endpoints existentes (sin cambios)
 export const createConsultasMedicas = async (req: Request, res: Response) => {
   try {
     const newConsulta: Omit<ConsultasMedicas, keyof Document> = req.body;
@@ -117,5 +118,53 @@ export const reassignConsulta = async (req: Request, res: Response) => {
   } catch (error) {
     console.log("error :>> ", error);
     res.status(500).json({ error: "Error al reasignar consulta", details: error });
+  }
+};
+
+// Nuevos endpoints para citas
+export const programarCita = async (req: Request, res: Response) => {
+  try {
+    const newCita: Omit<ConsultasMedicas, keyof Document> = req.body;
+    const { consulta, message } = await consultasMedicasService.createConsultasMedicas(newCita);
+    res.status(201).json({ consulta, message });
+  } catch (error) {
+    console.log("error :>> ", error);
+    res.status(400).json({ error: "Error al programar cita", details: error });
+  }
+};
+
+export const actualizarCita = async (req: Request, res: Response) => {
+  try {
+    const { id } = req.params;
+    const { consulta, message } = await consultasMedicasService.updateConsultasMedicas(id, req.body);
+    if (!consulta) return res.status(404).json({ message: "Cita no encontrada" });
+    res.json({ consulta, message });
+  } catch (error) {
+    console.log("error :>> ", error);
+    res.status(400).json({ error: "Error al actualizar cita", details: error });
+  }
+};
+
+export const cancelarCita = async (req: Request, res: Response) => {
+  try {
+    const { id } = req.params;
+    const { success, message } = await consultasMedicasService.softDeleteConsultasMedicas(id);
+    if (!success) return res.status(404).json({ message: "Cita no encontrada" });
+    res.json({ success, message });
+  } catch (error) {
+    console.log("error :>> ", error);
+    res.status(400).json({ error: "Error al cancelar cita", details: error });
+  }
+};
+
+// Nuevo endpoint para listar citas programadas
+export const listarCitasProgramadas = async (req: Request, res: Response) => {
+  try {
+    const citas = await consultasMedicasService.findCitasProgramadas();
+    if (citas.length === 0) return res.status(404).json({ message: "No hay citas programadas encontradas" });
+    res.json({ citas, message: "Lista de citas programadas obtenida con éxito" });
+  } catch (error) {
+    console.log("error :>> ", error);
+    res.status(500).json({ error: "Error al listar citas programadas", details: error });
   }
 };
