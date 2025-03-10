@@ -1,0 +1,36 @@
+###Historial medico del paciente ID 67cba12fa78ad406e838da79
+
+GET http://localhost:4000/api/v1/pacientes/67cba12fa78ad406e838da79/historial HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3YzA4MzgxOTdjN2VhYzQzYmEzNzM3ZiIsImVtYWlsIjoiYWRtaW5AdGVzdC5jb20iLCJ1c2VybmFtZSI6ImFkbWluIiwiaWF0IjoxNzQxNTcxNzYxLCJleHAiOjE3NDE5MzE3NjF9.UV28hx1dx6a4I2r_lz3qqoe-XouIrhf35VxcpvGEvbk
+
+
+
+### Agregar Entrada al Historial
+
+POST http://localhost:4000/api/v1/pacientes/67cba12fa78ad406e838da79/historial HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3YzA4MzgxOTdjN2VhYzQzYmEzNzM3ZiIsImVtYWlsIjoiYWRtaW5AdGVzdC5jb20iLCJ1c2VybmFtZSI6ImFkbWluIiwiaWF0IjoxNzQxNTcxNzYxLCJleHAiOjE3NDE5MzE3NjF9.UV28hx1dx6a4I2r_lz3qqoe-XouIrhf35VxcpvGEvbk
+
+{
+  "fecha": "2025-03-09T10:00:00Z",
+  "descripcion": "Consulta por dolor abdominal",
+  "diagnostico": "Gastritis",
+  "tratamiento": "Omeprazol 20mg",
+  "medico": "67c7868a43449cb8ad3460f7",
+  "notas": "Paciente reporta mejoría tras 2 días"
+}
+
+### Agregar Entrada al Historial (como Médico)
+
+POST http://localhost:4000/api/v1/pacientes/67cba12fa78ad406e838da79/historial HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3YzA4MzgxOTdjN2VhYzQzYmEzNzM3ZiIsImVtYWlsIjoiYWRtaW5AdGVzdC5jb20iLCJ1c2VybmFtZSI6ImFkbWluIiwiaWF0IjoxNzQxNTcxNzYxLCJleHAiOjE3NDE5MzE3NjF9.UV28hx1dx6a4I2r_lz3qqoe-XouIrhf35VxcpvGEvbk
+
+{
+  "fecha": "2025-03-10T09:00:00Z",
+  "descripcion": "Revisión de seguimiento",
+  "diagnostico": "Gastritis controlada",
+  "tratamiento": "Continuar Omeprazol 20mg",
+  "notas": "Paciente estable"
+}

@@ -22,6 +22,11 @@ import {
   updateConsultasMedicas, deleteConsultasMedicas, softDeleteConsultasMedicas, concludeConsulta,
   deriveConsulta, reassignConsulta, programarCita, actualizarCita, cancelarCita, listarCitasProgramadas} from "../controllers/consultasMedicasControllers";
 
+  import {
+    getHistorialByPaciente,
+    addHistorialEntry,
+  } from "../controllers/historialMedicoController";
+
 import { Router } from "express";
 import {  getPermissons, verifyToken } from "middlewares/auth";
 import { checkRoles } from "middlewares/roles";
@@ -145,6 +150,11 @@ router.patch("/consultasMedicas/softDelete/:id", verifyToken, getPermissons, sof
 router.patch("/consultasMedicas/conclude/:id", verifyToken, getPermissons, concludeConsulta);
 router.patch("/consultasMedicas/derive/:id", verifyToken, getPermissons, deriveConsulta);
 router.patch("/consultasMedicas/reassign/:id", verifyToken, getPermissons, reassignConsulta);
+
+// Nuevas rutas para historial médico
+router.get("/pacientes/:id/historial", verifyToken, getPermissons, getHistorialByPaciente);
+router.post("/pacientes/:id/historial", verifyToken, getPermissons, addHistorialEntry);
+
 
 // Rutas de citas
 router.post("/citas", verifyToken, getPermissons, programarCita);
