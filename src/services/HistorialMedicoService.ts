@@ -18,15 +18,13 @@ export class HistorialMedicoService implements IHistorialMedicoService {
   async addHistorialEntry(
     pacienteId: string,
     entry: Omit<HistorialMedico, "_id" | "paciente" | "createdAt" | "updatedAt">,
-    userId: string // Nuevo parámetro para el ID del usuario autenticado
+    userId: string
   ): Promise<HistorialMedico> {
-    // Buscar el usuario autenticado para verificar su rol
     const user = await UserModel.findById(userId).populate("roles");
     if (!user) {
       throw new Error("Usuario no encontrado");
     }
 
-    // Verificar si el usuario tiene rol "admin" o es un médico
     const userRoles = user.roles.map((role: any) => role.name);
     const isAdmin = userRoles.includes("admin");
     const isMedico = await MedicoModel.exists({ _id: userId });
@@ -35,7 +33,6 @@ export class HistorialMedicoService implements IHistorialMedicoService {
       throw new Error("Acceso denegado: solo médicos o administradores autorizados pueden agregar entradas al historial");
     }
 
-    // Si el usuario es admin, usamos el medico del body; si es medico, usamos su propio ID
     const medicoId = isAdmin ? entry.medico : userId;
 
     const medicoExists = await MedicoModel.findById(medicoId);
@@ -48,6 +45,6 @@ export class HistorialMedicoService implements IHistorialMedicoService {
       paciente: pacienteId,
       medico: medicoId,
     };
-    return this.historialMedicoRepository.create(newEntry);
+    return this.historialMedicoRepository.create(newEntry, userId);
   }
 }

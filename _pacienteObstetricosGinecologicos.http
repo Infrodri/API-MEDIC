@@ -7,6 +7,12 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3YzA4MzgxO
   "paciente": "67c1404975156d4ce24ca2e4", 
   "tipoObstetricoGinecologico": "67c14fd92f65123b7fa7d2fd",  
   "fechaEvento": "2025-02-25",
+  "embarazos": 2,
+  "partos": 2,
+  "abortos": 0,
+  "cesareas": 0,
+  "menarca": "12",
+  "cicloMenstrual": "Regular",
   "observaciones": "Control prenatal de rutina"
 }
 

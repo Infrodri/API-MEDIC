@@ -2,13 +2,20 @@
 import { Document, Types } from "mongoose";
 import { Query, Repository } from "./RepositoryTypes";
 import { Paciente } from "./PacientesTypes";
+import { TiposObstetricosGinecologicos } from "./TiposObstetricosGinecologicosTypes";
 
 export interface PacienteObstetricoGinecologico extends Document {
   getBasicInfo(): any;
   paciente: Types.ObjectId | Paciente;
-  tipoObstetricoGinecologico: Types.ObjectId;
+  tipoObstetricoGinecologico: Types.ObjectId | TiposObstetricosGinecologicos;
+  embarazos: string;
+  partos: string;
+  abortos: string;
+  cesareas: string;
+  menarca: string;
+  cicloMenstrual: string;
   fechaEvento: Date;
-  detalles: string;
+  observaciones: string;
   estado: "Activo" | "Inactivo";
 }
 

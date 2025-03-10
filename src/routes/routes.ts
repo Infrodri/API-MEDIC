@@ -3,7 +3,6 @@ import { createRoles, deleteRoles, findRoles, findRolesById,  updateRoles } from
 import { createUser, deleteUser, findUsers, findUsersById,  updateUser } from "@controllers/usersControllers";
 import { createTiposAdiccion, deleteTiposAdiccion, findTiposAdicciones, findTiposAdiccionById, softDeleteTiposAdiccion, updateTiposAdiccion } from "@controllers/tiposAdiccionesControllers";
 import { createExamenesMedicos, deleteExamenesMedicos, findExamenesMedicos, findExamenesMedicosById, softDeleteExamenesMedicos, updateExamenesMedicos } from "@controllers/examenesMedicosControllers";
-import { createFichaMedica,  findFichasMedicas,  findFichaMedicaById,  findFichasMedicasByPaciente,  updateFichaMedica,  deleteFichaMedica,  softDeleteFichaMedica } from "@controllers/fichasMedicasControllers";
 import { createRecetasMedicas, deleteRecetasMedicas, findRecetasMedicas, findRecetasMedicasById, softDeleteRecetasMedicas, updateRecetasMedicas } from "@controllers/recetasMedicasControllers";
 import { createMedicamentos, deleteMedicamentos, findMedicamentos, findMedicamentosById, softDeleteMedicamentos, updateMedicamentos } from "@controllers/medicamentosControllers";
 import {  createPacienteAdicciones,  findPacienteAdicciones,  findPacienteAdiccionesById,  findPacienteAdiccionesByPaciente,  updatePacienteAdicciones,  deletePacienteAdicciones,  softDeletePacienteAdicciones} from "@controllers/pacienteAdiccionesControllers";
@@ -31,7 +30,7 @@ import { Router } from "express";
 import {  getPermissons, verifyToken } from "middlewares/auth";
 import { checkRoles } from "middlewares/roles";
 import { getAlertas, getConsultasHoy, getDashboardStats, getMedicosActivosHoy } from "@controllers/dashboardControllers";
-
+import { addExamen, addReceta, addSection, createConsulta, getConsultaPrintable, getFichaByPaciente, getSection, updateConsulta } from "@controllers/fichasMedicasControllers";
 const router = Router();
 
 export default () => {
@@ -130,14 +129,14 @@ router.patch("/tiposadicciones/:id/soft-delete", verifyToken, getPermissons, sof
   router.patch("/examenesmedicos/:id/soft-delete", verifyToken, getPermissons, softDeleteExamenesMedicos);
 
   // Rutas de Fichas Médicas
-  router.get("/fichasmedicas", verifyToken, getPermissons, findFichasMedicas);
-  router.get("/fichasmedicas/:id", verifyToken, getPermissons, findFichaMedicaById);
-  router.get("/fichasmedicas/paciente/:pacienteId", verifyToken, getPermissons, findFichasMedicasByPaciente);
-  router.post("/fichasmedicas", verifyToken, getPermissons, createFichaMedica);
-  router.put("/fichasmedicas/:id", verifyToken, getPermissons, updateFichaMedica);
-  router.delete("/fichasmedicas/:id", verifyToken, getPermissons, deleteFichaMedica);
-  router.patch("/fichasmedicas/:id/soft-delete", verifyToken, getPermissons, softDeleteFichaMedica);
-
+  router.get("/fichasMedicas/:id", verifyToken, getPermissons, getFichaByPaciente);
+  router.post("/fichasMedicas/:id/:section", verifyToken, getPermissons, addSection);
+  router.get("/fichasMedicas/:id/:section", verifyToken, getPermissons, getSection);
+  router.post("/fichasMedicas/:pacienteId/consultas", verifyToken, getPermissons, createConsulta);
+  router.post("/fichasMedicas/consultas/:consultaId/recetas", verifyToken, getPermissons, addReceta);
+  router.post("/fichasMedicas/consultas/:consultaId/examenes", verifyToken, getPermissons, addExamen);
+  router.put("/fichasMedicas/consultas/:consultaId", verifyToken, getPermissons, updateConsulta);
+  router.get("/fichasMedicas/consultas/:consultaId/printable", verifyToken, getPermissons, getConsultaPrintable);
 
 // Rutas de ConsultasMedicas
 router.post("/consultasMedicas", verifyToken, getPermissons, createConsultasMedicas);

@@ -1,6 +1,7 @@
 // src/models/PacienteObstetricosGinecologicos.ts
 import mongoose, { Schema } from "mongoose";
 import { PacienteObstetricoGinecologico } from "types/PacienteObstetricosGinecologicosTypes";
+import { number } from "zod";
 
 const PacienteObstetricoGinecologicoSchema: Schema = new Schema<PacienteObstetricoGinecologico>(
   {
@@ -14,11 +15,41 @@ const PacienteObstetricoGinecologicoSchema: Schema = new Schema<PacienteObstetri
       ref: "TiposObstetricosGinecologicos",
       required: [true, "El tipo obstétrico/ginecológico es obligatorio"],
     },
-    fechaEvento: {
+    embarazos: {
+      type: String,
+      trim: true,
+      default: "",
+    },
+    partos: {
+      type: String,
+      trim: true,
+      default: "",
+    },
+    abortos: {
+      type: String,
+      trim: true,
+      default: "",
+    },
+    cesareas: {
+      type: String,
+      trim: true,
+      default: "",
+    },
+    menarca: {
+      type: String,
+      trim: true,
+      default: "",
+    },
+    cicloMenstrual: {
+      type: String,
+      trim: true,
+      default: "",
+    },
+     fechaEvento: {
       type: Date,
       required: [true, "La fecha del evento es obligatoria"],
     },
-    detalles: {
+    observaciones: {
       type: String,
       trim: true,
       default: "",
@@ -38,11 +69,17 @@ const PacienteObstetricoGinecologicoSchema: Schema = new Schema<PacienteObstetri
 PacienteObstetricoGinecologicoSchema.methods.getBasicInfo = function () {
   return {
     _id: this._id,
-    paciente: this.paciente,
-    tipoObstetricoGinecologico: this.tipoObstetricoGinecologico,
-    fechaEvento: this.fechaEvento,
-    detalles: this.detalles,
-    estado: this.estado,
+    paciente: this.paciente? { primerNombre: this.paciente.primerNombre, primerApellido: this.paciente.primerApellido } : null,
+    tipoObstetricoGinecologico: this.tipoObstetricoGinecologico? {nombreObstetricoGinecologico: this.tipoObstetricoGinecologico, descripcion: this.tipoObstetricoGinecologico.descripcion} : null,
+  embarazos: this.embarazos,
+  partos: this.partos ,
+  abortos: this.abortos ,
+  cesareas: this.cesareas ,
+  menarca: this.menarca ,
+  cicloMenstrual: this.cicloMenstrual ,
+  fechaEvento: this.fechaEvento ,
+  observaciones: this.observaciones ,
+  estado: this.estado,
   };
 };
 

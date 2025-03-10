@@ -8,8 +8,8 @@ const pacienteAdiccionService: IPacienteAdiccionService = new PacienteAdiccionSe
 
 export const createPacienteAdicciones = async (req: Request, res: Response) => {
   try {
-    const { paciente, tipoAdiccion, fechaInicio } = req.body;
-    if (!paciente || !tipoAdiccion || !fechaInicio) {
+    const { paciente, tipoAdiccion } = req.body;
+    if (!paciente || !tipoAdiccion ) {
       return res.status(400).json({ message: "Paciente, tipo de adicción y fecha de inicio son obligatorios" });
     }
 

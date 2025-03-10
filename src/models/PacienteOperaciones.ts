@@ -1,49 +1,36 @@
 // src/models/PacienteOperaciones.ts
 import mongoose, { Schema } from "mongoose";
 import { PacienteOperacion } from "types/PacienteOperacionesTypes";
+import { PacienteModel } from "./Pacientes";
+import { object } from "zod";
+
 
 const PacienteOperacionSchema: Schema = new Schema<PacienteOperacion>(
   {
-    paciente: {
-      type: Schema.Types.ObjectId,
-      ref: "Paciente",
-      required: [true, "El paciente es obligatorio"],
-    },
-    tipoOperacionQuirurgica: {
-      type: Schema.Types.ObjectId,
-      ref: "TiposOperacionesQuirurgicas",
-      required: [true, "El tipo de operación quirúrgica es obligatorio"],
-    },
-    fechaOperacion: {
-      type: Date,
-      required: [true, "La fecha de la operación es obligatoria"],
-    },
-    notas: {
-      type: String,
-      trim: true,
-      default: "",
-    },
-    estado: {
-      type: String,
-      enum: ["Activo", "Inactivo"],
-      default: "Activo",
-    },
+  paciente: { type: Schema.Types.ObjectId, ref: "Paciente", required: true },
+  tipoOperacionQuirurgica: { type: Schema.Types.ObjectId, ref: "TiposOperacionesQuirurgicas ", required: true },
+  fechaOperacion: { type: Date, required: true },
+  medico: { type: Schema.Types.ObjectId, ref: "Medico", required: true },
+  notas: { type: String },
+  estado: {type: String, enum: ["Activo", "Inactivo"], default: "Activo",
   },
-  {
-    timestamps: true,
-    versionKey: false,
-  }
+},
+{
+  timestamps: true,
+  versionKey: false,
+}
 );
 
-PacienteOperacionSchema.methods.getBasicInfo = function () {
-  return {
-    _id: this._id,
-    paciente: this.paciente,
-    tipoOperacionQuirurgica: this.tipoOperacionQuirurgica,
-    fechaOperacion: this.fechaOperacion,
-    notas: this.notas,
-    estado: this.estado,
+  PacienteOperacionSchema.methods.getBasicInfo = function () {
+    return {
+      _id: this._id,
+      paciente: this.paciente? { primerNombre: this.paciente.primerNombre, primerApellido: this.paciente.primerApellido } : null,
+      tipoOperacionQuirurgica: this.tipoOperacionQuirurgica? {nombreOperacion: this.tipoOperacionQuirurgica, descripcion: this.tipoOperacionQuirurgica.descripcion} : null,
+      fechaOperacion: this.fechaOperacion,
+      medico: this.medico? { primerNombre: this.medico.primerNombre, primerApellido: this.medico.primerApellido } : null,
+      notas: this.notas,
+      estado: this.estado,
+    };
   };
-};
 
-export const PacienteOperacionModel = mongoose.model<PacienteOperacion>("PacienteOperacion", PacienteOperacionSchema);
+export const PacienteOperacionesModel = mongoose.model<PacienteOperacion>("PacienteOperaciones", PacienteOperacionSchema);

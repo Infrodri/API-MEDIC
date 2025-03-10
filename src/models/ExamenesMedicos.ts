@@ -1,39 +1,17 @@
-import mongoose, { Schema } from "mongoose";
-import { ExamenesMedicos } from "types/ExamenesMedicosTypes";
+// src/models/ExamenesMedicos.ts
+import { Schema, model, Types } from "mongoose";
+import { ExamenMedico } from "types/FichasMedicasTypes";
 
-const ExamenesMedicosSchema: Schema = new Schema<ExamenesMedicos>(
+const examenesMedicosSchema = new Schema<ExamenMedico>(
   {
-    nombre: {
-      type: String,
-      required: [true, "El nombre del examen es obligatorio"],
-      trim: true,
-      unique: true, // Para evitar duplicados en el nombre
-    },
-    descripcion: {
-      type: String,
-      required: [true, "La descripción es obligatoria"],
-      trim: true,
-    },
-     estado: {
-      type: String,
-      enum: ["Activo", "Inactivo"],
-      default: "Activo",
-    },
+    consulta: { type: Schema.Types.ObjectId, ref: "ConsultasMedicas", required: true },
+    medico: { type: Schema.Types.ObjectId, ref: "Medico", required: true },
+    tipo: { type: String, required: true, trim: true },
+    fecha: { type: Date, required: true },
+    resultado: { type: String, trim: true },
+    notas: { type: String, trim: true },
   },
-  {
-    timestamps: true, // Automatically add createdAt and updatedAt
-    versionKey: false,
-  }
+  { timestamps: true }
 );
 
-// Método para obtener solo la información básica (usando solo los ObjectIds de las referencias)
-ExamenesMedicosSchema.methods.getBasicInfo = function () {
-  return {
-    _id: this._id, // Usamos el _id generado por MongoDB
-    nombre: this.nombre,
-    descripcion: this.descripcion,
-    estado: this.estado,
-  };
-};
-
-export const ExamenesMedicosModel = mongoose.model<ExamenesMedicos>("ExamenesMedicos", ExamenesMedicosSchema);
+export const ExamenesMedicosModel = model<ExamenMedico>("ExamenesMedicos", examenesMedicosSchema);

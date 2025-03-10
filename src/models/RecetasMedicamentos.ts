@@ -1,44 +1,17 @@
-import mongoose, { Schema } from "mongoose";
-import { RecetasMedicamentos } from "types/RecetasMedicamentosTypes";
+// src/models/RecetasMedicamentos.ts
+import { Schema, model, Types } from "mongoose";
+import { RecetaMedicamento } from "types/FichasMedicasTypes";
 
-const RecetasMedicamentosSchema: Schema = new Schema<RecetasMedicamentos>(
+const recetasMedicamentosSchema = new Schema<RecetaMedicamento>(
   {
-    receta: {
-      type: Schema.Types.ObjectId,
-      ref: "RecetasMedicas", // Relación con RecetasMedicas
-      required: [true, "La receta es obligatoria"],
-    },
-    medicamento: {
-      type: Schema.Types.ObjectId,
-      ref: "Medicamentos", // Relación con Medicamentos
-      required: [true, "El medicamento es obligatorio"],
-    },
-    dosis: {
-      type: String,
-      required: [true, "La dosis es obligatoria"],
-      trim: true,
-    },
-    estado: {
-      type: String,
-      enum: ["Activo", "Inactivo"],
-      default: "Activo",
-    },
+    consulta: { type: Schema.Types.ObjectId, ref: "ConsultasMedicas", required: true },
+    medico: { type: Schema.Types.ObjectId, ref: "Medico", required: true },
+    medicamento: { type: Schema.Types.ObjectId, ref: "Medicamentos", required: true },
+    dosis: { type: String, required: true, trim: true },
+    duracion: { type: String, required: true, trim: true },
+    instrucciones: { type: String, trim: true },
   },
-  {
-    timestamps: true, // Automatically add createdAt and updatedAt
-    versionKey: false,
-  }
+  { timestamps: true }
 );
 
-// Method to get basic recetas-medicamentos info (for the list)
-RecetasMedicamentosSchema.methods.getBasicInfo = function () {
-  return {
-    _id: this._id, // Usamos el _id generado por MongoDB
-    receta: this.receta,
-    medicamento: this.medicamento,
-    dosis: this.dosis,
-    estado: this.estado,
-  };
-};
-
-export const RecetasMedicamentosModel = mongoose.model<RecetasMedicamentos>("RecetasMedicamentos", RecetasMedicamentosSchema);
+export const RecetasMedicamentosModel = model<RecetaMedicamento>("RecetasMedicamentos", recetasMedicamentosSchema);

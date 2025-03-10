@@ -22,9 +22,9 @@ export const getHistorialByPaciente = async (req: Request, res: Response) => {
 
 export const addHistorialEntry = async (req: Request, res: Response) => {
   try {
-    const { id } = req.params; // ID del paciente
+    const { id } = req.params;
     const entry = req.body;
-    const userId = req.currentUser?.id; // Cambiamos req.user a req.currentUser según tu middleware
+    const userId = req.currentUser?.id;
     if (!userId) {
       return res.status(403).json({ message: "Acceso denegado: usuario no autenticado" });
     }

@@ -2,12 +2,15 @@
 import { Document, Types } from "mongoose";
 import { Query, Repository } from "./RepositoryTypes";
 import { Paciente } from "./PacientesTypes";
+import { TiposOperacionesQuirurgicas } from "./TiposOperacionesQuirurgicasTypes";
+import { Medico } from "./MedicoTypes";
 
 export interface PacienteOperacion extends Document {
   getBasicInfo(): any;
   paciente: Types.ObjectId | Paciente;
-  tipoOperacionQuirurgica: Types.ObjectId;
+  tipoOperacionQuirurgica: Types.ObjectId | TiposOperacionesQuirurgicas;
   fechaOperacion: Date;
+  medico: Types.ObjectId | Medico;
   notas: string;
   estado: "Activo" | "Inactivo";
 }
