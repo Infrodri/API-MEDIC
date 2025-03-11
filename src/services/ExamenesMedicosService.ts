@@ -1,3 +1,4 @@
+// src/services/ExamenesMedicosService.ts
 import { Query } from "types/RepositoryTypes";
 import { IExamenesMedicosRepository, IExamenesMedicosService, ExamenesMedicos } from "types/ExamenesMedicosTypes";
 
@@ -11,7 +12,7 @@ export class ExamenesMedicosService implements IExamenesMedicosService {
   async createExamenesMedicos(examenData: Omit<ExamenesMedicos, keyof Document>): Promise<{ examen: ExamenesMedicos; message: string }> {
     const newExamen = await this.examenesMedicosRepository.create({
       ...examenData,
-      estado: "Activo", // Default status is Active
+      estado: "Activo",
     });
     return { examen: newExamen, message: "Examen médico registrado con éxito" };
   }
@@ -24,8 +25,8 @@ export class ExamenesMedicosService implements IExamenesMedicosService {
     return this.examenesMedicosRepository.findById(id);
   }
 
-  async findExamenesMedicosByNombre(nombreExamen: string): Promise<ExamenesMedicos | null> {
-    return this.examenesMedicosRepository.findOne({ nombreExamen, estado: "Activo" });
+  async findExamenesMedicosByNombre(nombre: string): Promise<ExamenesMedicos | null> {
+    return this.examenesMedicosRepository.findOne({ nombre, estado: "Activo" }); // Usar "nombre"
   }
 
   async updateExamenesMedicos(id: string, examen: Partial<ExamenesMedicos>): Promise<{ examen: ExamenesMedicos | null; message: string }> {
@@ -46,8 +47,7 @@ export class ExamenesMedicosService implements IExamenesMedicosService {
     if (!examen) {
       return { success: false, message: "Examen médico no encontrado" };
     }
-    examen.estado = "Inactivo";
-    await this.examenesMedicosRepository.update(id, examen);
+    await this.examenesMedicosRepository.update(id, { estado: "Inactivo" });
     return { success: true, message: "Examen médico cambiado a estado Inactivo" };
   }
 }

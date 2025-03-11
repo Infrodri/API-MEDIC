@@ -1,62 +1,22 @@
-###   crear ficha medica
+# Pruebas Manuales HTTP
+# 1. getFichaByPaciente
+# Descripción: Obtiene la ficha médica completa de un paciente, incluyendo todas las secciones y consultas asociadas.
+# Método: GET
+# URL: http://localhost:4000/api/v1/fichasMedicas/:id
 
-### 1. Crear Ficha Médica
+### 1. Ficha Médica por id
 GET http://localhost:4000/api/v1/fichasMedicas/67cba12fa78ad406e838da79 HTTP/1.1
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3YzA4MzgxOTdjN2VhYzQzYmEzNzM3ZiIsImVtYWlsIjoiYWRtaW5AdGVzdC5jb20iLCJ1c2VybmFtZSI6ImFkbWluIiwiaWF0IjoxNzQxNTcxNzYxLCJleHAiOjE3NDE5MzE3NjF9.UV28hx1dx6a4I2r_lz3qqoe-XouIrhf35VxcpvGEvbk
 
 
 
+# 2. addSection
+# Descripción: Agrega una nueva sección (antecedentesPersonales, exploracionFisica, examenNeurologico, organosSentidos) a la ficha de un paciente.
+# Método: POST
+# URL: http://localhost:4000/api/v1/fichasMedicas/:id/:section
 
-### 1. Agregar Sección: Antecedentes Personales
-POST http://localhost:4000/api/v1/fichasMedicas/67cba12fa78ad406e838da79/antecedentesPersonales HTTP/1.1
-Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3YzA4MzgxOTdjN2VhYzQzYmEzNzM3ZiIsImVtYWlsIjoiYWRtaW5AdGVzdC5jb20iLCJ1c2VybmFtZSI6ImFkbWluIiwiaWF0IjoxNzQxNTcxNzYxLCJleHAiOjE3NDE5MzE3NjF9.UV28hx1dx6a4I2r_lz3qqoe-XouIrhf35VxcpvGEvbk
-
-
-
-{
-  "alergias": ["Penicilina"],
-  "enfermedades": ["Gastritis", "Epilepsia"],
-  "cirugias": [], 
-  "vacunas": ["Tétanos", "Hepatitis B"],
-  "examenesFisicos": [
-    { "fecha": "2025-01-15", "peso": 75, "altura": 175 }
-  ],
-  "pruebasDeteccion": [
-    { "fecha": "2025-01-15", "glucosa": 90, "colesterol": 180 }
-  ],
-  "medicamentos": [
-    { "nombre": "Omeprazol", "dosis": "20mg", "duracion": "1 mes" },
-    { "nombre": "Metformina", "dosis": "500mg", "duracion": "3 meses" }
-  ],
-  "enfermedadesCronicas": ["Diabetes"],
-  "antecedentesFamiliares": ["Hipertensión", "Diabetes"],
-  "habitosSalud": {
-    "alimentacion": "Dieta balanceada",
-    "ejercicio": "30 minutos de caminata diaria"
-  }
-}
-
-
-###FIcha medica
-
-### 2. Agregar Antecedentes Personales
-POST http://localhost:4000/api/v1/fichasMedicas/67cba12fa78ad406e838da79/antecedentesPersonales HTTP/1.1
-Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3YzA4MzgxOTdjN2VhYzQzYmEzNzM3ZiIsImVtYWlsIjoiYWRtaW5AdGVzdC5jb20iLCJ1c2VybmFtZSI6ImFkbWluIiwiaWF0IjoxNzQxNTcxNzYxLCJleHAiOjE3NDE5MzE3NjF9.UV28hx1dx6a4I2r_lz3qqoe-XouIrhf35VxcpvGEvbk
-
-{
-  "alergias": ["Penicilina"],
-  "enfermedades": ["Gastritis"],
-  "medicamentos": [{ "nombre": "Omeprazol", "dosis": "20mg", "duracion": "1 mes" }],
-  "enfermedadesCronicas": ["Diabetes"],
-  "antecedentesFamiliares": ["Hipertensión"]
-}
-
-###FIcha medica
-
-### 3. Agregar Sección: Exploración Física
+### 1. exploracionFisica
 POST http://localhost:4000/api/v1/fichasMedicas/67cba12fa78ad406e838da79/exploracionFisica HTTP/1.1
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3YzA4MzgxOTdjN2VhYzQzYmEzNzM3ZiIsImVtYWlsIjoiYWRtaW5AdGVzdC5jb20iLCJ1c2VybmFtZSI6ImFkbWluIiwiaWF0IjoxNzQxNTcxNzYxLCJleHAiOjE3NDE5MzE3NjF9.UV28hx1dx6a4I2r_lz3qqoe-XouIrhf35VxcpvGEvbk
@@ -70,84 +30,105 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3YzA4MzgxO
   "otrasObservaciones": "Paciente en buen estado general"
 }
 
-### 4. Agregar Sección: Examen Neurológico
-POST http://localhost:4000/api/v1/fichasMedicas/67cba12fa78ad406e838da79/examenNeurologico HTTP/1.1
+# 3. getSection
+# Descripción: Obtiene una sección específica de la ficha de un paciente.
+# Método: GET
+# URL: http://localhost:4000/api/v1/fichasMedicas/:id/:section
+### exploracionFisica
+GET http://localhost:4000/api/v1/fichasMedicas/67cba12fa78ad406e838da79/exploracionFisica HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3YzA4MzgxOTdjN2VhYzQzYmEzNzM3ZiIsImVtYWlsIjoiYWRtaW5AdGVzdC5jb20iLCJ1c2VybmFtZSI6ImFkbWluIiwiaWF0IjoxNzQxNTcxNzYxLCJleHAiOjE3NDE5MzE3NjF9.UV28hx1dx6a4I2r_lz3qqoe-XouIrhf35VxcpvGEvbk
+
+
+
+
+# 4. createConsulta
+# Descripción: Crea una nueva consulta médica para un paciente.
+# Método: POST
+# URL: http://localhost:4000/api/v1/fichasMedicas/:pacienteId/consultas
+
+### Crea una nueva consulta médica para un paciente
+POST http://localhost:4000/api/v1/fichasMedicas/67cba12fa78ad406e838da79/consultas HTTP/1.1
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3YzA4MzgxOTdjN2VhYzQzYmEzNzM3ZiIsImVtYWlsIjoiYWRtaW5AdGVzdC5jb20iLCJ1c2VybmFtZSI6ImFkbWluIiwiaWF0IjoxNzQxNTcxNzYxLCJleHAiOjE3NDE5MzE3NjF9.UV28hx1dx6a4I2r_lz3qqoe-XouIrhf35VxcpvGEvbk
 
 {
-  "reflejos": "Normales",
-  "coordinacion": "Sin alteraciones",
-  "estadoMental": "Alerta y orientado",
-  "otrasObservaciones": "No se observan déficits neurológicos"
+  "fecha": "2025-03-10T10:00:00Z",
+  "motivo": "Dolor de cabeza persistente",
+  "diagnostico": "Migraña",
+  "tratamiento": "Ibuprofeno 400mg",
+  "notas": "Monitorear evolución",
+  "estado": "Activo",
+  "estadoConsulta": "Pendiente",
+  "prioridad": "Urgente"
 }
 
-### 4. Agregar Sección: organosSentidos
-POST http://localhost:4000/api/v1/fichasMedicas/67cba12fa78ad406e838da79/organosSentidos HTTP/1.1
+# 5. addReceta
+# Descripción: Agrega una receta a una consulta existente.
+# Método: POST
+# URL: http://localhost:4000/api/v1/fichasMedicas/consultas/:consultaId/recetas
+
+### Agrega una receta a una consulta existente
+POST http://localhost:4000/api/v1/fichasMedicas/consultas/67cf275223cfc0bbfc206634/recetas HTTP/1.1
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3YzA4MzgxOTdjN2VhYzQzYmEzNzM3ZiIsImVtYWlsIjoiYWRtaW5AdGVzdC5jb20iLCJ1c2VybmFtZSI6ImFkbWluIiwiaWF0IjoxNzQxNTcxNzYxLCJleHAiOjE3NDE5MzE3NjF9.UV28hx1dx6a4I2r_lz3qqoe-XouIrhf35VxcpvGEvbk
 
 {
-  "vision": "20/20",
-  "audicion": "Normal",
-  "olfato": "Sin alteraciones",
-  "otrasObservaciones": "Paciente refiere buena percepción sensorial"
+  "medicamento": "67ceb6794989c70cc2eea24b",
+  "dosis": "400mg cada 8 horas",
+  "duracion": "3 días",
+  "instrucciones": "Tomar con agua"
 }
 
-### Paso 2: Verificar la Ficha Médica Completa
-GET http://localhost:4000/api/v1/fichasMedicas/67cba12fa78ad406e838da79 HTTP/1.1
-Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3YzA4MzgxOTdjN2VhYzQzYmEzNzM3ZiIsImVtYWlsIjoiYWRtaW5AdGVzdC5jb20iLCJ1c2VybmFtZSI6ImFkbWluIiwiaWF0IjoxNzQxNTcxNzYxLCJleHAiOjE3NDE5MzE3NjF9.UV28hx1dx6a4I2r_lz3qqoe-XouIrhf35VxcpvGEvbk
 
 
-### pacienteOperaciones
-POST http://localhost:4000/api/v1/pacienteoperaciones HTTP/1.1
-Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3YzA4MzgxOTdjN2VhYzQzYmEzNzM3ZiIsImVtYWlsIjoiYWRtaW5AdGVzdC5jb20iLCJ1c2VybmFtZSI6ImFkbWluIiwiaWF0IjoxNzQxNTcxNzYxLCJleHAiOjE3NDE5MzE3NjF9.UV28hx1dx6a4I2r_lz3qqoe-XouIrhf35VxcpvGEvbk
+# 6. addExamen
+# Descripción: Agrega un examen médico a una consulta existente.
+# Método: POST
+# URL: http://localhost:4000/api/v1/fichasMedicas/consultas/:consultaId/examenes
 
-{
-"paciente": "67cba12fa78ad406e838da79",
-  "fechaOperacion": "2023-06-10",
-  "tipoOperacionQuirurgica": "67ce8747fac846a7ff27d3cc",
-  "medico": "67c783c543449cb8ad3460d1",
-  "notas": "Procedimiento exitoso"
-}
-
-### pacienteGinecología y Obstétrica
-POST http://localhost:4000/api/v1/pacienteObstetricosGinecologicos HTTP/1.1
+### grega un examen médico a una consulta existente.
+POST http://localhost:4000/api/v1/fichasMedicas/consultas/67cf275223cfc0bbfc206634/examenes HTTP/1.1
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3YzA4MzgxOTdjN2VhYzQzYmEzNzM3ZiIsImVtYWlsIjoiYWRtaW5AdGVzdC5jb20iLCJ1c2VybmFtZSI6ImFkbWluIiwiaWF0IjoxNzQxNTcxNzYxLCJleHAiOjE3NDE5MzE3NjF9.UV28hx1dx6a4I2r_lz3qqoe-XouIrhf35VxcpvGEvbk
 
 {
-  "paciente": "67c1404975156d4ce24ca2e4", 
-  "tipoObstetricoGinecologico": "67c14fd92f65123b7fa7d2fd",  
-  "fechaEvento": "2025-02-25",
-  "observaciones": "Control prenatal de rutina"
+  "tipo": "Resonancia Magnética",
+  "fecha": "2025-03-11",
+  "resultado": "Pendiente",
+  "notas": "Programar para mañana"
 }
 
-### Adicciones
-POST http://localhost:4000/api/v1/pacienteAdicciones HTTP/1.1
+# 7. updateConsulta
+# Descripción: Actualiza los campos de una consulta existente.
+# Método: PUT
+# URL: http://localhost:4000/api/v1/fichasMedicas/consultas/:consultaId
+
+### Actualiza los campos de una consulta existente..
+PUT http://localhost:4000/api/v1/fichasMedicas/consultas/67cf275223cfc0bbfc206634 HTTP/1.1
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3YzA4MzgxOTdjN2VhYzQzYmEzNzM3ZiIsImVtYWlsIjoiYWRtaW5AdGVzdC5jb20iLCJ1c2VybmFtZSI6ImFkbWluIiwiaWF0IjoxNzQxNTcxNzYxLCJleHAiOjE3NDE5MzE3NjF9.UV28hx1dx6a4I2r_lz3qqoe-XouIrhf35VxcpvGEvbk
 
 {
-  "paciente": "67cba12fa78ad406e838da79",
-  "tipoAdiccion": "67c9fecb7c04cf29265d6d4f",
-  "frecuencia": "Ocasional",
-  "duracion": "5 años",
-  "notas": "Consumo controlado"
+  "diagnostico": "Migraña leve Actualizado",
+  "tratamiento": "Ibuprofeno 400mg + reposo Actualizado",
+  "notas": "Paciente mejora lentamente Actualizado",
+  "estadoConsulta": "Pendiente",
+  "prioridad": "Normal"
 }
 
+# 8. getConsultaPrintable
+# Descripción: Genera un formato imprimible (JSON o PDF) de una consulta específica.
+# Método: GET
+# URL: http://localhost:4000/api/v1/fichasMedicas/consultas/:consultaId/printable?format=json
 
-### Agregar Consulta Médica (Asumiendo un modelo ConsultasMedicas)
-POST http://localhost:4000/api/v1/consultasMedicas HTTP/1.1
+
+### Genera un formato imprimible (JSON o PDF) de una consulta específica.
+GET http://localhost:4000/api/v1/fichasMedicas/consultas/67cf275223cfc0bbfc206634/printable?format=json HTTP/1.1
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3YzA4MzgxOTdjN2VhYzQzYmEzNzM3ZiIsImVtYWlsIjoiYWRtaW5AdGVzdC5jb20iLCJ1c2VybmFtZSI6ImFkbWluIiwiaWF0IjoxNzQxNTcxNzYxLCJleHAiOjE3NDE5MzE3NjF9.UV28hx1dx6a4I2r_lz3qqoe-XouIrhf35VxcpvGEvbk
 
-{
-  "paciente": "67cba12fa78ad406e838da79",
-  "tipoAdiccion": "67c9fecb7c04cf29265d6d4f",
-  "frecuencia": "Ocasional",
-  "duracion": "5 años",
-  "notas": "Consumo controlado"
-}
+### Solicitud (Formato PDF)
+GET http://localhost:4000/api/v1/fichasMedicas/consultas/67cf275223cfc0bbfc206634/printable?format=pdf HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3YzA4MzgxOTdjN2VhYzQzYmEzNzM3ZiIsImVtYWlsIjoiYWRtaW5AdGVzdC5jb20iLCJ1c2VybmFtZSI6ImFkbWluIiwiaWF0IjoxNzQxNTcxNzYxLCJleHAiOjE3NDE5MzE3NjF9.UV28hx1dx6a4I2r_lz3qqoe-XouIrhf35VxcpvGEvbk

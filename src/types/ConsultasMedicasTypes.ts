@@ -8,16 +8,16 @@ import { Especialidades } from "./EspecialidadesTypes";
 
 export interface ConsultasMedicas extends Document {
   getBasicInfo(): any;
-  paciente: Types.ObjectId;
-  medico: Types.ObjectId;
-  fichaMedica: Types.ObjectId;
-  especialidad: Types.ObjectId;
+  paciente: Types.ObjectId |Paciente;
+  medico: Types.ObjectId | Medico;
   fecha: Date;
   motivo: string;
-  observaciones?: string;
+  diagnostico: string;
+  tratamiento: string;
+  notas: string;
   estado: "Activo" | "Inactivo";
   estadoConsulta: "Pendiente" | "Concluida" | "Derivada" | "Cancelada"; // Agregado "Cancelada"
-  medicoDerivado?: Types.ObjectId;
+  medicoDerivado?: Types.ObjectId | Medico;
   prioridad: "Normal" | "Alta" | "Urgente";
   duracion: number; // Nuevo campo para citas
 }

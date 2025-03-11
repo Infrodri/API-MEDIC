@@ -1,53 +1,53 @@
+// src/services/PacienteExamenService.ts
 import { Query } from "types/RepositoryTypes";
-import { IPacienteExamenesRepository, IPacienteExamenesService, PacienteExamenes } from "types/PacienteExamenesTypes";
+import { IPacienteExamenRepository, IPacienteExamenService, PacienteExamen } from "types/PacienteExamenesTypes";
 
-export class PacienteExamenesService implements IPacienteExamenesService {
-  private pacienteExamenesRepository: IPacienteExamenesRepository;
+export class PacienteExamenService implements IPacienteExamenService {
+  private pacienteExamenRepository: IPacienteExamenRepository;
 
-  constructor(pacienteExamenesRepository: IPacienteExamenesRepository) {
-    this.pacienteExamenesRepository = pacienteExamenesRepository;
+  constructor(pacienteExamenRepository: IPacienteExamenRepository) {
+    this.pacienteExamenRepository = pacienteExamenRepository;
   }
 
-  async createPacienteExamenes(pacienteExamenData: Omit<PacienteExamenes, keyof Document>): Promise<{ pacienteExamen: PacienteExamenes; message: string }> {
-    const newPacienteExamen = await this.pacienteExamenesRepository.create({
+  async createPacienteExamen(pacienteExamenData: Omit<PacienteExamen, keyof Document>): Promise<{ pacienteExamen: PacienteExamen; message: string }> {
+    const newPacienteExamen = await this.pacienteExamenRepository.create({
       ...pacienteExamenData,
       estado: "Activo",
     });
-    return { pacienteExamen: newPacienteExamen, message: "Relación paciente-examen registrada con éxito" };
+    return { pacienteExamen: newPacienteExamen, message: "Examen del paciente registrado con éxito" };
   }
 
-  async findPacienteExamenes(query?: Query): Promise<PacienteExamenes[]> {
-    return this.pacienteExamenesRepository.findActive(query);
+  async findPacienteExamen(query?: Query): Promise<PacienteExamen[]> {
+    return this.pacienteExamenRepository.findActive(query);
   }
 
-  async findPacienteExamenesById(id: string): Promise<PacienteExamenes | null> {
-    return this.pacienteExamenesRepository.findById(id);
+  async findPacienteExamenById(id: string): Promise<PacienteExamen | null> {
+    return this.pacienteExamenRepository.findById(id);
   }
 
-  async findPacienteExamenesByPaciente(pacienteId: string): Promise<PacienteExamenes[]> {
-    return this.pacienteExamenesRepository.findActive({ paciente: pacienteId });
+  async findPacienteExamenByPaciente(pacienteId: string): Promise<PacienteExamen[]> {
+    return this.pacienteExamenRepository.findByPaciente(pacienteId);
   }
 
-  async updatePacienteExamenes(id: string, pacienteExamen: Partial<PacienteExamenes>): Promise<{ pacienteExamen: PacienteExamenes | null; message: string }> {
-    const updatedPacienteExamen = await this.pacienteExamenesRepository.update(id, pacienteExamen);
+  async updatePacienteExamen(id: string, pacienteExamen: Partial<PacienteExamen>): Promise<{ pacienteExamen: PacienteExamen | null; message: string }> {
+    const updatedPacienteExamen = await this.pacienteExamenRepository.update(id, pacienteExamen);
     if (!updatedPacienteExamen) {
-      return { pacienteExamen: null, message: "Relación paciente-examen no encontrada" };
+      return { pacienteExamen: null, message: "Examen del paciente no encontrado" };
     }
-    return { pacienteExamen: updatedPacienteExamen, message: "Relación paciente-examen actualizada con éxito" };
+    return { pacienteExamen: updatedPacienteExamen, message: "Examen del paciente actualizado con éxito" };
   }
 
-  async deletePacienteExamenes(id: string): Promise<{ success: boolean; message: string }> {
-    const deleted = await this.pacienteExamenesRepository.delete(id);
-    return { success: deleted, message: deleted ? "Relación paciente-examen eliminada físicamente" : "Relación paciente-examen no encontrada" };
+  async deletePacienteExamen(id: string): Promise<{ success: boolean; message: string }> {
+    const deleted = await this.pacienteExamenRepository.delete(id);
+    return { success: deleted, message: deleted ? "Examen del paciente eliminado físicamente" : "Examen del paciente no encontrado" };
   }
 
-  async softDeletePacienteExamenes(id: string): Promise<{ success: boolean; message: string }> {
-    const pacienteExamen = await this.pacienteExamenesRepository.findById(id);
+  async softDeletePacienteExamen(id: string): Promise<{ success: boolean; message: string }> {
+    const pacienteExamen = await this.pacienteExamenRepository.findById(id);
     if (!pacienteExamen) {
-      return { success: false, message: "Relación paciente-examen no encontrada" };
+      return { success: false, message: "Examen del paciente no encontrado" };
     }
-    pacienteExamen.estado = "Inactivo";
-    await this.pacienteExamenesRepository.update(id, pacienteExamen);
-    return { success: true, message: "Relación paciente-examen cambiada a estado Inactivo" };
+    await this.pacienteExamenRepository.update(id, { estado: "Inactivo" });
+    return { success: true, message: "Examen del paciente cambiado a estado Inactivo" };
   }
 }

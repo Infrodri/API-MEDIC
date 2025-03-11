@@ -1,43 +1,53 @@
-# Crear una nueva especialidad
-POST http://localhost:4000/api/v1/especialidades HTTP/1.1
+# Crear una nueva relación Consulta-medico-medicamento
+POST http://localhost:4000/api/v1/recetasmedicamentos HTTP/1.1
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3YzA4MzgxOTdjN2VhYzQzYmEzNzM3ZiIsImVtYWlsIjoiYWRtaW5AdGVzdC5jb20iLCJ1c2VybmFtZSI6ImFkbWluIiwiaWF0IjoxNzQxNjM5NzQ3LCJleHAiOjE3NDE5OTk3NDd9.iuXR8_sAZg42UR4C5D0REdH99CChqwa1N6YNfiB5ubY
 
 {
-  "nombre": "Cardiolsfsdfsdfogía",
-  "descripcion": "Especialidad enfocada en el diagnóstico y tratamiento de enfermedades cardíacas"
+  "consulta": "67cf275223cfc0bbfc206634",
+  "medico": "67c0838197c7eac43ba3737f",
+  "medicamento": "67cf275523cfc0bbfc206638",
+  "dosis": "400mg cada 8 horas",
+  "duracion": "3 días",
+  "instrucciones": "Tomar con agua"
 }
 
 ###
-# Listar todas las especialidades
-GET http://localhost:4000/api/v1/especialidades HTTP/1.1
+# Listar todas las relaciones Consulta-medico-medicamento
+GET http://localhost:4000/api/v1/recetasmedicamentos HTTP/1.1
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3YzA4MzgxOTdjN2VhYzQzYmEzNzM3ZiIsImVtYWlsIjoiYWRtaW5AdGVzdC5jb20iLCJ1c2VybmFtZSI6ImFkbWluIiwiaWF0IjoxNzQxNjM5NzQ3LCJleHAiOjE3NDE5OTk3NDd9.iuXR8_sAZg42UR4C5D0REdH99CChqwa1N6YNfiB5ubY
 
 ###
-# Obtener una especialidad por ID
-GET http://localhost:4000/api/v1/especialidades/67ca1c9b2f165707869e96e9 HTTP/1.1
+# Obtener una relación Consulta-medico-medicamento por ID
+GET http://localhost:4000/api/v1/recetasmedicamentos/67cf6f5274e887dcd357c8de HTTP/1.1
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3YzA4MzgxOTdjN2VhYzQzYmEzNzM3ZiIsImVtYWlsIjoiYWRtaW5AdGVzdC5jb20iLCJ1c2VybmFtZSI6ImFkbWluIiwiaWF0IjoxNzQxNjM5NzQ3LCJleHAiOjE3NDE5OTk3NDd9.iuXR8_sAZg42UR4C5D0REdH99CChqwa1N6YNfiB5ubY
 
 ###
-# Actualizar una especialidad
-PUT http://localhost:4000/api/v1/especialidades/67ca1c9b2f165707869e96e9 HTTP/1.1
+# Actualizar una relación Consulta-medico-medicamento
+PUT http://localhost:4000/api/v1/recetasmedicamentos/67c171c8efceb12b75fe87d6 HTTP/1.1
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3YzA4MzgxOTdjN2VhYzQzYmEzNzM3ZiIsImVtYWlsIjoiYWRtaW5AdGVzdC5jb20iLCJ1c2VybmFtZSI6ImFkbWluIiwiaWF0IjoxNzQxNjM5NzQ3LCJleHAiOjE3NDE5OTk3NDd9.iuXR8_sAZg42UR4C5D0REdH99CChqwa1N6YNfiB5ubY
 
 {
-  "descripcion": "Especialidad enfocada en enfermedades cardíacas y vasculares"
+      "consulta": "67cf275223cfc0bbfc206634",
+      "medico": null,
+      "medicamento": null,
+      "dosis": "400mg cada 8 horas",
+      "duracion": "3 días",
+      "instrucciones": "Tomar con agua",
+      "estado": "Activo",
 }
 
 ###
-# Eliminar lógicamente una especialidad (cambiar a Inactivo)
-PATCH http://localhost:4000/api/v1/especialidades/67ca1c9b2f165707869e96e9/soft-delete HTTP/1.1
+# Eliminar lógicamente una relación Consulta-medico-medicamento (cambiar a Inactivo)
+PATCH http://localhost:4000/api/v1/recetasmedicamentos/67bc14f2906952918cabf625/soft-delete HTTP/1.1
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3YzA4MzgxOTdjN2VhYzQzYmEzNzM3ZiIsImVtYWlsIjoiYWRtaW5AdGVzdC5jb20iLCJ1c2VybmFtZSI6ImFkbWluIiwiaWF0IjoxNzQxNjM5NzQ3LCJleHAiOjE3NDE5OTk3NDd9.iuXR8_sAZg42UR4C5D0REdH99CChqwa1N6YNfiB5ubY
 
 ###
-# Eliminar físicamente una especialidad
-DELETE http://localhost:4000/api/v1/especialidades/67ca1c9b2f165707869e96e9 HTTP/1.1
+# Eliminar físicamente una relación Consulta-medico-medicamento (si aplica, aunque prefieres eliminaciones lógicas)
+DELETE http://localhost:4000/api/v1/recetasmedicamentos/67bc14f2906952918cabf625 HTTP/1.1
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3YzA4MzgxOTdjN2VhYzQzYmEzNzM3ZiIsImVtYWlsIjoiYWRtaW5AdGVzdC5jb20iLCJ1c2VybmFtZSI6ImFkbWluIiwiaWF0IjoxNzQxNjM5NzQ3LCJleHAiOjE3NDE5OTk3NDd9.iuXR8_sAZg42UR4C5D0REdH99CChqwa1N6YNfiB5ubY

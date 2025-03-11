@@ -1,3 +1,4 @@
+// src/repositories/ExamenesMedicosRepositories.ts
 import { ExamenesMedicosModel } from "@models/ExamenesMedicos";
 import { Query } from "types/RepositoryTypes";
 import { IExamenesMedicosRepository, ExamenesMedicos } from "types/ExamenesMedicosTypes";

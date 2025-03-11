@@ -4,6 +4,27 @@ import { Query } from "types/RepositoryTypes";
 import { IConsultasMedicasRepository, ConsultasMedicas } from "types/ConsultasMedicasTypes";
 
 export class ConsultasMedicasRepository implements IConsultasMedicasRepository {
+  // findOne(query: Query): Promise<ConsultasMedicas | null> {
+  //   throw new Error("Method not implemented.");
+  // }
+  // findActive(query?: Query): Promise<ConsultasMedicas[]> {
+  //   throw new Error("Method not implemented.");
+  // }
+  // create(data: ConsultasMedicas): Promise<ConsultasMedicas> {
+  //   throw new Error("Method not implemented.");
+  // }
+  // find(query?: Query): Promise<ConsultasMedicas[]> {
+  //   throw new Error("Method not implemented.");
+  // }
+  // findById(id: string): Promise<ConsultasMedicas | null> {
+  //   throw new Error("Method not implemented.");
+  // }
+  // update(id: string, data: Partial<ConsultasMedicas>): Promise<ConsultasMedicas | null> {
+  //   throw new Error("Method not implemented.");
+  // }
+  // softDelete?(id: string): Promise<ConsultasMedicas | null> {
+  //   throw new Error("Method not implemented.");
+  // }
   async create(data: ConsultasMedicas): Promise<ConsultasMedicas> {
     const newConsulta = new ConsultasMedicasModel(data);
     return await newConsulta.save();

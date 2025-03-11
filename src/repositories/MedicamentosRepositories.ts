@@ -1,6 +1,7 @@
-import { MedicamentosModel } from "@models/Medicamentos";
+// src/repositories/MedicamentosRepositories.ts
 import { Query } from "types/RepositoryTypes";
 import { IMedicamentosRepository, Medicamentos } from "types/MedicamentosTypes";
+import { MedicamentosModel } from "@models/Medicamentos";
 
 export class MedicamentosRepository implements IMedicamentosRepository {
   async create(data: Medicamentos): Promise<Medicamentos> {
@@ -13,7 +14,7 @@ export class MedicamentosRepository implements IMedicamentosRepository {
   }
 
   async findActive(query?: Query): Promise<Medicamentos[]> {
-    return await MedicamentosModel.find({ ...query, estado: "Activo" }).exec();
+    return await MedicamentosModel.find(query || {}).exec(); // Sin filtro por estado
   }
 
   async findOne(query: Query): Promise<Medicamentos | null> {

@@ -3,9 +3,9 @@ import { Query } from "types/RepositoryTypes";
 import { PacienteAdiccionModel } from "@models/PacienteAdicciones";
 import { PacienteExamenesModel } from "@models/PacienteExamenes";
 import { PacienteObstetricoGinecologicoModel } from "@models/PacienteObstetricosGinecologicos";
-import { PacienteOperacionModel } from "@models/PacienteOperaciones";
 import { ConsultasMedicasModel } from "@models/ConsultasMedicas";
 import { HistorialMedico, IPacienteRepository, IPacienteService, Paciente } from "types/PacientesTypes";
+import { PacienteOperacionesModel } from "@models/PacienteOperaciones";
 
 export class PacienteService implements IPacienteService {
   private pacienteRepository: IPacienteRepository;
@@ -65,7 +65,7 @@ export class PacienteService implements IPacienteService {
     const adicciones = await PacienteAdiccionModel.find({ paciente: pacienteId, estado: "Activo" }).populate("tipoAdiccion").exec();
     const examenes = await PacienteExamenesModel.find({ paciente: pacienteId, estado: "Activo" }).populate("examenMedico").exec();
     const obstetricosGinecologicos = await PacienteObstetricoGinecologicoModel.find({ paciente: pacienteId, estado: "Activo" }).populate("tipoObstetricoGinecologico").exec();
-    const operaciones = await PacienteOperacionModel.find({ paciente: pacienteId, estado: "Activo" }).populate("tipoOperacionQuirurgica").exec();
+    const operaciones = await PacienteOperacionesModel.find({ paciente: pacienteId, estado: "Activo" }).populate("tipoOperacionQuirurgica").exec();
     const consultas = await ConsultasMedicasModel.find({ paciente: pacienteId, estado: "Activo" }).populate("medico").populate("especialidad").exec();
 
     return {paciente, adicciones, examenes, obstetricosGinecologicos, operaciones, consultas };

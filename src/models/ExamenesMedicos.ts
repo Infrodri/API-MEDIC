@@ -1,17 +1,25 @@
 // src/models/ExamenesMedicos.ts
-import { Schema, model, Types } from "mongoose";
-import { ExamenMedico } from "types/FichasMedicasTypes";
+import { Schema, model } from "mongoose";
+import { ExamenesMedicos } from "types/ExamenesMedicosTypes";
 
-const examenesMedicosSchema = new Schema<ExamenMedico>(
+const examenesMedicosSchema = new Schema<ExamenesMedicos>(
   {
-    consulta: { type: Schema.Types.ObjectId, ref: "ConsultasMedicas", required: true },
-    medico: { type: Schema.Types.ObjectId, ref: "Medico", required: true },
-    tipo: { type: String, required: true, trim: true },
-    fecha: { type: Date, required: true },
-    resultado: { type: String, trim: true },
-    notas: { type: String, trim: true },
+    nombre: { type: String, required: true, trim: true, unique: true }, // Nombre del tipo de examen
+    descripcion: { type: String, trim: true }, // Descripción opcional
+    estado: { type: String, enum: ["Activo", "Inactivo"], default: "Activo" }, // Estado para eliminación suave
   },
   { timestamps: true }
 );
 
-export const ExamenesMedicosModel = model<ExamenMedico>("ExamenesMedicos", examenesMedicosSchema);
+examenesMedicosSchema.methods.getBasicInfo = function () {
+  return {
+    _id: this._id,
+    nombre: this.nombre,
+    descripcion: this.descripcion,
+    estado: this.estado,
+    createdAt: this.createdAt,
+    updatedAt: this.updatedAt,
+  };
+};
+
+export const ExamenesMedicosModel = model<ExamenesMedicos>("ExamenesMedicos", examenesMedicosSchema);

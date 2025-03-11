@@ -17,7 +17,7 @@ export const findRecetasMedicamentos = async (req: Request, res: Response) => {
     console.log("error :>> ", error);
     res.status(500).json({ error: "Error al obtener relaciones receta-medicamento", details: error });
   }
-};
+};;
 
 export const findRecetasMedicamentosById = async (req: Request, res: Response) => {
   try {

@@ -10,8 +10,24 @@ const recetasMedicamentosSchema = new Schema<RecetaMedicamento>(
     dosis: { type: String, required: true, trim: true },
     duracion: { type: String, required: true, trim: true },
     instrucciones: { type: String, trim: true },
+    estado: { type: String, enum: ["Activo", "Inactivo"], default: "Activo" },
   },
   { timestamps: true }
 );
+
+recetasMedicamentosSchema.methods.getBasicInfo = function () {
+  return {
+    _id: this._id,
+    consulta: this.consulta,
+    medico: this.medico,
+    medicamento: this.medicamento,
+    dosis: this.dosis,
+    duracion: this.duracion,
+    instrucciones: this.instrucciones,
+    estado: this.estado,
+    createdAt: this.createdAt,
+    updatedAt: this.updatedAt,
+  };
+};
 
 export const RecetasMedicamentosModel = model<RecetaMedicamento>("RecetasMedicamentos", recetasMedicamentosSchema);

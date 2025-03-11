@@ -3,6 +3,7 @@ import { Request, Response } from "express";
 import { FichasMedicasService } from "../services/FichasMedicasService";
 import PDFDocument from "pdfkit";
 import { FichasMedicasRepository } from "@repositories/FichasMedicasRepositories";
+import { ConsultasMedicasModel } from "@models/ConsultasMedicas";
 
 const fichasMedicasRepository = new FichasMedicasRepository();
 const fichasMedicasService = new FichasMedicasService(fichasMedicasRepository);
@@ -61,7 +62,6 @@ export const createConsulta = async (req: Request, res: Response) => {
     res.status(400).json({ error: "Error al crear consulta médica", details: error });
   }
 };
-
 export const addReceta = async (req: Request, res: Response) => {
   try {
     const { consultaId } = req.params;
@@ -107,65 +107,108 @@ export const updateConsulta = async (req: Request, res: Response) => {
 export const getConsultaPrintable = async (req: Request, res: Response) => {
   try {
     const { consultaId } = req.params;
-    const format = req.query.format || "json";
+    const { format = "json" } = req.query;
 
-    const printableData = await fichasMedicasService.getConsultaPrintable(consultaId);
+    // Validar formato
+    if (format !== "json" && format !== "pdf") {
+      return res.status(400).json({
+        error: "Formato no soportado. Use 'json' o 'pdf'",
+      });
+    }
 
+    // Buscar la consulta con población de datos
+    const consulta = await ConsultasMedicasModel.findById(consultaId)
+      .populate("paciente", "primerNombre primerApellido cedula edad")
+      .populate("medico", "primerNombre primerApellido")
+      .populate({
+        path: "recetas",
+        populate: { path: "medicamento", select: "nombre descripcion" },
+      })
+      .populate("examenes")
+      .lean();
+
+    // Verificar si la consulta existe
+    if (!consulta) {
+      return res.status(404).json({
+        error: "Consulta no encontrada",
+      });
+    }
+
+    // Formato JSON
     if (format === "json") {
-      res.json({ printableData, message: "Datos para imprimir consulta obtenidos con éxito" });
-    } else if (format === "pdf") {
-      const doc = new PDFDocument({ size: "A4", margin: 50 });
+      return res.status(200).json({
+        printableData: consulta,
+        message: "Datos para imprimir consulta obtenidos con éxito",
+      });
+    }
+
+    // Formato PDF
+    if (format === "pdf") {
+      // Configurar headers para la descarga del PDF
       res.setHeader("Content-Type", "application/pdf");
-      res.setHeader("Content-Disposition", `attachment; filename=consulta_${consultaId}.pdf`);
+      res.setHeader(
+        "Content-Disposition",
+        `attachment; filename=consulta_${consultaId}.pdf`
+      );
 
-      doc.pipe(res);
+      // Crear el documento PDF
+      const doc = new PDFDocument();
+      doc.pipe(res); // Enviar el PDF directamente a la respuesta
 
-      doc.fontSize(20).text("Consulta Médica", { align: "center" });
+      // Añadir contenido al PDF
+      doc.fontSize(16).text("Consulta Médica", { align: "center" });
       doc.moveDown();
 
-      doc.fontSize(12).text(`Paciente: ${printableData.paciente.primerNombre} ${printableData.paciente.primerApellido}`);
-      doc.text(`Cédula: ${printableData.paciente.cedula}`);
-      doc.text(`Edad: ${printableData.paciente.edad}`);
+      doc.fontSize(12).text(`Paciente: ${consulta.paciente?.primerNombre} ${consulta.paciente?.primerApellido}`);
+      doc.text(`Cédula: ${consulta.paciente?.cedula}`);
+      doc.text(`Edad: ${consulta.paciente?.edad}`);
       doc.moveDown();
 
-      doc.text(`Médico: ${printableData.medico.primerNombre} ${printableData.medico.primerApellido}`);
-      doc.text(`Fecha: ${new Date(printableData.fecha).toLocaleDateString()}`);
+      doc.text(`Médico: ${consulta.medico?.primerNombre} ${consulta.medico?.primerApellido}`);
+      doc.text(`Fecha: ${new Date(consulta.fecha).toLocaleString()}`);
       doc.moveDown();
 
-      doc.text(`Motivo: ${printableData.motivo}`);
-      doc.text(`Diagnóstico: ${printableData.diagnostico || "No especificado"}`);
-      doc.text(`Tratamiento: ${printableData.tratamiento || "No especificado"}`);
-      doc.text(`Notas: ${printableData.notas || "No especificado"}`);
-      doc.text(`Estado: ${printableData.estado}`);
+      doc.text(`Motivo: ${consulta.motivo}`);
+      doc.text(`Diagnóstico: ${consulta.diagnostico || "No especificado"}`);
+      doc.text(`Tratamiento: ${consulta.tratamiento || "No especificado"}`);
+      doc.text(`Notas: ${consulta.notas || "No especificado"}`);
       doc.moveDown();
 
-      if (printableData.recetas.length > 0) {
-        doc.fontSize(14).text("Recetas", { underline: true });
-        printableData.recetas.forEach((receta: any, index: number) => {
-          doc.fontSize(12).text(`${index + 1}. Medicamento: ${receta.medicamento.nombre}`);
-          doc.text(`   Dosis: ${receta.dosis}`);
-          doc.text(`   Duración: ${receta.duracion}`);
-          doc.text(`   Instrucciones: ${receta.instrucciones || "No especificado"}`);
-          doc.moveDown(0.5);
+      // Añadir recetas
+      if (consulta.recetas && consulta.recetas.length > 0) {
+        doc.fontSize(14).text("Recetas:", { underline: true });
+        consulta.recetas.forEach((receta: any) => {
+          doc.fontSize(12).text(`- Medicamento: ${receta.medicamento?.nombre}`);
+          doc.text(`  Dosis: ${receta.dosis}`);
+          doc.text(`  Duración: ${receta.duracion}`);
+          doc.text(`  Instrucciones: ${receta.instrucciones || "No especificadas"}`);
+          doc.moveDown();
         });
       }
 
-      if (printableData.examenes.length > 0) {
-        doc.fontSize(14).text("Exámenes Médicos", { underline: true });
-        printableData.examenes.forEach((examen: any, index: number) => {
-          doc.fontSize(12).text(`${index + 1}. Tipo: ${examen.tipo}`);
-          doc.text(`   Fecha: ${new Date(examen.fecha).toLocaleDateString()}`);
-          doc.text(`   Resultado: ${examen.resultado || "No especificado"}`);
-          doc.text(`   Notas: ${examen.notas || "No especificado"}`);
-          doc.moveDown(0.5);
+      // Añadir exámenes
+      if (consulta.examenes && consulta.examenes.length > 0) {
+        doc.fontSize(14).text("Exámenes:", { underline: true });
+        consulta.examenes.forEach((examen: any) => {
+          doc.fontSize(12).text(`- Tipo: ${examen.tipo}`);
+          doc.text(`  Fecha: ${new Date(examen.fecha).toLocaleDateString()}`);
+          doc.text(`  Resultado: ${examen.resultado || "Pendiente"}`);
+          doc.text(`  Notas: ${examen.notas || "No especificadas"}`);
+          doc.moveDown();
         });
       }
 
+      // Finalizar el PDF
       doc.end();
-    } else {
-      res.status(400).json({ error: "Formato no soportado. Use 'json' o 'pdf'" });
     }
   } catch (error) {
-    res.status(400).json({ error: "Error al obtener datos para imprimir consulta", details: error });
+    console.error("Error en getConsultaPrintable:", error);
+    // Asegurarse de no escribir en la respuesta si ya se cerró
+    if (!res.headersSent) {
+      res.status(500).json({
+        error: "Error al generar el documento imprimible",
+        details: error instanceof Error ? error.message : String(error),
+      });
+    }
   }
 };

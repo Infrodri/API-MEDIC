@@ -1,4 +1,4 @@
-// src/types/FichaMedicaTypes.ts
+// src/types/FichasMedicaTypes.ts
 import { Types } from "mongoose";
 
 export interface AntecedentesPersonales {
@@ -41,6 +41,7 @@ export interface Medicamento {
   _id?: string;
   nombre: string;
   descripcion?: string;
+  esCritico?: boolean; // Nuevo campo
   createdAt?: Date;
   updatedAt?: Date;
 }
@@ -53,6 +54,7 @@ export interface RecetaMedicamento {
   dosis: string;
   duracion: string;
   instrucciones?: string;
+  estado?: "Activo" | "Inactivo"; // Añadido para coincidir con el esquema
   createdAt?: Date;
   updatedAt?: Date;
 }
@@ -78,7 +80,9 @@ export interface ConsultasMedicas {
   diagnostico?: string;
   tratamiento?: string;
   notas?: string;
-  estado?: "pendiente" | "completada"; // Nuevo campo para estado
+  estado: "Activo" | "Inactivo";
+  estadoConsulta?: "pendiente" | "Concluida" | "Derivada"| "completada"| "Cancelada"; // Nuevo campo para estado
+  prioridad: "Normal" | "Alta" | "Urgente"; // Nuevo campo para estado
   recetas?: Types.ObjectId[]; // Referencia a RecetasMedicamentos
   examenes?: Types.ObjectId[]; // Referencia a ExamenesMedicos
   createdAt?: Date;

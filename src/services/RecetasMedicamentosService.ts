@@ -1,3 +1,4 @@
+// src/services/RecetasMedicamentosService.ts
 import { Query } from "types/RepositoryTypes";
 import { IRecetasMedicamentosRepository, IRecetasMedicamentosService, RecetasMedicamentos } from "types/RecetasMedicamentosTypes";
 
@@ -24,8 +25,8 @@ export class RecetasMedicamentosService implements IRecetasMedicamentosService {
     return this.recetasMedicamentosRepository.findById(id);
   }
 
-  async findRecetasMedicamentosByReceta(recetaId: string): Promise<RecetasMedicamentos[]> {
-    return this.recetasMedicamentosRepository.findActive({ receta: recetaId });
+  async findRecetasMedicamentosByReceta(consultaId: string): Promise<RecetasMedicamentos[]> {
+    return this.recetasMedicamentosRepository.findActive({ consulta: consultaId });
   }
 
   async updateRecetasMedicamentos(id: string, recetaMedicamento: Partial<RecetasMedicamentos>): Promise<{ recetaMedicamento: RecetasMedicamentos | null; message: string }> {
@@ -46,8 +47,7 @@ export class RecetasMedicamentosService implements IRecetasMedicamentosService {
     if (!recetaMedicamento) {
       return { success: false, message: "Relación receta-medicamento no encontrada" };
     }
-    recetaMedicamento.estado = "Inactivo";
-    await this.recetasMedicamentosRepository.update(id, recetaMedicamento);
+    await this.recetasMedicamentosRepository.update(id, { estado: "Inactivo" });
     return { success: true, message: "Relación receta-medicamento cambiada a estado Inactivo" };
   }
 }

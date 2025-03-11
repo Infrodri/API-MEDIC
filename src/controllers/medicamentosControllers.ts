@@ -1,3 +1,4 @@
+// src/controllers/medicamentosControllers.ts
 import { MedicamentosRepository } from "@repositories/MedicamentosRepositories";
 import { MedicamentosService } from "@services/MedicamentosService";
 import { Request, Response } from "express";
@@ -10,15 +11,18 @@ export const findMedicamentos = async (req: Request, res: Response) => {
   try {
     const medicamentos = await medicamentosService.findMedicamentos();
     const basicInfoList = medicamentos.map((medicamento) => medicamento.getBasicInfo());
-    if (basicInfoList.length === 0) return res.status(404).json({ message: "No hay medicamentos encontrados." });
 
-    res.json({ medicamentos: basicInfoList, message: "Lista de medicamentos obtenida con éxito" });
+    res.status(200).json({
+      medicamentos: basicInfoList,
+      message: basicInfoList.length > 0 ? "Lista de medicamentos obtenida con éxito" : "No hay medicamentos registrados aún",
+    });
   } catch (error) {
     console.log("error :>> ", error);
     res.status(500).json({ error: "Error al obtener medicamentos", details: error });
   }
 };
 
+// Resto del código sin cambios
 export const findMedicamentosById = async (req: Request, res: Response) => {
   try {
     const medicamento = await medicamentosService.findMedicamentosById(req.params.id);

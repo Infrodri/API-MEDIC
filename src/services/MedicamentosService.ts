@@ -11,7 +11,6 @@ export class MedicamentosService implements IMedicamentosService {
   async createMedicamentos(medicamentoData: Omit<Medicamentos, keyof Document>): Promise<{ medicamento: Medicamentos; message: string }> {
     const newMedicamento = await this.medicamentosRepository.create({
       ...medicamentoData,
-      estado: "Activo", // Default status is Active
     });
     return { medicamento: newMedicamento, message: "Medicamento registrado con éxito" };
   }
@@ -46,7 +45,6 @@ export class MedicamentosService implements IMedicamentosService {
     if (!medicamento) {
       return { success: false, message: "Medicamento no encontrado" };
     }
-    medicamento.estado = "Inactivo";
     await this.medicamentosRepository.update(id, medicamento);
     return { success: true, message: "Medicamento cambiado a estado Inactivo" };
   }
