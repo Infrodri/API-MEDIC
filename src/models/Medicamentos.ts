@@ -1,8 +1,8 @@
 // src/models/Medicamentos.ts
 import { Schema, model } from "mongoose";
-import { Medicamento } from "types/FichasMedicasTypes"; // Usaremos este tipo como base
+import { Medicamentos } from "types/MedicamentosTypes";
 
-const medicamentosSchema = new Schema<Medicamento>(
+const medicamentosSchema = new Schema<Medicamentos>(
   {
     nombre: { type: String, required: true, trim: true, unique: true },
     descripcion: { type: String, trim: true },
@@ -23,4 +23,4 @@ medicamentosSchema.methods.getBasicInfo = function () {
   };
 };
 
-export const MedicamentosModel = model<Medicamento>("Medicamentos", medicamentosSchema);
+export const MedicamentosModel = model<Medicamentos>("Medicamentos", medicamentosSchema);

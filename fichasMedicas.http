@@ -1,0 +1,148 @@
+
+### Paso 1: Crear Ficha Médica creada  "_id": "67cff82e5800cc5e2d0456d2", con id Paciente 67ca23c779e062bd415db73f
+
+POST http://localhost:4000/api/v1/fichasmedicas HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3YzA4MzgxOTdjN2VhYzQzYmEzNzM3ZiIsImVtYWlsIjoiYWRtaW5AdGVzdC5jb20iLCJ1c2VybmFtZSI6ImFkbWluIiwiaWF0IjoxNzQxNjM5NzQ3LCJleHAiOjE3NDE5OTk3NDd9.iuXR8_sAZg42UR4C5D0REdH99CChqwa1N6YNfiB5ubY
+
+{
+  "pacienteId": "67ca23c779e062bd415db73f"
+}
+
+
+### 2. Añadir Antecedentes Personales creada     "_id": "67cff8a75800cc5e2d0456d8",con  id Paciente 67ca23c779e062bd415db73f
+
+POST http://localhost:4000/api/v1/fichasmedicas/67ca23c779e062bd415db73f/antecedentes-personales HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3YzA4MzgxOTdjN2VhYzQzYmEzNzM3ZiIsImVtYWlsIjoiYWRtaW5AdGVzdC5jb20iLCJ1c2VybmFtZSI6ImFkbWluIiwiaWF0IjoxNzQxNjM5NzQ3LCJleHAiOjE3NDE5OTk3NDd9.iuXR8_sAZg42UR4C5D0REdH99CChqwa1N6YNfiB5ubY
+
+{
+  "antecedentes": { "hipertension": true, "diabetes": false },
+  "otrosAntecedentes": "Alergia al polen"
+}
+
+
+### 
+# Paso 3: Antecedentes Familiares  "_id": "67cffae75800cc5e2d0456e0",
+# Obtener Ficha por Paciente ID 67ca23c779e062bd415db73f
+
+POST http://localhost:4000/api/v1/fichasmedicas/67ca23c779e062bd415db73f/antecedentes-familiares HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3YzA4MzgxOTdjN2VhYzQzYmEzNzM3ZiIsImVtYWlsIjoiYWRtaW5AdGVzdC5jb20iLCJ1c2VybmFtZSI6ImFkbWluIiwiaWF0IjoxNzQxNjM5NzQ3LCJleHAiOjE3NDE5OTk3NDd9.iuXR8_sAZg42UR4C5D0REdH99CChqwa1N6YNfiB5ubY
+
+{
+  "antecedentes": {
+    "hipertension": true,
+    "diabetes": true,
+    "cancer": false
+  },
+  "otrosAntecedentes": "Historia de hipertensión en padre y madre"
+}
+
+### 
+# Añadir Operación Quirúrgica   "_id": "67cffbfe5800cc5e2d0456f3",
+# Descripción: Añade una operación quirúrgica a la ficha médica del paciente.
+# Obtener Ficha por Paciente ID 67ca23c779e062bd415db73f
+
+POST http://localhost:4000/api/v1/fichasmedicas/67ca23c779e062bd415db73f/operaciones-quirurgicas HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3YzA4MzgxOTdjN2VhYzQzYmEzNzM3ZiIsImVtYWlsIjoiYWRtaW5AdGVzdC5jb20iLCJ1c2VybmFtZSI6ImFkbWluIiwiaWF0IjoxNzQxNjM5NzQ3LCJleHAiOjE3NDE5OTk3NDd9.iuXR8_sAZg42UR4C5D0REdH99CChqwa1N6YNfiB5ubY
+
+{
+  "tipoOperacionQuirurgica": "67ce8747fac846a7ff27d3cc",
+  "fechaOperacion": "2024-01-15",
+  "observaciones": "Cirugía de apendicitis exitosa"
+}
+
+### 
+# # Añadir Ginecología y Obstetricia     "_id": "67d003f334002c5a0522bd0f",
+# Descripción: Añade un registro de ginecología/obstetricia a la ficha médica del paciente.
+# Obtener Ficha por Paciente ID 67ca23c779e062bd415db73f
+
+POST http://localhost:4000/api/v1/fichasmedicas/67ca23c779e062bd415db73f/ginecologia-obstetrica HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3YzA4MzgxOTdjN2VhYzQzYmEzNzM3ZiIsImVtYWlsIjoiYWRtaW5AdGVzdC5jb20iLCJ1c2VybmFtZSI6ImFkbWluIiwiaWF0IjoxNzQxNjM5NzQ3LCJleHAiOjE3NDE5OTk3NDd9.iuXR8_sAZg42UR4C5D0REdH99CChqwa1N6YNfiB5ubY
+
+{
+  "tipoObstetricoGinecologico": "67c14fd92f65123b7fa7d2fd",
+  "fechaEvento": "2023-05-20",
+  "observaciones": "Parto natural sin complicaciones"
+}
+
+#### 
+# Añadir Adicción     "_id": "67d0048734002c5a0522bd1f",
+# Descripción: Añade una adicción a la ficha médica del paciente..
+# Obtener Ficha por Paciente ID 67ca23c779e062bd415db73f
+
+POST http://localhost:4000/api/v1/fichasmedicas/67ca23c779e062bd415db73f/adicciones HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3YzA4MzgxOTdjN2VhYzQzYmEzNzM3ZiIsImVtYWlsIjoiYWRtaW5AdGVzdC5jb20iLCJ1c2VybmFtZSI6ImFkbWluIiwiaWF0IjoxNzQxNjM5NzQ3LCJleHAiOjE3NDE5OTk3NDd9.iuXR8_sAZg42UR4C5D0REdH99CChqwa1N6YNfiB5ubY
+
+{
+  "tipoAdiccion": "67c9fecb7c04cf29265d6d4f",
+  "frecuencia": "Diaria",
+  "duracion": "5 años",
+  "fechaInicio": "2018-01-01",
+  "notas": "Fumador empedernido"
+}
+
+#### 
+# Añadir exploracion-fisica
+# Descripción: Añade un examen neurológico a la ficha médica del paciente.
+# Obtener Ficha por Paciente ID 67ca23c779e062bd415db73f
+
+POST http://localhost:4000/api/v1/fichasmedicas/67ca23c779e062bd415db73f/exploracion-fisica HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3YzA4MzgxOTdjN2VhYzQzYmEzNzM3ZiIsImVtYWlsIjoiYWRtaW5AdGVzdC5jb20iLCJ1c2VybmFtZSI6ImFkbWluIiwiaWF0IjoxNzQxNjM5NzQ3LCJleHAiOjE3NDE5OTk3NDd9.iuXR8_sAZg42UR4C5D0REdH99CChqwa1N6YNfiB5ubY
+
+{
+  "temperatura": 36.6,
+  "tensionArterial": "120/80",
+  "frecuenciaCardiaca": 72,
+  "peso": 70,
+  "talla": 175,
+  "frecuenciaRespiratoria": 16,
+  "examenFisico": {
+    "piel": "Normal",
+    "cabeza": "Sin anomalías",
+    "abdomen": "Blando, no doloroso"
+  }
+}
+
+
+#### 
+# Añadir Examen Neurológico
+# # Descripción: Añade un examen neurológico a la ficha médica del paciente.
+# Obtener Ficha por Paciente ID 67ca23c779e062bd415db73f
+
+POST http://localhost:4000/api/v1/fichasmedicas/67ca23c779e062bd415db73f/examen-neurologico HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3YzA4MzgxOTdjN2VhYzQzYmEzNzM3ZiIsImVtYWlsIjoiYWRtaW5AdGVzdC5jb20iLCJ1c2VybmFtZSI6ImFkbWluIiwiaWF0IjoxNzQxNjM5NzQ3LCJleHAiOjE3NDE5OTk3NDd9.iuXR8_sAZg42UR4C5D0REdH99CChqwa1N6YNfiB5ubY
+
+{
+  "reflejos": "Normales",
+  "coordinacion": "Sin alteraciones",
+  "observaciones": "Sin hallazgos relevantes"
+}
+
+#### Añadir Órganos de los Sentidos
+# Descripción: Añade datos de órganos de los sentidos a la ficha médica del paciente.
+# Obtener Ficha por Paciente ID 67ca23c779e062bd415db73f
+
+POST http://localhost:4000/api/v1/fichasmedicas/67ca23c779e062bd415db73f/organos-sentidos HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3YzA4MzgxOTdjN2VhYzQzYmEzNzM3ZiIsImVtYWlsIjoiYWRtaW5AdGVzdC5jb20iLCJ1c2VybmFtZSI6ImFkbWluIiwiaWF0IjoxNzQxNjM5NzQ3LCJleHAiOjE3NDE5OTk3NDd9.iuXR8_sAZg42UR4C5D0REdH99CChqwa1N6YNfiB5ubY
+
+{
+  "vision": "20/20",
+  "audicion": "Normal",
+  "observaciones": "Sin problemas detectados"
+}
+
+
+#### Pruebas Completas del Flujo
+# Descripción: para verificar que todas las secciones se hayan añadido correctamente.
+# Obtener Ficha por Paciente ID 67ca23c779e062bd415db73f
+
+GET http://localhost:4000/api/v1/fichasmedicas/67ca23c779e062bd415db73f HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3YzA4MzgxOTdjN2VhYzQzYmEzNzM3ZiIsImVtYWlsIjoiYWRtaW5AdGVzdC5jb20iLCJ1c2VybmFtZSI6ImFkbWluIiwiaWF0IjoxNzQxNjM5NzQ3LCJleHAiOjE3NDE5OTk3NDd9.iuXR8_sAZg42UR4C5D0REdH99CChqwa1N6YNfiB5ubY

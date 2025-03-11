@@ -1,4 +1,5 @@
-import mongoose, { Schema } from "mongoose";
+
+import { model, Schema } from "mongoose";
 import { TiposAdiccion } from "types/TiposAdiccionesTypes";
 
 const TiposAdiccionesSchema: Schema = new Schema<TiposAdiccion>(
@@ -36,4 +37,4 @@ TiposAdiccionesSchema.methods.getBasicInfo = function () {
   };
 };
 
-export const TiposAdiccionesModel = mongoose.model<TiposAdiccion>("TiposAdicciones", TiposAdiccionesSchema);
+export const TiposAdiccionesModel = model<TiposAdiccion>("TiposAdicciones", TiposAdiccionesSchema);

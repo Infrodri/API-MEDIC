@@ -1,6 +1,8 @@
-// src/services/PacienteOperacionesService.ts
-import { Query } from "types/RepositoryTypes";
+// src/services/PacienteOperacionService.ts
+import { PacienteOperacionModel } from "@models/PacienteOperaciones"; // Ajustado el nombre del archivo
+import { PacienteModel } from "@models/Pacientes";
 import { IPacienteOperacionRepository, IPacienteOperacionService, PacienteOperacion } from "types/PacienteOperacionesTypes";
+import { Query } from "types/RepositoryTypes";
 
 export class PacienteOperacionService implements IPacienteOperacionService {
   private pacienteOperacionRepository: IPacienteOperacionRepository;
@@ -9,12 +11,22 @@ export class PacienteOperacionService implements IPacienteOperacionService {
     this.pacienteOperacionRepository = pacienteOperacionRepository;
   }
 
-  async createPacienteOperacion(pacienteOperacionData: Omit<PacienteOperacion, keyof Document>): Promise<{ pacienteOperacion: PacienteOperacion; message: string }> {
+  async createPacienteOperacion(pacienteOperacion: Partial<PacienteOperacion>): Promise<{ pacienteOperacion: PacienteOperacion; message: string }> {
+    const pacienteExists = await PacienteModel.findById(pacienteOperacion.paciente);
+    if (!pacienteExists) throw new Error("Paciente no encontrado");
+
+    const tipoOperacionExists = await PacienteOperacionModel.db.model("TiposOperacionesQuirurgicas").findById(pacienteOperacion.tipoOperacionQuirurgica);
+    if (!tipoOperacionExists) throw new Error("Tipo de operación quirúrgica no encontrado");
+
     const newPacienteOperacion = await this.pacienteOperacionRepository.create({
-      ...pacienteOperacionData,
+      paciente: pacienteOperacion.paciente,
+      tipoOperacionQuirurgica: pacienteOperacion.tipoOperacionQuirurgica,
+      fechaOperacion: pacienteOperacion.fechaOperacion, // Incluimos fechaOperacion, requerido
+      observaciones: pacienteOperacion.observaciones,   // Opcional
       estado: "Activo",
-    });
-    return { pacienteOperacion: newPacienteOperacion, message: "Operación del paciente registrada con éxito" };
+    } as PacienteOperacion);
+
+    return { pacienteOperacion: newPacienteOperacion, message: "Operación quirúrgica creada con éxito" };
   }
 
   async findPacienteOperacion(query?: Query): Promise<PacienteOperacion[]> {
@@ -22,33 +34,33 @@ export class PacienteOperacionService implements IPacienteOperacionService {
   }
 
   async findPacienteOperacionById(id: string): Promise<PacienteOperacion | null> {
-    return this.pacienteOperacionRepository.findById(id);
+    const operacion = await this.pacienteOperacionRepository.findById(id);
+    if (!operacion) throw new Error("Operación quirúrgica no encontrada");
+    return operacion;
   }
 
   async findPacienteOperacionByPaciente(pacienteId: string): Promise<PacienteOperacion[]> {
+    const pacienteExists = await PacienteModel.findById(pacienteId);
+    if (!pacienteExists) throw new Error("Paciente no encontrado");
     return this.pacienteOperacionRepository.findByPaciente(pacienteId);
   }
 
   async updatePacienteOperacion(id: string, pacienteOperacion: Partial<PacienteOperacion>): Promise<{ pacienteOperacion: PacienteOperacion | null; message: string }> {
-    const updatedPacienteOperacion = await this.pacienteOperacionRepository.update(id, pacienteOperacion);
-    if (!updatedPacienteOperacion) {
-      return { pacienteOperacion: null, message: "Operación del paciente no encontrada" };
-    }
-    return { pacienteOperacion: updatedPacienteOperacion, message: "Operación del paciente actualizada con éxito" };
+    const updatedOperacion = await this.pacienteOperacionRepository.update(id, pacienteOperacion);
+    if (!updatedOperacion) throw new Error("Operación quirúrgica no encontrada");
+    return { pacienteOperacion: updatedOperacion, message: "Operación quirúrgica actualizada con éxito" };
   }
 
   async deletePacienteOperacion(id: string): Promise<{ success: boolean; message: string }> {
-    const deleted = await this.pacienteOperacionRepository.delete(id);
-    return { success: deleted, message: deleted ? "Operación del paciente eliminada físicamente" : "Operación del paciente no encontrada" };
+    const success = await this.pacienteOperacionRepository.delete(id);
+    if (!success) throw new Error("Operación quirúrgica no encontrada");
+    return { success: true, message: "Operación quirúrgica eliminada con éxito" };
   }
 
   async softDeletePacienteOperacion(id: string): Promise<{ success: boolean; message: string }> {
-    const pacienteOperacion = await this.pacienteOperacionRepository.findById(id);
-    if (!pacienteOperacion) {
-      return { success: false, message: "Operación del paciente no encontrada" };
-    }
-    pacienteOperacion.estado = "Inactivo";
-    await this.pacienteOperacionRepository.update(id, pacienteOperacion);
-    return { success: true, message: "Operación del paciente cambiada a estado Inactivo" };
+    const operacion = await this.pacienteOperacionRepository.findById(id);
+    if (!operacion) throw new Error("Operación quirúrgica no encontrada");
+    await this.pacienteOperacionRepository.update(id, { estado: "Inactivo" });
+    return { success: true, message: "Operación quirúrgica desactivada con éxito" };
   }
 }

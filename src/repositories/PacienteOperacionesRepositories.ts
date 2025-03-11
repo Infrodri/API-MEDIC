@@ -1,59 +1,58 @@
-// src/repositories/PacienteOperacionesRepositories.ts
-
-import { Query } from "types/RepositoryTypes";
+// src/repositories/PacienteOperacionRepository.ts
+import { PacienteOperacionModel } from "@models/PacienteOperaciones";
 import { IPacienteOperacionRepository, PacienteOperacion } from "types/PacienteOperacionesTypes";
-import { PacienteOperacionesModel } from "@models/PacienteOperaciones";
+import { Query } from "types/RepositoryTypes";
 
 export class PacienteOperacionRepository implements IPacienteOperacionRepository {
-  async create(data: PacienteOperacion): Promise<PacienteOperacion> {
-    const newPacienteOperacion = new PacienteOperacionesModel(data);
-    return await newPacienteOperacion.save();
-  } 
-
   async find(query?: Query): Promise<PacienteOperacion[]> {
-    return await PacienteOperacionesModel.find(query || {})
-      .populate("paciente")
-      .populate("tipoOperacionQuirurgica")
-      .exec();
-  }
-
-  async findActive(query?: Query): Promise<PacienteOperacion[]> {
-    return await PacienteOperacionesModel.find({ ...query, estado: "Activo" })
-      .populate("paciente")
-      .populate("tipoOperacionQuirurgica")
+    return PacienteOperacionModel.find(query || {})
+      .populate("paciente", "primerNombre primerApellido cedula")
+      .populate("tipoOperacionQuirurgica", "nombre descripcion")
       .exec();
   }
 
   async findOne(query: Query): Promise<PacienteOperacion | null> {
-    return await PacienteOperacionesModel.findOne(query)
-      .populate("paciente")
-      .populate("tipoOperacionQuirurgica")
+    return PacienteOperacionModel.findOne(query)
+      .populate("paciente", "primerNombre primerApellido cedula")
+      .populate("tipoOperacionQuirurgica", "nombre descripcion")
       .exec();
   }
 
-  async findById(id: string): Promise<PacienteOperacion | null> {
-    return await PacienteOperacionesModel.findById(id)
-      .populate("paciente")
-      .populate("tipoOperacionQuirurgica")
+  async findActive(query?: Query): Promise<PacienteOperacion[]> {
+    return PacienteOperacionModel.find({ ...(query || {}), estado: "Activo" })
+      .populate("paciente", "primerNombre primerApellido cedula")
+      .populate("tipoOperacionQuirurgica", "nombre descripcion")
       .exec();
   }
 
   async findByPaciente(pacienteId: string): Promise<PacienteOperacion[]> {
-    return await PacienteOperacionesModel.find({ paciente: pacienteId, estado: "Activo" })
-      .populate("paciente")
-      .populate("tipoOperacionQuirurgica")
+    return PacienteOperacionModel.find({ paciente: pacienteId, estado: "Activo" })
+      .populate("paciente", "primerNombre primerApellido cedula")
+      .populate("tipoOperacionQuirurgica", "nombre descripcion")
       .exec();
   }
 
+  async findById(id: string): Promise<PacienteOperacion | null> {
+    return PacienteOperacionModel.findById(id)
+      .populate("paciente", "primerNombre primerApellido cedula")
+      .populate("tipoOperacionQuirurgica", "nombre descripcion")
+      .exec();
+  }
+
+  async create(data: Partial<PacienteOperacion>): Promise<PacienteOperacion> {
+    const pacienteOperacion = new PacienteOperacionModel(data);
+    return await pacienteOperacion.save();
+  }
+
   async update(id: string, data: Partial<PacienteOperacion>): Promise<PacienteOperacion | null> {
-    return await PacienteOperacionesModel.findByIdAndUpdate(id, data, { new: true, runValidators: true })
-      .populate("paciente")
-      .populate("tipoOperacionQuirurgica")
+    return PacienteOperacionModel.findByIdAndUpdate(id, data, { new: true, runValidators: true })
+      .populate("paciente", "primerNombre primerApellido cedula")
+      .populate("tipoOperacionQuirurgica", "nombre descripcion")
       .exec();
   }
 
   async delete(id: string): Promise<boolean> {
-    const deleted = await PacienteOperacionesModel.findByIdAndDelete(id).exec();
-    return deleted !== null;
+    const result = await PacienteOperacionModel.findByIdAndDelete(id).exec();
+    return result !== null;
   }
 }

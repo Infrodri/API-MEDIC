@@ -1,116 +1,49 @@
-// src/types/FichasMedicaTypes.ts
-import { Types } from "mongoose";
+// src/types/FichasMedicasTypes.ts
+import { Document, Types } from "mongoose";
+import { Repository } from "./RepositoryTypes";
+import { Paciente } from "./PacientesTypes";
+import { AntecedentesPersonales } from "./AntecedentesPersonalesTypes";
+import { AntecedentesFamiliares } from "./AntecedentesFamiliaresTypes";
+import { PacienteOperacion } from "./PacienteOperacionesTypes";
+import { PacienteObstetricoGinecologico } from "./PacienteObstetricosGinecologicosTypes";
+import { PacienteAdiccion } from "./PacienteAdiccionesTypes";
+import { ExploracionFisica } from "./ExploracionFisicaTypes";
+import { ExamenNeurologico } from "./ExamenNeurologicoTypes";
+import { OrganosSentidos } from "./OrganosSentidosTypes";
+import { ConsultasMedicas } from "./ConsultasMedicasTypes";
 
-export interface AntecedentesPersonales {
-  alergias?: string[];
-  enfermedades?: string[];
-  cirugias?: Types.ObjectId[]; // Referencia a OperacionesQuirurgicas
-  vacunas?: string[];
-  examenesFisicos?: { [key: string]: string | number }[];
-  pruebasDeteccion?: { [key: string]: string | number }[];
-  medicamentos?: { nombre: string; dosis: string; duracion: string }[];
-  enfermedadesCronicas?: string[];
-  antecedentesFamiliares?: string[];
-  habitosSalud?: { alimentacion: string; ejercicio: string };
-}
-
-export interface ExploracionFisica {
-  peso?: number;
-  altura?: number;
-  presionArterial?: string;
-  frecuenciaCardiaca?: number;
-  temperatura?: number;
-  otrasObservaciones?: string;
-}
-
-export interface ExamenNeurologico {
-  reflejos?: string;
-  coordinacion?: string;
-  estadoMental?: string;
-  otrasObservaciones?: string;
-}
-
-export interface OrganosSentidos {
-  vision?: string;
-  audicion?: string;
-  olfato?: string;
-  otrasObservaciones?: string;
-}
-
-export interface Medicamento {
-  _id?: string;
-  nombre: string;
-  descripcion?: string;
-  esCritico?: boolean; // Nuevo campo
-  createdAt?: Date;
-  updatedAt?: Date;
-}
-
-export interface RecetaMedicamento {
-  _id?: string;
-  consulta: Types.ObjectId | string;
-  medico: Types.ObjectId | string;
-  medicamento: Types.ObjectId | string; // Referencia a Medicamentos
-  dosis: string;
-  duracion: string;
-  instrucciones?: string;
-  estado?: "Activo" | "Inactivo"; // Añadido para coincidir con el esquema
-  createdAt?: Date;
-  updatedAt?: Date;
-}
-
-export interface ExamenMedico {
-  _id?: string;
-  consulta: Types.ObjectId | string;
-  medico: Types.ObjectId | string;
-  tipo: string;
-  fecha: Date;
-  resultado?: string;
-  notas?: string;
-  createdAt?: Date;
-  updatedAt?: Date;
-}
-
-export interface ConsultasMedicas {
-  _id?: string;
-  paciente: Types.ObjectId | string;
-  medico: Types.ObjectId | string;
-  fecha: Date;
-  motivo: string;
-  diagnostico?: string;
-  tratamiento?: string;
-  notas?: string;
+export interface FichasMedicas extends Document {
+  getBasicInfo(): any;
+  paciente: Types.ObjectId | Paciente;
+  antecedentesPersonales?: Types.ObjectId | AntecedentesPersonales;
+  antecedentesFamiliares?: Types.ObjectId | AntecedentesFamiliares;
+  operacionesQuirurgicas: (Types.ObjectId | PacienteOperacion)[];
+  ginecologiaObstetrica: (Types.ObjectId | PacienteObstetricoGinecologico)[];
+  adicciones: (Types.ObjectId | PacienteAdiccion)[];
+  exploracionFisica?: Types.ObjectId | ExploracionFisica;
+  examenNeurologico?: Types.ObjectId | ExamenNeurologico;
+  organosSentidos?: Types.ObjectId | OrganosSentidos;
+  consultasMedicas: (Types.ObjectId | ConsultasMedicas)[];
   estado: "Activo" | "Inactivo";
-  estadoConsulta?: "pendiente" | "Concluida" | "Derivada"| "completada"| "Cancelada"; // Nuevo campo para estado
-  prioridad: "Normal" | "Alta" | "Urgente"; // Nuevo campo para estado
-  recetas?: Types.ObjectId[]; // Referencia a RecetasMedicamentos
-  examenes?: Types.ObjectId[]; // Referencia a ExamenesMedicos
-  createdAt?: Date;
-  updatedAt?: Date;
 }
 
-export interface FichasMedicas {
-  _id?: string;
-  paciente: Types.ObjectId | string;
-  antecedentesPersonales?: Types.ObjectId;
-  operacionesQuirurgicas?: Types.ObjectId[];
-  ginecologiaObstetrica?: Types.ObjectId;
-  adicciones?: Types.ObjectId[];
-  exploracionFisica?: Types.ObjectId;
-  examenNeurologico?: Types.ObjectId;
-  organosSentidos?: Types.ObjectId;
-  consultasMedicas?: Types.ObjectId[];
-  createdAt?: Date;
-  updatedAt?: Date;
+export interface IFichasMedicasRepository extends Repository<FichasMedicas> {
+  findByPaciente(pacienteId: string): Promise<FichasMedicas | null>;
 }
 
 export interface IFichasMedicasService {
   getFichaByPaciente(pacienteId: string): Promise<FichasMedicas | null>;
-  addSection(pacienteId: string, section: string, data: any, userId: string): Promise<any>;
-  getSection(pacienteId: string, section: string): Promise<any>;
-  createConsulta(pacienteId: string, data: Partial<ConsultasMedicas>, userId: string): Promise<ConsultasMedicas>;
-  addReceta(consultaId: string, data: Partial<RecetaMedicamento>, userId: string): Promise<RecetaMedicamento>;
-  addExamen(consultaId: string, data: Partial<ExamenMedico>, userId: string): Promise<ExamenMedico>;
-  updateConsulta(consultaId: string, data: Partial<ConsultasMedicas>, userId: string): Promise<ConsultasMedicas>;
-  getConsultaPrintable(consultaId: string): Promise<any>;
+  createFicha(pacienteId: string): Promise<{ ficha: FichasMedicas; message: string }>;
+  updateFicha(id: string, data: Partial<FichasMedicas>): Promise<{ ficha: FichasMedicas | null; message: string }>;
+  softDeleteFicha(id: string): Promise<{ success: boolean; message: string }>;
+  addAntecedentesPersonales(pacienteId: string, data: Partial<AntecedentesPersonales>): Promise<{ antecedentes: AntecedentesPersonales; message: string }>;
+  addAntecedentesFamiliares(pacienteId: string, data: Partial<AntecedentesFamiliares>): Promise<{ antecedentes: AntecedentesFamiliares; message: string }>;
+  addOperacionQuirurgica(pacienteId: string, data: Partial<PacienteOperacion>): Promise<{ operacion: PacienteOperacion; message: string }>;
+  addGinecologiaObstetrica(pacienteId: string, data: Partial<PacienteObstetricoGinecologico>): Promise<{ ginecologia: PacienteObstetricoGinecologico; message: string }>;
+  addAdiccion(pacienteId: string, data: Partial<PacienteAdiccion>): Promise<{ adiccion: PacienteAdiccion; message: string }>;
+  addExploracionFisica(pacienteId: string, data: Partial<ExploracionFisica>): Promise<{ exploracion: ExploracionFisica; message: string }>;
+  addExamenNeurologico(pacienteId: string, data: Partial<ExamenNeurologico>): Promise<{ examen: ExamenNeurologico; message: string }>;
+  addOrganosSentidos(pacienteId: string, data: Partial<OrganosSentidos>): Promise<{ organos: OrganosSentidos; message: string }>;
+  addConsultaMedica(id: string, consulta: Partial<ConsultasMedicas>): Promise<{ consulta: ConsultasMedicas; message: string }>;
+  generateReporte(id: string): Promise<any>;
 }

@@ -1,36 +1,39 @@
 // src/types/ConsultasMedicasTypes.ts
 import { Document, Types } from "mongoose";
 import { Query, Repository } from "./RepositoryTypes";
-import { Medico } from "types/MedicoTypes";
-import { Paciente } from "types/PacientesTypes";
-import { FichasMedicas } from "types/FichasMedicasTypes";
-import { Especialidades } from "./EspecialidadesTypes";
+import { Medico } from "./MedicoTypes";
+import { Paciente } from "./PacientesTypes";
+import { RecetasMedicamentos } from "./RecetasMedicamentosTypes";
+import { PacienteExamen } from "./PacienteExamenesTypes";
 
 export interface ConsultasMedicas extends Document {
   getBasicInfo(): any;
-  paciente: Types.ObjectId |Paciente;
+  paciente: Types.ObjectId | Paciente;
   medico: Types.ObjectId | Medico;
   fecha: Date;
   motivo: string;
+  sintomas: string; // Nuevo campo para síntomas
   diagnostico: string;
   tratamiento: string;
-  notas: string;
+  observaciones: string; // Renombrado de "notas" para consistencia
+  recomendacionDescanso?: string; // Nuevo campo opcional
   estado: "Activo" | "Inactivo";
-  estadoConsulta: "Pendiente" | "Concluida" | "Derivada" | "Cancelada"; // Agregado "Cancelada"
+  estadoConsulta: "Pendiente" | "Concluida" | "Derivada" | "Cancelada";
   medicoDerivado?: Types.ObjectId | Medico;
   prioridad: "Normal" | "Alta" | "Urgente";
-  duracion: number; // Nuevo campo para citas
+  duracion: number; // Duración en minutos
+  recetas: (Types.ObjectId | RecetasMedicamentos)[]; // Referencia a recetas
+  examenes: (Types.ObjectId | PacienteExamen)[]; // Referencia a exámenes del paciente
 }
 
 export interface IConsultasMedicasRepository extends Repository<ConsultasMedicas> {
   findOne(query: Query): Promise<ConsultasMedicas | null>;
   findActive(query?: Query): Promise<ConsultasMedicas[]>;
-  checkAvailability(medicoId: string, fecha: Date, duracion: number): Promise<boolean>; // Nuevo método
+  checkAvailability(medicoId: string, fecha: Date, duracion: number): Promise<boolean>;
 }
 
 export interface IConsultasMedicasService {
-  findCitasProgramadas(): unknown;
-  createConsultasMedicas(consulta: ConsultasMedicas): Promise<{ consulta: ConsultasMedicas; message: string }>;
+  createConsultasMedicas(consulta: Partial<ConsultasMedicas>): Promise<{ consulta: ConsultasMedicas; message: string }>;
   findConsultasMedicas(query?: Query): Promise<ConsultasMedicas[]>;
   findConsultasMedicasById(id: string): Promise<ConsultasMedicas | null>;
   findConsultasMedicasByPaciente(pacienteId: string): Promise<ConsultasMedicas[]>;
@@ -40,4 +43,7 @@ export interface IConsultasMedicasService {
   concludeConsulta(id: string): Promise<{ consulta: ConsultasMedicas; message: string }>;
   deriveConsultaMedica(id: string, medicoId: string): Promise<{ consulta: ConsultasMedicas; message: string }>;
   reassignConsultaMedica(id: string, medicoId: string): Promise<{ consulta: ConsultasMedicas; message: string }>;
+  addRecetaToConsulta(id: string, recetaData: Partial<RecetasMedicamentos>): Promise<{ consulta: ConsultasMedicas; message: string }>;
+  addExamenToConsulta(id: string, examenData: Partial<PacienteExamen>): Promise<{ consulta: ConsultasMedicas; message: string }>;
+  generateReporte(id: string, tipo: "receta" | "examen" | "ampliacion"): Promise<{ reporte: any; message: string }>;
 }

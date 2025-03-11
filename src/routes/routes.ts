@@ -26,9 +26,20 @@ import { createTiposOperacionesQuirurgicas, deleteTiposOperacionesQuirurgicas, f
 import { createPaciente, deletePaciente, findPacienteById, findPacientes, findPacientesByEstadoAtencion, getHistorialMedico, softDeletePaciente, updatePaciente } from "@controllers/pacientesControllers";
 
 import {
-  createConsultasMedicas, findConsultasMedicas, findConsultasMedicasById, findConsultasMedicasByPaciente,
-  updateConsultasMedicas, deleteConsultasMedicas, softDeleteConsultasMedicas, concludeConsulta,
-  deriveConsulta, reassignConsulta, programarCita, actualizarCita, cancelarCita, listarCitasProgramadas} from "../controllers/consultasMedicasControllers";
+  createConsultasMedicas,
+  findConsultasMedicas,
+  findConsultasMedicasById,
+  findConsultasMedicasByPaciente,
+  updateConsultasMedicas,
+  deleteConsultasMedicas,
+  softDeleteConsultasMedicas,
+  concludeConsulta,
+  deriveConsulta,
+  reassignConsulta,
+  addRecetaToConsulta,
+  addExamenToConsulta,
+  generateReporte,
+} from "../controllers/consultasMedicasControllers";
 
   import {
     getHistorialByPaciente,
@@ -38,16 +49,24 @@ import {
 import { Router } from "express";
 import {  getPermissons, verifyToken } from "middlewares/auth";
 import { checkRoles } from "middlewares/roles";
+
+
 import {
   getFichaByPaciente,
-  addSection,
-  getSection,
-  createConsulta,
-  addReceta,
-  addExamen,
-  updateConsulta,
-  getConsultaPrintable,
+  createFicha,
+  updateFicha,
+  softDeleteFicha,
+  addAntecedentesPersonales,
+  addAntecedentesFamiliares,
+  addOperacionQuirurgica,
+  addGinecologiaObstetrica,
+  addAdiccion,
+  addExploracionFisica,
+  addExamenNeurologico,
+  addOrganosSentidos,
+  addConsultaMedica,
 } from "../controllers/fichasMedicasControllers";
+
 import {
   getDashboardStats,
   getConsultasHoy,
@@ -152,18 +171,29 @@ router.patch("/tiposadicciones/:id/soft-delete", verifyToken, getPermissons, sof
   router.patch("/examenesmedicos/:id/soft-delete", verifyToken, getPermissons, softDeleteExamenesMedicos);
 
 
+  
 
-// Rutas específicas primero (evitar conflictos con rutas genéricas)
-router.post("/fichasMedicas/:pacienteId/consultas", verifyToken, getPermissons, createConsulta);
-router.post("/fichasMedicas/consultas/:consultaId/recetas", verifyToken, getPermissons, addReceta);
-router.post("/fichasMedicas/consultas/:consultaId/examenes", verifyToken, getPermissons, addExamen);
-router.put("/fichasMedicas/consultas/:consultaId", verifyToken, getPermissons, updateConsulta);
-router.get("/fichasMedicas/consultas/:consultaId/printable", verifyToken, getPermissons, getConsultaPrintable);
 
-// Rutas genéricas después
-router.get("/fichasMedicas/:id", verifyToken, getPermissons, getFichaByPaciente);
-router.post("/fichasMedicas/:id/:section", verifyToken, getPermissons, addSection);
-router.get("/fichasMedicas/:id/:section", verifyToken, getPermissons, getSection);
+
+
+
+
+// Rutas fichas medicas después
+router.get("/fichasmedicas/:pacienteId", verifyToken, getPermissons, getFichaByPaciente);
+router.get("/fichasmedicas/:pacienteId", verifyToken, getPermissons, getFichaByPaciente);
+router.post("/fichasmedicas/", verifyToken, getPermissons, createFicha);
+router.put("/fichasmedicas/:id", verifyToken, getPermissons, updateFicha);
+router.patch("/fichasmedicas/:id/soft-delete", verifyToken, getPermissons, softDeleteFicha);
+router.post("/fichasmedicas/:pacienteId/antecedentes-personales", verifyToken, getPermissons, addAntecedentesPersonales);
+router.post("/fichasmedicas/:pacienteId/antecedentes-familiares", verifyToken, getPermissons, addAntecedentesFamiliares);
+router.post("/fichasmedicas/:pacienteId/operaciones-quirurgicas", verifyToken, getPermissons, addOperacionQuirurgica);
+router.post("/fichasmedicas/:pacienteId/ginecologia-obstetrica", verifyToken, getPermissons, addGinecologiaObstetrica);
+router.post("/fichasmedicas/:pacienteId/adicciones", verifyToken, getPermissons, addAdiccion);
+router.post("/fichasmedicas/:pacienteId/exploracion-fisica", verifyToken, getPermissons, addExploracionFisica);
+router.post("/fichasmedicas/:pacienteId/examen-neurologico", verifyToken, getPermissons, addExamenNeurologico);
+router.post("/fichasmedicas/:pacienteId/organos-sentidos", verifyToken, getPermissons, addOrganosSentidos);
+router.post("/fichasmedicas/:id/consulta", verifyToken, getPermissons, addConsultaMedica);
+router.get("/fichasmedicas/:id/reporte", verifyToken, getPermissons, generateReporte);
 
 // Rutas del dashboard
 router.get("/dashboard/stats", verifyToken, getPermissons, getDashboardStats);
@@ -173,27 +203,26 @@ router.get("/dashboard/alertas", verifyToken, getPermissons, getAlertas);
 
 
 // Rutas de ConsultasMedicas
-router.post("/consultasMedicas", verifyToken, getPermissons, createConsultasMedicas);
-router.get("/consultasMedicas", verifyToken, getPermissons, findConsultasMedicas);
-router.get("/consultasMedicas/:id", verifyToken, getPermissons, findConsultasMedicasById);
-router.get("/consultasMedicas/paciente/:pacienteId", verifyToken, getPermissons, findConsultasMedicasByPaciente);
-router.put("/consultasMedicas/:id", verifyToken, getPermissons, updateConsultasMedicas);
-router.delete("/consultasMedicas/:id", verifyToken, getPermissons, deleteConsultasMedicas);
-router.patch("/consultasMedicas/softDelete/:id", verifyToken, getPermissons, softDeleteConsultasMedicas);
-router.patch("/consultasMedicas/conclude/:id", verifyToken, getPermissons, concludeConsulta);
-router.patch("/consultasMedicas/derive/:id", verifyToken, getPermissons, deriveConsulta);
-router.patch("/consultasMedicas/reassign/:id", verifyToken, getPermissons, reassignConsulta);
+router.post("/consultasmedicas", verifyToken, getPermissons, createConsultasMedicas);
+router.get("/consultasmedicas", verifyToken, getPermissons, findConsultasMedicas);
+router.get("/consultasmedicas/:id", verifyToken, getPermissons, findConsultasMedicasById);
+router.get("/consultasmedicas/paciente/:pacienteId", verifyToken, getPermissons, findConsultasMedicasByPaciente);
+router.put("/consultasmedicas/:id", verifyToken, getPermissons, updateConsultasMedicas);
+router.delete("/consultasmedicas/:id", verifyToken, getPermissons, deleteConsultasMedicas);
+router.patch("/consultasmedicas/:id/soft-delete", verifyToken, getPermissons, softDeleteConsultasMedicas);
+router.patch("/consultasmedicas/:id/conclude", verifyToken, getPermissons, concludeConsulta);
+router.patch("/consultasmedicas/:id/derive", verifyToken, getPermissons, deriveConsulta);
+router.patch("/consultasmedicas/:id/reassign", verifyToken, getPermissons, reassignConsulta);
+router.post("/consultasmedicas/:id/receta", verifyToken, getPermissons, addRecetaToConsulta);
+router.post("/consultasmedicas/:id/examen", verifyToken, getPermissons, addExamenToConsulta);
+router.get("/consultasmedicas/:id/reporte", verifyToken, getPermissons, generateReporte);
 
 // Nuevas rutas para historial médico
 router.get("/pacientes/:id/historial", verifyToken, getPermissons, getHistorialByPaciente);
 router.post("/pacientes/:id/historial", verifyToken, getPermissons, addHistorialEntry);
 
 
-// Rutas de citas
-router.post("/citas", verifyToken, getPermissons, programarCita);
-router.put("/citas/:id", verifyToken, getPermissons, actualizarCita);
-router.delete("/citas/:id", verifyToken, getPermissons, cancelarCita);
-router.get("/citas", verifyToken, getPermissons, listarCitasProgramadas); // Nueva ruta
+
 
   // Rutas de Recetas Médicas
   router.get("/recetasmedicas", verifyToken, getPermissons, findRecetasMedicas);

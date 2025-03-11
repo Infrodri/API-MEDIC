@@ -5,7 +5,7 @@ import { PacienteAdiccion } from "types/PacienteAdiccionesTypes";
 import { PacienteObstetricoGinecologico } from "types/PacienteObstetricosGinecologicosTypes";
 import { PacienteOperacion } from "types/PacienteOperacionesTypes";
 import { ConsultasMedicas } from "types/ConsultasMedicasTypes";
-import { PacienteExamenes } from "./PacienteExamenesTypes";
+import { PacienteExamen } from "./PacienteExamenesTypes";
 
 export interface Paciente extends Document {
   getBasicInfo(): any;
@@ -24,9 +24,9 @@ export interface Paciente extends Document {
 }
 
 export interface HistorialMedico {
-  paciente: Paciente[];
+  paciente: Paciente;
   adicciones: PacienteAdiccion[];
-  examenes: PacienteExamenes[];
+  examenes: PacienteExamen[];
   obstetricosGinecologicos: PacienteObstetricoGinecologico[];
   operaciones: PacienteOperacion[];
   consultas: ConsultasMedicas[];

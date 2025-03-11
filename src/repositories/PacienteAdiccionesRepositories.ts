@@ -1,58 +1,58 @@
-// src/repositories/PacienteAdiccionesRepositories.ts
+// src/repositories/PacienteAdiccionRepository.ts
 import { PacienteAdiccionModel } from "@models/PacienteAdicciones";
-import { Query } from "types/RepositoryTypes";
 import { IPacienteAdiccionRepository, PacienteAdiccion } from "types/PacienteAdiccionesTypes";
+import { Query } from "types/RepositoryTypes";
 
 export class PacienteAdiccionRepository implements IPacienteAdiccionRepository {
-  async create(data: PacienteAdiccion): Promise<PacienteAdiccion> {
-    const newPacienteAdiccion = new PacienteAdiccionModel(data);
-    return await newPacienteAdiccion.save();
-  }
-
   async find(query?: Query): Promise<PacienteAdiccion[]> {
-    return await PacienteAdiccionModel.find(query || {})
-      .populate("paciente")
-      .populate("tipoAdiccion")
-      .exec();
-  }
-
-  async findActive(query?: Query): Promise<PacienteAdiccion[]> {
-    return await PacienteAdiccionModel.find({ ...query, estado: "Activo" })
-      .populate("paciente")
-      .populate("tipoAdiccion")
+    return PacienteAdiccionModel.find(query || {})
+      .populate("paciente", "primerNombre primerApellido cedula")
+      .populate("tipoAdiccion", "nombre descripcion")
       .exec();
   }
 
   async findOne(query: Query): Promise<PacienteAdiccion | null> {
-    return await PacienteAdiccionModel.findOne(query)
-      .populate("paciente")
-      .populate("tipoAdiccion")
+    return PacienteAdiccionModel.findOne(query)
+      .populate("paciente", "primerNombre primerApellido cedula")
+      .populate("tipoAdiccion", "nombre descripcion")
       .exec();
   }
 
-  async findById(id: string): Promise<PacienteAdiccion | null> {
-    return await PacienteAdiccionModel.findById(id)
-      .populate("paciente")
-      .populate("tipoAdiccion")
+  async findActive(query?: Query): Promise<PacienteAdiccion[]> {
+    return PacienteAdiccionModel.find({ ...(query || {}), estado: "Activo" })
+      .populate("paciente", "primerNombre primerApellido cedula")
+      .populate("tipoAdiccion", "nombre descripcion")
       .exec();
   }
 
   async findByPaciente(pacienteId: string): Promise<PacienteAdiccion[]> {
-    return await PacienteAdiccionModel.find({ paciente: pacienteId, estado: "Activo" })
-      .populate("paciente")
-      .populate("tipoAdiccion")
+    return PacienteAdiccionModel.find({ paciente: pacienteId, estado: "Activo" })
+      .populate("paciente", "primerNombre primerApellido cedula")
+      .populate("tipoAdiccion", "nombre descripcion")
       .exec();
   }
 
+  async findById(id: string): Promise<PacienteAdiccion | null> {
+    return PacienteAdiccionModel.findById(id)
+      .populate("paciente", "primerNombre primerApellido cedula")
+      .populate("tipoAdiccion", "nombre descripcion")
+      .exec();
+  }
+
+  async create(data: Partial<PacienteAdiccion>): Promise<PacienteAdiccion> {
+    const pacienteAdiccion = new PacienteAdiccionModel(data);
+    return await pacienteAdiccion.save();
+  }
+
   async update(id: string, data: Partial<PacienteAdiccion>): Promise<PacienteAdiccion | null> {
-    return await PacienteAdiccionModel.findByIdAndUpdate(id, data, { new: true, runValidators: true })
-      .populate("paciente")
-      .populate("tipoAdiccion")
+    return PacienteAdiccionModel.findByIdAndUpdate(id, data, { new: true, runValidators: true })
+      .populate("paciente", "primerNombre primerApellido cedula")
+      .populate("tipoAdiccion", "nombre descripcion")
       .exec();
   }
 
   async delete(id: string): Promise<boolean> {
-    const deleted = await PacienteAdiccionModel.findByIdAndDelete(id).exec();
-    return deleted !== null;
+    const result = await PacienteAdiccionModel.findByIdAndDelete(id).exec();
+    return result !== null;
   }
 }

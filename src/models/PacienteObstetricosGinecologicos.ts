@@ -1,7 +1,6 @@
 // src/models/PacienteObstetricosGinecologicos.ts
 import mongoose, { Schema } from "mongoose";
 import { PacienteObstetricoGinecologico } from "types/PacienteObstetricosGinecologicosTypes";
-import { number } from "zod";
 
 const PacienteObstetricoGinecologicoSchema: Schema = new Schema<PacienteObstetricoGinecologico>(
   {

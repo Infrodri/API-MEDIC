@@ -1,65 +1,35 @@
-// src/models/PacienteAdicciones.ts
-import mongoose, { Schema } from "mongoose";
+// src/models/PacienteAdiccion.ts
+import mongoose, { Schema, Document, model } from "mongoose";
 import { PacienteAdiccion } from "types/PacienteAdiccionesTypes";
-import { PacienteModel } from "./Pacientes";
-import { object } from "zod";
 
-const PacienteAdiccionSchema: Schema = new Schema<PacienteAdiccion>(
+const pacienteAdiccionSchema = new Schema<PacienteAdiccion>(
   {
-    paciente: {
-      type: Schema.Types.ObjectId,
-      ref: "Paciente",
-      required: [true, "El paciente es obligatorio"],
-    },
-    tipoAdiccion: {
-      type: Schema.Types.ObjectId,
-      ref: "TiposAdicciones", // Coincide con el modelo registrado
-      required: [true, "El tipo de adicción es obligatorio"],
-    },
-    frecuencia: {
-      type: String,
-      required: false,
-    },
-    duracion: {
-      type: String,
-      required: false,
-    },
-    fechaInicio: {
-      type: Date,
-      required: [false, "La fecha de inicio es obligatoria"],
-    },
-    fechaFin: {
-      type: Date,
-      required: false,
-    },
-    notas: {
-      type: String,
-      required: false,
-    },
-    estado: {
-      type: String,
-      enum: ["Activo", "Inactivo"],
-      default: "Activo",
-    },
+    paciente: { type: Schema.Types.ObjectId, ref: "Paciente", required: true },
+    tipoAdiccion: { type: Schema.Types.ObjectId, ref: "TiposAdicciones", required: true },
+    frecuencia: { type: String, required: true },
+    duracion: { type: String, required: true },
+    fechaInicio: { type: Date, required: true },
+    fechaFin: { type: Date },
+    notas: { type: String },
+    estado: { type: String, enum: ["Activo", "Inactivo"], default: "Activo" },
   },
-  {
-    timestamps: true,
-    versionKey: false,
-  }
+  { timestamps: true }
 );
 
-PacienteAdiccionSchema.methods.getBasicInfo = function () {
+pacienteAdiccionSchema.methods.getBasicInfo = function () {
   return {
     _id: this._id,
-    paciente: this.paciente ? { primerNombre: this.paciente.primerNombre, primerApellido: this.paciente.primerApellido } : null,
-    tipoAdiccion: this.tipoAdiccion? {nombreAdiccion: this.tipoAdiccion.nombreAdiccion, descripcion: this.tipoAdiccion.descripcion } : null,
+    paciente: this.paciente,
+    tipoAdiccion: this.tipoAdiccion,
     frecuencia: this.frecuencia,
     duracion: this.duracion,
     fechaInicio: this.fechaInicio,
     fechaFin: this.fechaFin,
     notas: this.notas,
     estado: this.estado,
+    createdAt: this.createdAt,
+    updatedAt: this.updatedAt,
   };
 };
 
-export const PacienteAdiccionModel = mongoose.model<PacienteAdiccion>("PacienteAdicciones", PacienteAdiccionSchema);
+export const PacienteAdiccionModel = model<PacienteAdiccion>("PacienteAdiccion", pacienteAdiccionSchema);

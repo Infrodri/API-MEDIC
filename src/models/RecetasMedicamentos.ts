@@ -1,8 +1,8 @@
 // src/models/RecetasMedicamentos.ts
 import { Schema, model, Types } from "mongoose";
-import { RecetaMedicamento } from "types/FichasMedicasTypes";
+import { RecetasMedicamentos } from "types/RecetasMedicamentosTypes";
 
-const recetasMedicamentosSchema = new Schema<RecetaMedicamento>(
+const recetasMedicamentosSchema = new Schema<RecetasMedicamentos>(
   {
     consulta: { type: Schema.Types.ObjectId, ref: "ConsultasMedicas", required: true },
     medico: { type: Schema.Types.ObjectId, ref: "Medico", required: true },
@@ -30,4 +30,4 @@ recetasMedicamentosSchema.methods.getBasicInfo = function () {
   };
 };
 
-export const RecetasMedicamentosModel = model<RecetaMedicamento>("RecetasMedicamentos", recetasMedicamentosSchema);
+export const RecetasMedicamentosModel = model<RecetasMedicamentos>("RecetasMedicamentos", recetasMedicamentosSchema);

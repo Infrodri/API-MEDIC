@@ -7,12 +7,11 @@ import { IConsultasMedicasRepository, IConsultasMedicasService, ConsultasMedicas
 const consultasMedicasRepository: IConsultasMedicasRepository = new ConsultasMedicasRepository();
 const consultasMedicasService: IConsultasMedicasService = new ConsultasMedicasService(consultasMedicasRepository);
 
-// Endpoints existentes (sin cambios)
 export const createConsultasMedicas = async (req: Request, res: Response) => {
   try {
-    const newConsulta: Omit<ConsultasMedicas, keyof Document> = req.body;
+    const newConsulta: Partial<ConsultasMedicas> = req.body;
     const { consulta, message } = await consultasMedicasService.createConsultasMedicas(newConsulta);
-    res.status(201).json({ consulta, message });
+    res.status(201).json({ consulta: consulta.getBasicInfo(), message });
   } catch (error) {
     console.log("error :>> ", error);
     res.status(400).json({ error: "Error al crear consulta médica", details: error });
@@ -35,7 +34,7 @@ export const findConsultasMedicasById = async (req: Request, res: Response) => {
   try {
     const consulta = await consultasMedicasService.findConsultasMedicasById(req.params.id);
     if (!consulta) return res.status(404).json({ message: "Consulta médica no encontrada" });
-    res.json({ consulta, message: "Consulta médica encontrada con éxito" });
+    res.json({ consulta: consulta.getBasicInfo(), message: "Consulta médica encontrada con éxito" });
   } catch (error) {
     console.log("error :>> ", error);
     res.status(500).json({ error: "Error al obtener consulta médica", details: error });
@@ -45,8 +44,9 @@ export const findConsultasMedicasById = async (req: Request, res: Response) => {
 export const findConsultasMedicasByPaciente = async (req: Request, res: Response) => {
   try {
     const consultas = await consultasMedicasService.findConsultasMedicasByPaciente(req.params.pacienteId);
-    if (consultas.length === 0) return res.status(404).json({ message: "No hay consultas para este paciente" });
-    res.json({ consultas, message: "Consultas médicas del paciente obtenidas con éxito" });
+    const basicInfoList = consultas.map((consulta) => consulta.getBasicInfo());
+    if (basicInfoList.length === 0) return res.status(404).json({ message: "No hay consultas para este paciente" });
+    res.json({ consultas: basicInfoList, message: "Consultas del paciente obtenidas con éxito" });
   } catch (error) {
     console.log("error :>> ", error);
     res.status(500).json({ error: "Error al obtener consultas del paciente", details: error });
@@ -57,7 +57,7 @@ export const updateConsultasMedicas = async (req: Request, res: Response) => {
   try {
     const { consulta, message } = await consultasMedicasService.updateConsultasMedicas(req.params.id, req.body);
     if (!consulta) return res.status(404).json({ message: "Consulta médica no encontrada" });
-    res.json({ consulta, message });
+    res.json({ consulta: consulta.getBasicInfo(), message });
   } catch (error) {
     console.log("error :>> ", error);
     res.status(500).json({ error: "Error al actualizar consulta médica", details: error });
@@ -82,15 +82,14 @@ export const softDeleteConsultasMedicas = async (req: Request, res: Response) =>
     res.json({ success, message });
   } catch (error) {
     console.log("error :>> ", error);
-    res.status(500).json({ error: "Error al eliminar consulta médica", details: error });
+    res.status(500).json({ error: "Error al cancelar consulta médica", details: error });
   }
 };
 
 export const concludeConsulta = async (req: Request, res: Response) => {
   try {
-    const { id } = req.params;
-    const { consulta, message } = await consultasMedicasService.concludeConsulta(id);
-    res.json({ consulta, message });
+    const { consulta, message } = await consultasMedicasService.concludeConsulta(req.params.id);
+    res.json({ consulta: consulta.getBasicInfo(), message });
   } catch (error) {
     console.log("error :>> ", error);
     res.status(500).json({ error: "Error al concluir consulta", details: error });
@@ -99,10 +98,9 @@ export const concludeConsulta = async (req: Request, res: Response) => {
 
 export const deriveConsulta = async (req: Request, res: Response) => {
   try {
-    const { id } = req.params;
     const { medicoId } = req.body;
-    const { consulta, message } = await consultasMedicasService.deriveConsultaMedica(id, medicoId);
-    res.json({ consulta, message });
+    const { consulta, message } = await consultasMedicasService.deriveConsultaMedica(req.params.id, medicoId);
+    res.json({ consulta: consulta.getBasicInfo(), message });
   } catch (error) {
     console.log("error :>> ", error);
     res.status(500).json({ error: "Error al derivar consulta", details: error });
@@ -111,60 +109,42 @@ export const deriveConsulta = async (req: Request, res: Response) => {
 
 export const reassignConsulta = async (req: Request, res: Response) => {
   try {
-    const { id } = req.params;
     const { medicoId } = req.body;
-    const { consulta, message } = await consultasMedicasService.reassignConsultaMedica(id, medicoId);
-    res.json({ consulta, message });
+    const { consulta, message } = await consultasMedicasService.reassignConsultaMedica(req.params.id, medicoId);
+    res.json({ consulta: consulta.getBasicInfo(), message });
   } catch (error) {
     console.log("error :>> ", error);
     res.status(500).json({ error: "Error al reasignar consulta", details: error });
   }
 };
 
-// Nuevos endpoints para citas
-export const programarCita = async (req: Request, res: Response) => {
+export const addRecetaToConsulta = async (req: Request, res: Response) => {
   try {
-    const newCita: Omit<ConsultasMedicas, keyof Document> = req.body;
-    const { consulta, message } = await consultasMedicasService.createConsultasMedicas(newCita);
-    res.status(201).json({ consulta, message });
+    const { consulta, message } = await consultasMedicasService.addRecetaToConsulta(req.params.id, req.body);
+    res.status(201).json({ consulta: consulta.getBasicInfo(), message });
   } catch (error) {
     console.log("error :>> ", error);
-    res.status(400).json({ error: "Error al programar cita", details: error });
+    res.status(400).json({ error: "Error al añadir receta a la consulta", details: error });
   }
 };
 
-export const actualizarCita = async (req: Request, res: Response) => {
+export const addExamenToConsulta = async (req: Request, res: Response) => {
   try {
-    const { id } = req.params;
-    const { consulta, message } = await consultasMedicasService.updateConsultasMedicas(id, req.body);
-    if (!consulta) return res.status(404).json({ message: "Cita no encontrada" });
-    res.json({ consulta, message });
+    const { consulta, message } = await consultasMedicasService.addExamenToConsulta(req.params.id, req.body);
+    res.status(201).json({ consulta: consulta.getBasicInfo(), message });
   } catch (error) {
     console.log("error :>> ", error);
-    res.status(400).json({ error: "Error al actualizar cita", details: error });
+    res.status(400).json({ error: "Error al añadir examen a la consulta", details: error });
   }
 };
 
-export const cancelarCita = async (req: Request, res: Response) => {
+export const generateReporte = async (req: Request, res: Response) => {
   try {
-    const { id } = req.params;
-    const { success, message } = await consultasMedicasService.softDeleteConsultasMedicas(id);
-    if (!success) return res.status(404).json({ message: "Cita no encontrada" });
-    res.json({ success, message });
+    const { tipo } = req.query;
+    const { reporte, message } = await consultasMedicasService.generateReporte(req.params.id, tipo as "receta" | "examen" | "ampliacion");
+    res.json({ reporte, message });
   } catch (error) {
     console.log("error :>> ", error);
-    res.status(400).json({ error: "Error al cancelar cita", details: error });
-  }
-};
-
-// Nuevo endpoint para listar citas programadas
-export const listarCitasProgramadas = async (req: Request, res: Response) => {
-  try {
-    const citas = await consultasMedicasService.findCitasProgramadas();
-    if (citas.length === 0) return res.status(404).json({ message: "No hay citas programadas encontradas" });
-    res.json({ citas, message: "Lista de citas programadas obtenida con éxito" });
-  } catch (error) {
-    console.log("error :>> ", error);
-    res.status(500).json({ error: "Error al listar citas programadas", details: error });
+    res.status(500).json({ error: "Error al generar reporte", details: error });
   }
 };
