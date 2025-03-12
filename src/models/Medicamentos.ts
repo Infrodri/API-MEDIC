@@ -7,6 +7,7 @@ const medicamentosSchema = new Schema<Medicamentos>(
     nombre: { type: String, required: true, trim: true, unique: true },
     descripcion: { type: String, trim: true },
     esCritico: { type: Boolean, default: false }, // Ajustado a Boolean
+    stock: { type: Number, default: 0 },
   },
   {
     timestamps: true,

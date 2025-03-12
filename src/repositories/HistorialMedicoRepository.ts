@@ -1,77 +1,60 @@
 // src/repositories/HistorialMedicoRepository.ts
-import { HistorialMedico } from "../types/HistorialMedicoTypes";
-import { HistorialMedicoModel } from "../models/HistorialMedico";
-import { AntecedentesPersonalesModel } from "../models/AntecedentesPersonales";
-import { ExploracionFisicaModel } from "../models/ExploracionFisica";
-import { ExamenNeurologicoModel } from "../models/ExamenNeurologico";
-import { OrganosSentidosModel } from "../models/OrganosSentidos";
-
-export interface IHistorialMedicoRepository {
-  findByPaciente(pacienteId: string): Promise<HistorialMedico[]>;
-  create(entry: Omit<HistorialMedico, "_id" | "createdAt" | "updatedAt">, userId: string): Promise<HistorialMedico>;
-}
+import { Model } from "mongoose";
+import { FormattedHistorialMedico, IHistorialMedico, IHistorialMedicoRepository, Paciente } from "types/HistorialMedicoTypes";
 
 export class HistorialMedicoRepository implements IHistorialMedicoRepository {
-  async findByPaciente(pacienteId: string): Promise<HistorialMedico[]> {
-    return HistorialMedicoModel.find({ paciente: pacienteId })
-      .populate("antecedentesPersonales")
-      .populate("operacionesQuirurgicas")
-      .populate("ginecologiaObstetrica")
-      .populate("adicciones")
-      .populate("exploracionFisica")
-      .populate("examenNeurologico")
-      .populate("organosSentidos")
-      .populate("medico", "primerNombre primerApellido")
-      .populate("paciente", "primerNombre primerApellido")
-      .exec();
+  private model: Model<IHistorialMedico>;
+
+  constructor(model: Model<IHistorialMedico> = require("@models/HistorialMedico").default) {
+    this.model = model;
+  }
+  findHistorialMedicoById(id: string): Promise<IHistorialMedico | null> {
+    throw new Error("Method not implemented.");
+  }
+  findHistorialMedicoByPaciente(pacienteId: string): Promise<IHistorialMedico | null> {
+    throw new Error("Method not implemented.");
+  }
+  updateHistorialMedico(id: string, data: Partial<IHistorialMedico>): Promise<IHistorialMedico | null> {
+    throw new Error("Method not implemented.");
+  }
+  deleteHistorialMedico(id: string): Promise<IHistorialMedico | null> {
+    throw new Error("Method not implemented.");
+  }
+  findByPaciente(pacienteId: string): Promise<IHistorialMedico[]> {
+    throw new Error("Method not implemented.");
   }
 
-  async create(entry: Omit<HistorialMedico, "_id" | "createdAt" | "updatedAt">, userId: string): Promise<HistorialMedico> {
-    // Crear subdocumentos si existen
-    let antecedentesPersonalesId: string | undefined;
-    if (entry.antecedentesPersonales) {
-      const antecedentes = await AntecedentesPersonalesModel.create({
-        paciente: entry.paciente,
-        ...entry.antecedentesPersonales,
-      });
-      antecedentesPersonalesId = antecedentes._id;
-    }
+  async createHistorialMedico(data: Partial<IHistorialMedico>): Promise<IHistorialMedico> {
+    const historial = new this.model(data);
+    return historial.save();
+  }
 
-    let exploracionFisicaId: string | undefined;
-    if (entry.exploracionFisica) {
-      const exploracion = await ExploracionFisicaModel.create({
-        paciente: entry.paciente,
-        ...entry.exploracionFisica,
-      });
-      exploracionFisicaId = exploracion._id;
-    }
+  async create(data: Partial<IHistorialMedico>, userId: string): Promise<IHistorialMedico> {
+    const historial = new this.model({ ...data, createdBy: userId });
+    return historial.save();
+  }
 
-    let examenNeurologicoId: string | undefined;
-    if (entry.examenNeurologico) {
-      const examen = await ExamenNeurologicoModel.create({
-        paciente: entry.paciente,
-        ...entry.examenNeurologico,
-      });
-      examenNeurologicoId = examen._id;
-    }
+  // ... otros métodos ...
 
-    let organosSentidosId: string | undefined;
-    if (entry.organosSentidos) {
-      const organos = await OrganosSentidosModel.create({
-        paciente: entry.paciente,
-        ...entry.organosSentidos,
-      });
-      organosSentidosId = organos._id;
-    }
+  async getFormattedHistorialMedico(id: string): Promise<FormattedHistorialMedico | null> {
+    const historial = await this.model
+      .findById(id)
+      .populate<{ paciente: Paciente }>("paciente", "primerNombre primerApellido")
+      .lean();
 
-    const newEntry = new HistorialMedicoModel({
-      ...entry,
-      antecedentesPersonales: antecedentesPersonalesId,
-      exploracionFisica: exploracionFisicaId,
-      examenNeurologico: examenNeurologicoId,
-      organosSentidos: organosSentidosId,
-      medico: userId,
-    });
-    return newEntry.save();
+    if (!historial) return null;
+
+    return {
+      id: historial._id.toString(),
+      paciente: historial.paciente
+        ? `${historial.paciente.primerNombre} ${historial.paciente.primerApellido}`.trim()
+        : undefined,
+      alergias: historial.alergias ?? undefined,
+      enfermedades: historial.enfermedades ?? undefined,
+      cirugiasPrevias: historial.cirugiasPrevias ?? undefined,
+      antecedentesFamiliares: historial.antecedentesFamiliares ?? undefined,
+      createdAt: historial.createdAt,
+      updatedAt: historial.updatedAt,
+    };
   }
 }

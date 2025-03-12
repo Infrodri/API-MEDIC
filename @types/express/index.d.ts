@@ -4,6 +4,9 @@ declare global {
   namespace Express {
     interface Request {
       currentUser: User;
+      query: {
+        [key: string]: string | undefined;
+      };
     }
   }
 }

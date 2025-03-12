@@ -1,17 +1,24 @@
+// src/app.ts
+import "module-alias/register"; // Registra los aliases al inicio     
 import app from "@server/server";
 import dotenv from "dotenv";
-import "@config/mongodb";
+import connectDB from "@config/mongodb"; // Renombramos la importación
 
 dotenv.config();
 
 const port = process.env.PORT || 4000;
 
-const headers = {
- 
-  "Authorization": process.env.AUTHORIZATION
+// Conectar a MongoDB antes de iniciar el servidor
+const startServer = async () => {
+  try {
+    await connectDB(); // Llama a la función de conexión
+    app.listen(port, () => {
+      console.log(`Server is running on port ${port}`);
+    });
+  } catch (error) {
+    console.error("Failed to start server:", error);
+    process.exit(1);
+  }
 };
 
-console.log(headers);
-app.listen(port, () => {
-  console.log(`Server is running on port ${port}`);
-});
+startServer();

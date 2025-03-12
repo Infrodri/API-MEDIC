@@ -73,7 +73,14 @@ import {
   getMedicosActivosHoy,
   getAlertas,
 } from "../controllers/dashboardControllers";
-const router = Router();
+
+
+const router = Router(); 
+
+import dashboardRoutes from "./dashboardRoutes"; 
+
+router.use("/dashboard", dashboardRoutes); 
+
 
 export default () => {
   router.get("/health", (req, res) => {
@@ -99,11 +106,7 @@ router.post("/auth/logout", verifyToken, logoutUser);
     router.put("/roles/:id", verifyToken, getPermissons, updateRoles);
     router.delete("/roles/:id", verifyToken, getPermissons, deleteRoles);
   
-// Rutas del Dashboard
-router.get("/dashboard/stats", verifyToken, getPermissons, getDashboardStats);
-router.get("/dashboard/consultas/hoy", verifyToken, getPermissons, getConsultasHoy);
-router.get("/dashboard/medicos/activos", verifyToken, getPermissons, getMedicosActivosHoy);
-router.get("/dashboard/alertas", verifyToken, getPermissons, getAlertas);
+
  
 
 

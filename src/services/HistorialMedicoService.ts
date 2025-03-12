@@ -1,8 +1,8 @@
 // src/services/HistorialMedicoService.ts
-import { IHistorialMedicoRepository } from "../repositories/HistorialMedicoRepository";
-import { IHistorialMedicoService, HistorialMedico } from "../types/HistorialMedicoTypes";
-import { MedicoModel } from "../models/Medicos";
+import { Types } from "mongoose";
+import { MedicoModel } from "@models/Medicos";
 import { UserModel } from "@models/Users";
+import { IHistorialMedico, IHistorialMedicoRepository, IHistorialMedicoService } from "types/HistorialMedicoTypes";
 
 export class HistorialMedicoService implements IHistorialMedicoService {
   private historialMedicoRepository: IHistorialMedicoRepository;
@@ -11,28 +11,30 @@ export class HistorialMedicoService implements IHistorialMedicoService {
     this.historialMedicoRepository = historialMedicoRepository;
   }
 
-  async getHistorialByPaciente(pacienteId: string): Promise<HistorialMedico[]> {
+  async getHistorialByPaciente(pacienteId: string): Promise<IHistorialMedico[]> {
     return this.historialMedicoRepository.findByPaciente(pacienteId);
   }
 
   async addHistorialEntry(
     pacienteId: string,
-    entry: Omit<HistorialMedico, "_id" | "paciente" | "createdAt" | "updatedAt">,
+    entry: Omit<IHistorialMedico, "_id" | "paciente" | "createdAt" | "updatedAt">,
     userId: string
-  ): Promise<HistorialMedico> {
-    const user = await UserModel.findById(userId).populate("roles");
+  ): Promise<IHistorialMedico> {
+    const user = await UserModel.findById(userId).populate("roles").lean();
     if (!user) {
       throw new Error("Usuario no encontrado");
     }
 
-    const userRoles = user.roles.map((role: any) => role.name);
+    const userRoles = user.roles?.map((role: any) => role.name) || [];
     const isAdmin = userRoles.includes("admin");
-    const isMedico = await MedicoModel.exists({ _id: userId });
+
+    const isMedico = await MedicoModel.exists({ usuario: userId });
 
     if (!isAdmin && !isMedico) {
       throw new Error("Acceso denegado: solo médicos o administradores autorizados pueden agregar entradas al historial");
     }
 
+    // Si es admin, usa entry.medico; si no, usa userId
     const medicoId = isAdmin ? entry.medico : userId;
 
     const medicoExists = await MedicoModel.findById(medicoId);
@@ -40,11 +42,14 @@ export class HistorialMedicoService implements IHistorialMedicoService {
       throw new Error("Médico no encontrado");
     }
 
-    const newEntry = {
+    const newEntry: Partial<IHistorialMedico> = {
       ...entry,
-      paciente: pacienteId,
-      medico: medicoId,
+      paciente: new Types.ObjectId(pacienteId), // Ya convertido a ObjectId
+      medico: medicoId ? new Types.ObjectId(medicoId) : undefined, // Convertir medicoId a ObjectId
     };
+
     return this.historialMedicoRepository.create(newEntry, userId);
   }
 }
+
+export default new HistorialMedicoService(new (require("@repositories/HistorialMedicoRepository").HistorialMedicoRepository)());

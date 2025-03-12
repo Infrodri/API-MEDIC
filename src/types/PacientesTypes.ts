@@ -19,7 +19,7 @@ export interface Paciente extends Document {
   telefono: string;
   celular: string;
   genero: string;
-  estado: "Activo" | "Inactivo";
+  estado?: "Activo" | "Inactivo";
   estadoAtencion: "Pendiente" | "Atendido" | "Derivado";
 }
 

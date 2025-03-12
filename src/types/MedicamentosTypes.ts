@@ -7,6 +7,7 @@ export interface Medicamentos extends Document {
   nombre: string;
   descripcion?: string;
   esCritico: boolean; // Ajustado a Boolean para coincidir con FichasMedicasTypes.ts
+  stock: Number;
   createdAt?: Date;
   updatedAt?: Date;
 }

@@ -1,12 +1,12 @@
 {
   "compilerOptions": {
     "target": "ES2021",
-    "outDir": "./dist", // Carpeta de salida
-    "rootDir": "./src", // Carpeta raíz de código fuente
+    "outDir": "./dist",
+    "rootDir": "./src",
     "strict": true,
     "esModuleInterop": true,
     "moduleResolution": "node",
-    "baseUrl": "./src", // Base para los alias
+    "baseUrl": "./src",
     "paths": {
       "@controllers/*": ["controllers/*"],
       "@services/*": ["services/*"],
@@ -15,12 +15,14 @@
       "@routes/*": ["routes/*"],
       "@server/*": ["server/*"],
       "@config/*": ["config/*"],
-      "@types/*": ["../@types/*"] // Añadimos para mapear @types desde la raíz
+      "@types/*": ["../@types/*"], // Añadimos para mapear @types desde la raíz
+      "@middlewares/*": ["middlewares/*"] // Añadido para mapear middlewares
     },
     "typeRoots": ["@types", "./node_modules/@types"]
   },
   "include": ["src/**/*", "@types/**/*"], // Añadimos para incluir explícitamente @types  "exclude": ["node_modules"],
+  "exclude": ["node_modules"],
   "ts-node": {
-  "require": ["tsconfig-paths/register"]
+    "require": ["tsconfig-paths/register"]
   }
 }
