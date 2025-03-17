@@ -4,9 +4,9 @@ Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3YzA4MzgxOTdjN2VhYzQzYmEzNzM3ZiIsImVtYWlsIjoiYWRtaW5AdGVzdC5jb20iLCJ1c2VybmFtZSI6ImFkbWluIiwiaWF0IjoxNzQxNTcxNzYxLCJleHAiOjE3NDE5MzE3NjF9.UV28hx1dx6a4I2r_lz3qqoe-XouIrhf35VxcpvGEvbk
 
 {
-  "nombre": "Ibuprofeno",
+  "nombre": "Iasdfeno",
   "descripcion": "Analgésico y antiinflamatorio",
-  "esCritico": false
+  "esCritico": true
 }
 
 ###

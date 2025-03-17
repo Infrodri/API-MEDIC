@@ -13,6 +13,7 @@ export class ConsultasMedicasRepository implements IConsultasMedicasRepository {
     return await ConsultasMedicasModel.find(query || {})
       .populate("paciente")
       .populate("medico")
+      .populate("especialidad") // Nuevo
       .populate("medicoDerivado")
       .populate("recetas")
       .populate("examenes")
@@ -23,6 +24,7 @@ export class ConsultasMedicasRepository implements IConsultasMedicasRepository {
     return await ConsultasMedicasModel.find({ ...query, estado: "Activo" })
       .populate("paciente")
       .populate("medico")
+      .populate("especialidad") // Nuevo
       .populate("medicoDerivado")
       .populate("recetas")
       .populate("examenes")
@@ -33,6 +35,7 @@ export class ConsultasMedicasRepository implements IConsultasMedicasRepository {
     return await ConsultasMedicasModel.findOne(query)
       .populate("paciente")
       .populate("medico")
+      .populate("especialidad") // Nuevo
       .populate("medicoDerivado")
       .populate("recetas")
       .populate("examenes")
@@ -43,6 +46,7 @@ export class ConsultasMedicasRepository implements IConsultasMedicasRepository {
     return await ConsultasMedicasModel.findById(id)
       .populate("paciente")
       .populate("medico")
+      .populate("especialidad") // Nuevo
       .populate("medicoDerivado")
       .populate("recetas")
       .populate("examenes")
@@ -53,6 +57,7 @@ export class ConsultasMedicasRepository implements IConsultasMedicasRepository {
     return await ConsultasMedicasModel.findByIdAndUpdate(id, data, { new: true, runValidators: true })
       .populate("paciente")
       .populate("medico")
+      .populate("especialidad") // Nuevo
       .populate("medicoDerivado")
       .populate("recetas")
       .populate("examenes")
@@ -74,5 +79,17 @@ export class ConsultasMedicasRepository implements IConsultasMedicasRepository {
       $expr: { $gt: [{ $add: ["$fecha", { $multiply: ["$duracion", 60000] }] }, start] },
     });
     return conflictingCitas.length === 0;
+  }
+
+  async countByEspecialidad(especialidadId: string): Promise<number> {
+    return await ConsultasMedicasModel.countDocuments({ especialidad: especialidadId, estado: "Activo" });
+  }
+
+  async countByMedico(medicoId: string): Promise<number> {
+    return await ConsultasMedicasModel.countDocuments({ medico: medicoId, estado: "Activo" });
+  }
+
+  async countByPaciente(pacienteId: string): Promise<number> {
+    return await ConsultasMedicasModel.countDocuments({ paciente: pacienteId, estado: "Activo" });
   }
 }

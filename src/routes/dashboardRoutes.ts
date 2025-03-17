@@ -1,27 +1,32 @@
-// src/routes/dashboardRoutes.ts
 import { Router } from "express";
+import { verifyToken } from "@middlewares/auth";
 import {
   getDashboardStats,
   getConsultasHoy,
   getMedicosActivosHoy,
-  getAlertas,
-  getUserDashboardStats,
-  getCriticalResources,
-  getFilteredDoctors, // Añadido
-  getDoctorsPageCount, // Añadido
+  getPacientes, // Nueva función del controlador
 } from "@controllers/dashboardControllers";
-import { verifyToken, getPermissons } from "@middlewares/auth";
 
 const router = Router();
 
-router.get("/stats", verifyToken, getPermissons, getDashboardStats);
-router.get("/consultas/hoy", verifyToken, getPermissons, getConsultasHoy);
-router.get("/medicos/activos", verifyToken, getPermissons, getMedicosActivosHoy);
-router.get("/alertas", verifyToken, getPermissons, getAlertas);
-router.get("/user/stats", verifyToken, getPermissons, getUserDashboardStats);
-router.get("/resources/critical", verifyToken, getPermissons, getCriticalResources);
-router.get("/medicos/paginate", verifyToken, getPermissons, getFilteredDoctors); // Nueva ruta
-router.get("/medicos/page-count", verifyToken, getPermissons, getDoctorsPageCount); // Nueva ruta
+// Estadísticas del dashboard
+router.get("/stats", verifyToken, getDashboardStats);
 
+// Consultas de hoy con paginación
+router.get("/consultas/hoy", verifyToken, getConsultasHoy);
+
+// Médicos activos
+router.get("/medicos/activos", verifyToken, getMedicosActivosHoy);
+
+// Pacientes con paginación
+router.get("/pacientes", verifyToken, getPacientes);
+
+// Ruta placeholder para alertas (puedes implementarla después)
+router.get("/alertas", verifyToken, (req, res) => {
+  res.status(501).json({
+    success: false,
+    message: "Ruta de alertas no implementada aún",
+  });
+});
 
 export default router;

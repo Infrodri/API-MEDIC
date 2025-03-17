@@ -1,11 +1,10 @@
-// src/services/DashboardService.ts
 import { Types } from "mongoose";
-import { MedicoModel } from "@models/Medicos";
 import { ConsultasMedicasModel } from "@models/ConsultasMedicas";
 import { PacienteModel } from "@models/Pacientes";
 import { RecetasMedicasModel } from "@models/RecetasMedicas";
 import { ExamenesMedicosModel } from "@models/ExamenesMedicos";
 import { MedicamentosModel } from "@models/Medicamentos";
+import { MedicoModel } from "@models/Medicos";
 
 export interface BaseStats {
   totalPacientes: number;
@@ -14,22 +13,8 @@ export interface BaseStats {
   totalMedicosActivos: number;
   totalRecetasHoy: number;
   totalExamenesHoy: number;
-}
-
-interface ConsultaPorMedico {
-  _id: string;
-  nombreMedico: string;
-  totalConsultas: number;
-}
-
-interface ConsultaHoy {
-  consultas: any[];
-  total: number;
-}
-
-interface FilteredDoctorsResult {
-  doctors: any[];
-  total: number;
+  totalConsultas: number; // Nuevo
+  pacientesAtendidosPorEstado: { [key: string]: number }; // Nuevo
 }
 
 export class DashboardService {
@@ -51,15 +36,25 @@ export class DashboardService {
       });
       const consultasPendientes = await ConsultasMedicasModel.countDocuments({
         fecha: { $gte: startOfDay, $lte: endOfDay },
-        estadoConsulta: "Pendiente",
+        estado: "Pendiente", // Ajustado a tu campo 'estado'
       });
-      const totalMedicosActivos = await MedicoModel.countDocuments({ estaActivo: true });
+      const totalMedicosActivos = await MedicoModel.countDocuments({ estado: "Activo" }); // Ajustado a tu campo 'estado'
       const totalRecetasHoy = await RecetasMedicasModel.countDocuments({
-        fecha: { $gte: startOfDay, $lte: endOfDay },
+        fechaEmision: { $gte: startOfDay, $lte: endOfDay }, // Ajustado a 'fechaEmision'
       });
       const totalExamenesHoy = await ExamenesMedicosModel.countDocuments({
-        fecha: { $gte: startOfDay, $lte: endOfDay },
+        createdAt: { $gte: startOfDay, $lte: endOfDay }, // Usamos 'createdAt' si no tiene 'fecha'
       });
+      const totalConsultas = await ConsultasMedicasModel.countDocuments();
+
+      // Pacientes atendidos por estado
+      const pacientesPorEstado = await ConsultasMedicasModel.aggregate([
+        { $group: { _id: "$estado", count: { $sum: 1 } } },
+      ]);
+      const pacientesAtendidosPorEstado = pacientesPorEstado.reduce((acc, item) => {
+        acc[item._id] = item.count;
+        return acc;
+      }, {});
 
       return {
         totalPacientes,
@@ -68,51 +63,82 @@ export class DashboardService {
         totalMedicosActivos,
         totalRecetasHoy,
         totalExamenesHoy,
+        totalConsultas,
+        pacientesAtendidosPorEstado,
       };
     } catch (error) {
       console.error("Error in getBaseStats:", error);
-      throw new Error("Method not implemented: getBaseStats failed");
+      throw new Error("Error al obtener estadísticas base");
     }
   }
 
-  async getConsultasPorMedico(): Promise<ConsultaPorMedico[]> {
-    const { startOfDay, endOfDay } = this.getTodayRange();
-
+  // Consultas atendidas por mes
+  async getConsultasPorMes() {
     try {
-      const consultasPorMedico = await ConsultasMedicasModel.aggregate([
+      const consultasPorMes = await ConsultasMedicasModel.aggregate([
         {
-          $match: {
-            fecha: { $gte: startOfDay, $lte: endOfDay },
+          $group: {
+            _id: { $month: "$fecha" },
+            total: { $sum: 1 },
           },
         },
         {
+          $project: {
+            mes: "$_id",
+            total: 1,
+            _id: 0,
+          },
+        },
+        { $sort: { mes: 1 } },
+      ]);
+      return consultasPorMes.map((item) => ({
+        mes: item.mes, // 1 = Enero, 2 = Febrero, etc.
+        total: item.total,
+      }));
+    } catch (error) {
+      console.error("Error in getConsultasPorMes:", error);
+      throw error;
+    }
+  }
+
+  // Consultas por médico
+  async getConsultasPorMedico() {
+    try {
+      const consultasPorMedico = await ConsultasMedicasModel.aggregate([
+        {
           $group: {
             _id: "$medico",
-            totalConsultas: { $sum: 1 },
+            total: { $sum: 1 },
           },
         },
         {
           $lookup: {
-            from: "medicos",
+            from: "Medico",
             localField: "_id",
             foreignField: "_id",
-            as: "medico",
+            as: "medicoData",
           },
         },
-        {
-          $unwind: "$medico",
-        },
+        { $unwind: "$medicoData" },
         {
           $project: {
-            _id: "$medico._id",
-            nombreMedico: {
-              $concat: ["$medico.primerNombre", " ", "$medico.primerApellido"],
+            medicoId: "$_id",
+            nombre: {
+              $concat: ["$medicoData.primerNombre", " ", "$medicoData.primerApellido"],
             },
-            totalConsultas: 1,
+            email: "$medicoData.email", // Asumiendo que 'email' está en el modelo Medico
+            totalConsultas: "$total",
+            imagen: {
+              $concat: [
+                "https://ui-avatars.com/api/?name=",
+                "$medicoData.primerNombre",
+                "+",
+                "$medicoData.primerApellido",
+              ],
+            },
           },
         },
       ]);
-
       return consultasPorMedico;
     } catch (error) {
       console.error("Error in getConsultasPorMedico:", error);
@@ -120,7 +146,54 @@ export class DashboardService {
     }
   }
 
-  async getConsultasHoy(page: number, limit: number): Promise<ConsultaHoy> {
+  // Consultas por paciente y estado
+  async getConsultasPorPacienteEstado() {
+    try {
+      const consultasPorPaciente = await ConsultasMedicasModel.aggregate([
+        {
+          $group: {
+            _id: { paciente: "$paciente", estado: "$estado" },
+            total: { $sum: 1 },
+          },
+        },
+        {
+          $lookup: {
+            from: "Paciente",
+            localField: "_id.paciente",
+            foreignField: "_id",
+            as: "pacienteData",
+          },
+        },
+        { $unwind: "$pacienteData" },
+        {
+          $project: {
+            pacienteId: "$_id.paciente",
+            nombre: {
+              $concat: ["$pacienteData.nombre", " ", "$pacienteData.apellido"],
+            },
+            email: "$pacienteData.email", // Asumiendo que 'email' está en el modelo Paciente
+            estado: "$_id.estado",
+            total: "$total",
+            imagen: {
+              $concat: [
+                "https://ui-avatars.com/api/?name=",
+                "$pacienteData.nombre",
+                "+",
+                "$pacienteData.apellido",
+              ],
+            },
+          },
+        },
+      ]);
+      return consultasPorPaciente;
+    } catch (error) {
+      console.error("Error in getConsultasPorPacienteEstado:", error);
+      throw error;
+    }
+  }
+
+  // Consultas con paginación
+  async getConsultasHoy(page: number, limit: number) {
     const { startOfDay, endOfDay } = this.getTodayRange();
     const skip = (page - 1) * limit;
 
@@ -128,8 +201,8 @@ export class DashboardService {
       const consultas = await ConsultasMedicasModel.find({
         fecha: { $gte: startOfDay, $lte: endOfDay },
       })
-        .populate("paciente", "primerNombre primerApellido")
-        .populate("medico", "primerNombre primerApellido")
+        .populate("paciente", "nombre apellido email")
+        .populate("medico", "primerNombre primerApellido email")
         .skip(skip)
         .limit(limit)
         .lean();
@@ -138,16 +211,42 @@ export class DashboardService {
         fecha: { $gte: startOfDay, $lte: endOfDay },
       });
 
-      return { consultas, total };
+      return { consultas, total, page, totalPages: Math.ceil(total / limit) };
     } catch (error) {
       console.error("Error in getConsultasHoy:", error);
       throw error;
     }
   }
 
-  async getFormattedMedicosActivos(): Promise<any[]> {
+  // Pacientes con imagen generada
+  async getPacientes(page: number, limit: number) {
+    const skip = (page - 1) * limit;
+
     try {
-      const medicos = await MedicoModel.find({ estaActivo: true })
+      const pacientes = await PacienteModel.find()
+        .skip(skip)
+        .limit(limit)
+        .lean();
+
+      const total = await PacienteModel.countDocuments();
+
+      const formattedPacientes = pacientes.map((paciente) => ({
+        id: paciente._id,
+        nombre: `${paciente.primerNombre} ${paciente.primerApellido}`,
+        estado: paciente.estado || "Sin email", // Asumiendo que 'email' puede no estar
+        imagen: `https://ui-avatars.com/api/?name=${paciente.primerNombre}+${paciente.primerApellido}`,
+      }));
+
+      return { pacientes: formattedPacientes, total, page, totalPages: Math.ceil(total / limit) };
+    } catch (error) {
+      console.error("Error in getPacientes:", error);
+      throw error;
+    }
+  }
+
+  async getFormattedMedicosActivos() {
+    try {
+      const medicos = await MedicoModel.find({ estado: "Activo" })
         .populate("especialidades", "nombre")
         .lean();
 
@@ -155,122 +254,11 @@ export class DashboardService {
         id: medico._id,
         nombre: `${medico.primerNombre} ${medico.primerApellido}`,
         especialidades: medico.especialidades?.map((esp: any) => esp.nombre) || [],
+        email: medico.email || "Sin email", // Asumiendo que 'email' está disponible
+        imagen: `https://ui-avatars.com/api/?name=${medico.primerNombre}+${medico.primerApellido}`,
       }));
     } catch (error) {
       console.error("Error in getFormattedMedicosActivos:", error);
-      throw error;
-    }
-  }
-
-  async getAlertas(page: number, limit: number): Promise<any[]> {
-    const { startOfDay, endOfDay } = this.getTodayRange();
-    const skip = (page - 1) * limit;
-
-    try {
-      const alertas = await ConsultasMedicasModel.find({
-        fecha: { $gte: startOfDay, $lte: endOfDay },
-        prioridad: { $in: ["Alta", "Crítica"] },
-      })
-        .populate("paciente", "primerNombre primerApellido")
-        .skip(skip)
-        .limit(limit)
-        .lean();
-
-      return alertas.map((consulta: any) => ({
-        id: consulta._id,
-        paciente: `${consulta.paciente?.primerNombre || ""} ${consulta.paciente?.primerApellido || ""}`,
-        prioridad: consulta.prioridad,
-        estado: consulta.estadoConsulta,
-      }));
-    } catch (error) {
-      console.error("Error in getAlertas:", error);
-      throw error;
-    }
-  }
-
-  async getUserStats(): Promise<any> {
-    try {
-      const baseStats = await this.getBaseStats();
-      const consultasPorMedico = await this.getConsultasPorMedico();
-
-      return {
-        consultasAtendidas: baseStats.totalConsultasHoy - baseStats.consultasPendientes,
-        consultasPendientes: baseStats.consultasPendientes,
-        consultasPorMedico,
-      };
-    } catch (error) {
-      console.error("Error in getUserStats:", error);
-      throw error;
-    }
-  }
-
-  async getCriticalResources(): Promise<any[]> {
-    try {
-      const criticalMedicines = await MedicamentosModel.find({ esCritico: true }).lean();
-      return criticalMedicines.map((med: any) => ({
-        id: med._id,
-        nombre: med.nombre,
-        stock: med.stock,
-      }));
-    } catch (error) {
-      console.error("Error in getCriticalResources:", error);
-      throw error;
-    }
-  }
-
-  async getFilteredDoctors(query?: string, page: number = 1, limit: number = 10): Promise<FilteredDoctorsResult> {
-    const skip = (page - 1) * limit;
-
-    try {
-      const filter: any = {};
-      if (query) {
-        const regex = new RegExp(query, "i");
-        filter.$or = [
-          { primerNombre: regex },
-          { primerApellido: regex },
-          { "especialidades.nombre": regex },
-        ];
-      }
-
-      const doctors = await MedicoModel.find(filter)
-        .populate("especialidades", "nombre")
-        .skip(skip)
-        .limit(limit)
-        .lean();
-
-      const total = await MedicoModel.countDocuments(filter);
-
-      const formattedDoctors = doctors.map((medico: any) => ({
-        id: medico._id,
-        nombre: `${medico.primerNombre} ${medico.primerApellido}`,
-        especialidades: medico.especialidades?.map((esp: any) => esp.nombre) || [],
-        estaActivo: medico.estaActivo,
-      }));
-
-      return { doctors: formattedDoctors, total };
-    } catch (error) {
-      console.error("Error in getFilteredDoctors:", error);
-      throw error;
-    }
-  }
-
-  // Nuevo método para contar páginas
-  async getDoctorsPageCount(query?: string, limit: number = 10): Promise<number> {
-    try {
-      const filter: any = {};
-      if (query) {
-        const regex = new RegExp(query, "i");
-        filter.$or = [
-          { primerNombre: regex },
-          { primerApellido: regex },
-          { "especialidades.nombre": regex },
-        ];
-      }
-
-      const totalDoctors = await MedicoModel.countDocuments(filter);
-      return Math.ceil(totalDoctors / limit);
-    } catch (error) {
-      console.error("Error in getDoctorsPageCount:", error);
       throw error;
     }
   }

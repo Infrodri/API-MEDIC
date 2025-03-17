@@ -1,39 +1,159 @@
 
+### Crear una consulta médica (con especialidad)
+POST http://localhost:4000/api/v1/consultasmedicas
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3YzA4MzgxOTdjN2VhYzQzYmEzNzM3ZiIsImVtYWlsIjoiYWRtaW5AdGVzdC5jb20iLCJ1c2VybmFtZSI6ImFkbWluIiwiaWF0IjoxNzQyMTc4NzU3LCJleHAiOjE3NDI1Mzg3NTd9.SR3tR_AOCa8CDgA5D8sbUmxArXUc6LhkUvf11L3_7_4
 
-### Paso 1: Crear Consulta Médica Inicial  "_id": "67cf9458ccfea9392f18322c",
+{
+  "paciente": "67ca23d379e062bd415db743",
+  "medico": "67c783c543449cb8ad3460d1",
+  "especialidad": "67c7801b46481074013e0210",
+  "fecha": "2025-03-26T14:30:00Z",
+  "motivo": "Palpitaciones",
+  "sintomas": "Latidos rápidos e irregulares",
+  "diagnostico": "Arritmia leve",
+  "tratamiento": "Monitoreo y betabloqueadores si persiste",
+  "observaciones": "Evitar cafeína",
+  "recomendacionDescanso": "Reposo relativo por 2 días",
+  "prioridad": "Alta",
+  "duracion": 50
+}
+
+###
+db.pacientes.findOne({ "_id": ObjectId("67ca23bc79e062bd415db73b") })
+###
+GET http://localhost:4000/api/v1/pacientes/67ca23bc79e062bd415db73b HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3YzA4MzgxOTdjN2VhYzQzYmEzNzM3ZiIsImVtYWlsIjoiYWRtaW5AdGVzdC5jb20iLCJ1c2VybmFtZSI6ImFkbWluIiwiaWF0IjoxNzQyMTc4NzU3LCJleHAiOjE3NDI1Mzg3NTd9.SR3tR_AOCa8CDgA5D8sbUmxArXUc6LhkUvf11L3_7_4
+
+###
+db.medicos.findOne({ "_id": ObjectId("67d77bce0a9574c3da5569c2") })
+### Obtener un médico por ID
+GET http://localhost:4000/api/v1/medicos/67d77bce0a9574c3da5569c2 HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3YzA4MzgxOTdjN2VhYzQzYmEzNzM3ZiIsImVtYWlsIjoiYWRtaW5AdGVzdC5jb20iLCJ1c2VybmFtZSI6ImFkbWluIiwiaWF0IjoxNzQyMTc4NzU3LCJleHAiOjE3NDI1Mzg3NTd9.SR3tR_AOCa8CDgA5D8sbUmxArXUc6LhkUvf11L3_7_4
+
+###
+db.especialidades.findOne({ "_id": ObjectId("67ca2a0c4cab82850ee4637b") })
+### Obtener una especialidad por ID
+GET http://localhost:4000/api/v1/especialidades/67ca2a0c4cab82850ee4637b HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3YzA4MzgxOTdjN2VhYzQzYmEzNzM3ZiIsImVtYWlsIjoiYWRtaW5AdGVzdC5jb20iLCJ1c2VybmFtZSI6ImFkbWluIiwiaWF0IjoxNzQyMTc4NzU3LCJleHAiOjE3NDI1Mzg3NTd9.SR3tR_AOCa8CDgA5D8sbUmxArXUc6LhkUvf11L3_7_4
+
+### Obtener una especialidad por ID
+GET http://localhost:4000/api/v1/especialidades/67ca2a0c4cab82850ee4637b HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3YzA4MzgxOTdjN2VhYzQzYmEzNzM3ZiIsImVtYWlsIjoiYWRtaW5AdGVzdC5jb20iLCJ1c2VybmFtZSI6ImFkbWluIiwiaWF0IjoxNzQyMTc4NzU3LCJleHAiOjE3NDI1Mzg3NTd9.SR3tR_AOCa8CDgA5D8sbUmxArXUc6LhkUvf11L3_7_4
+
+
+### 1. Verificar horarios disponibles del médico
+GET http://localhost:4000/api/v1/consultasmedicas/available-slots?medicoId=67d77bce0a9574c3da5569c2&date=2025-03-28 HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3YzA4MzgxOTdjN2VhYzQzYmEzNzM3ZiIsImVtYWlsIjoiYWRtaW5AdGVzdC5jb20iLCJ1c2VybmFtZSI6ImFkbWluIiwiaWF0IjoxNzQyMTc4NzU3LCJleHAiOjE3NDI1Mzg3NTd9.SR3tR_AOCa8CDgA5D8sbUmxArXUc6LhkUvf11L3_7_4
+
+###---------------------------------------------------------------------
+### Crear una consulta médica 67d7a121937a35ec0a9700d4
 POST http://localhost:4000/api/v1/consultasmedicas HTTP/1.1
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3YzA4MzgxOTdjN2VhYzQzYmEzNzM3ZiIsImVtYWlsIjoiYWRtaW5AdGVzdC5jb20iLCJ1c2VybmFtZSI6ImFkbWluIiwiaWF0IjoxNzQxNjM5NzQ3LCJleHAiOjE3NDE5OTk3NDd9.iuXR8_sAZg42UR4C5D0REdH99CChqwa1N6YNfiB5ubY
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3YzA4MzgxOTdjN2VhYzQzYmEzNzM3ZiIsImVtYWlsIjoiYWRtaW5AdGVzdC5jb20iLCJ1c2VybmFtZSI6ImFkbWluIiwiaWF0IjoxNzQyMTc4NzU3LCJleHAiOjE3NDI1Mzg3NTd9.SR3tR_AOCa8CDgA5D8sbUmxArXUc6LhkUvf11L3_7_4
 
 {
   "paciente": "67ca23bc79e062bd415db73b",
-  "medico": "67c783c543449cb8ad3460d1",
-  "fecha": "2025-03-10T10:00:00Z",
-  "motivo": "Dolor abdominal",
-  "sintomas": "Náuseas y fiebre",
-  "diagnostico": "Posible apendicitis",
-  "tratamiento": "Analgésicos y observación",
-  "observaciones": "Paciente estable",
-  "recomendacionDescanso": "Reposo por 48 horas"
+  "medico": "67d77bce0a9574c3da5569c2",
+  "especialidad": "67ca2a0c4cab82850ee4637b",
+  "fecha": "2025-03-28",
+  "motivo": "Dolor de garganta",
+  "sintomas": "Dolor al tragar y fiebre leve",
+  "diagnostico": "Faringitis",
+  "tratamiento": "Ibuprofeno 400mg cada 8 horas",
+  "observaciones": "Gárgaras con agua salada",
+  "recomendacionDescanso": "Reposo por 2 días",
+  "prioridad": "Normal",
+  "duracion": 30
 }
 
 
 
-### Paso 2: Añadir Receta Médica
-POST http://localhost:4000/api/v1/consultasmedicas/67cf9458ccfea9392f18322c/receta HTTP/1.1
+
+### Obtener todas las consultas médicas
+GET http://localhost:4000/api/v1/consultasmedicas HTTP/1.1
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3YzA4MzgxOTdjN2VhYzQzYmEzNzM3ZiIsImVtYWlsIjoiYWRtaW5AdGVzdC5jb20iLCJ1c2VybmFtZSI6ImFkbWluIiwiaWF0IjoxNzQxNjM5NzQ3LCJleHAiOjE3NDE5OTk3NDd9.iuXR8_sAZg42UR4C5D0REdH99CChqwa1N6YNfiB5ubY
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3YzA4MzgxOTdjN2VhYzQzYmEzNzM3ZiIsImVtYWlsIjoiYWRtaW5AdGVzdC5jb20iLCJ1c2VybmFtZSI6ImFkbWluIiwiaWF0IjoxNzQyMTc4NzU3LCJleHAiOjE3NDI1Mzg3NTd9.SR3tR_AOCa8CDgA5D8sbUmxArXUc6LhkUvf11L3_7_4
+
+
+
+### Obtener una consulta médica por ID (reemplaza <consulta-id> con un ID real)
+GET http://localhost:4000/api/v1/consultasmedicas/67d7a121937a35ec0a9700d4 HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3YzA4MzgxOTdjN2VhYzQzYmEzNzM3ZiIsImVtYWlsIjoiYWRtaW5AdGVzdC5jb20iLCJ1c2VybmFtZSI6ImFkbWluIiwiaWF0IjoxNzQyMTc4NzU3LCJleHAiOjE3NDI1Mzg3NTd9.SR3tR_AOCa8CDgA5D8sbUmxArXUc6LhkUvf11L3_7_4
+
+
+### Actualizar una consulta médica (reemplaza <consulta-id> con un ID real)
+PUT http://localhost:4000/api/v1/consultasmedicas/67cf663f52a67bfbdaa19252 HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3YzA4MzgxOTdjN2VhYzQzYmEzNzM3ZiIsImVtYWlsIjoiYWRtaW5AdGVzdC5jb20iLCJ1c2VybmFtZSI6ImFkbWluIiwiaWF0IjoxNzQyMTc4NzU3LCJleHAiOjE3NDI1Mzg3NTd9.SR3tR_AOCa8CDgA5D8sbUmxArXUc6LhkUvf11L3_7_4
 
 {
-  "medicamento": "67cf40c3f0678a438affe292",
-  "dosis": "400mg cada 8 horas",
-  "duracion": "3 días",
-  "instrucciones": "Tomar con agua"
+  "fecha": "2025-03-29T14:00:00Z",
+  "observaciones": "Paciente reagendado por solicitud"
 }
+
+
+### Eliminar una consulta médica (reemplaza <consulta-id> con un ID real)
+DELETE http://localhost:4000/api/v1/consultasmedicas/67d78117f36605123bffe420 HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3YzA4MzgxOTdjN2VhYzQzYmEzNzM3ZiIsImVtYWlsIjoiYWRtaW5AdGVzdC5jb20iLCJ1c2VybmFtZSI6ImFkbWluIiwiaWF0IjoxNzQyMTc4NzU3LCJleHAiOjE3NDI1Mzg3NTd9.SR3tR_AOCa8CDgA5D8sbUmxArXUc6LhkUvf11L3_7_4
+
+### Soft delete de una consulta médica (reemplaza <consulta-id> con un ID real)
+PATCH http://localhost:4000/api/v1/consultasmedicas/67cf663f52a67bfbdaa19252/soft-delete HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3YzA4MzgxOTdjN2VhYzQzYmEzNzM3ZiIsImVtYWlsIjoiYWRtaW5AdGVzdC5jb20iLCJ1c2VybmFtZSI6ImFkbWluIiwiaWF0IjoxNzQyMTc4NzU3LCJleHAiOjE3NDI1Mzg3NTd9.SR3tR_AOCa8CDgA5D8sbUmxArXUc6LhkUvf11L3_7_4
+
+### Concluir una consulta médica (reemplaza <consulta-id> con un ID real)
+PATCH http://localhost:4000/api/v1/consultasmedicas/67cf663f52a67bfbdaa19252/conclude HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3YzA4MzgxOTdjN2VhYzQzYmEzNzM3ZiIsImVtYWlsIjoiYWRtaW5AdGVzdC5jb20iLCJ1c2VybmFtZSI6ImFkbWluIiwiaWF0IjoxNzQyMTc4NzU3LCJleHAiOjE3NDI1Mzg3NTd9.SR3tR_AOCa8CDgA5D8sbUmxArXUc6LhkUvf11L3_7_4
+
+
+### Derivar una consulta médica de Pediatría a Cardiología
+PATCH http://localhost:4000/api/v1/consultasmedicas/67d7a121937a35ec0a9700d4/derive HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3YzA4MzgxOTdjN2VhYzQzYmEzNzM3ZiIsImVtYWlsIjoiYWRtaW5AdGVzdC5jb20iLCJ1c2VybmFtZSI6ImFkbWluIiwiaWF0IjoxNzQyMTc4NzU3LCJleHAiOjE3NDI1Mzg3NTd9.SR3tR_AOCa8CDgA5D8sbUmxArXUc6LhkUvf11L3_7_4
+
+{
+  "medicoId": "67c783c543449cb8ad3460d1", 
+  "nuevaEspecialidadId": "67c7801b46481074013e0210", 
+  "nuevaFecha": "2025-03-29"
+}
+
+
+
+### Reasignar una consulta médica
+PATCH http://localhost:4000/api/v1/consultasmedicas/67d7a744a7af29cecba5097b/reassign HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3YzA4MzgxOTdjN2VhYzQzYmEzNzM3ZiIsImVtYWlsIjoiYWRtaW5AdGVzdC5jb20iLCJ1c2VybmFtZSI6ImFkbWluIiwiaWF0IjoxNzQyMTc4NzU3LCJleHAiOjE3NDI1Mzg3NTd9.SR3tR_AOCa8CDgA5D8sbUmxArXUc6LhkUvf11L3_7_4
+
+{
+  "medicoId": "67c783c543449cb8ad3460d1",
+  "nuevaFecha": "2025-03-30",
+  "nuevaPrioridad": "Alta"
+}
+
+
+
+
+
+### Generar reporte de una consulta médica
+GET http://localhost:4000/api/v1/consultasmedicas/60d0fe4f5311236168a109cc/reporte?tipo=receta
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3YzA4MzgxOTdjN2VhYzQzYmEzNzM3ZiIsImVtYWlsIjoiYWRtaW5AdGVzdC5jb20iLCJ1c2VybmFtZSI6ImFkbWluIiwiaWF0IjoxNzQyMTc4NzU3LCJleHAiOjE3NDI1Mzg3NTd9.SR3tR_AOCa8CDgA5D8sbUmxArXUc6LhkUvf11L3_7_4
+
+
 
 ### Paso 3: Añadir Examen Médico
 POST http://localhost:4000/api/v1/consultasmedicas/67cf9458ccfea9392f18322c/examen HTTP/1.1
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3YzA4MzgxOTdjN2VhYzQzYmEzNzM3ZiIsImVtYWlsIjoiYWRtaW5AdGVzdC5jb20iLCJ1c2VybmFtZSI6ImFkbWluIiwiaWF0IjoxNzQyMTc4NzU3LCJleHAiOjE3NDI1Mzg3NTd9.SR3tR_AOCa8CDgA5D8sbUmxArXUc6LhkUvf11L3_7_4
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3YzA4MzgxOTdjN2VhYzQzYmEzNzM3ZiIsImVtYWlsIjoiYWRtaW5AdGVzdC5jb20iLCJ1c2VybmFtZSI6ImFkbWluIiwiaWF0IjoxNzQxNjM5NzQ3LCJleHAiOjE3NDE5OTk3NDd9.iuXR8_sAZg42UR4C5D0REdH99CChqwa1N6YNfiB5ubY
 
 {
@@ -46,19 +166,17 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3YzA4MzgxO
 ### Paso 4: Generar Reportes
 GET http://localhost:4000/api/v1/consultasmedicas/67cf9458ccfea9392f18322c/reporte?tipo=receta HTTP/1.1
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3YzA4MzgxOTdjN2VhYzQzYmEzNzM3ZiIsImVtYWlsIjoiYWRtaW5AdGVzdC5jb20iLCJ1c2VybmFtZSI6ImFkbWluIiwiaWF0IjoxNzQyMTc4NzU3LCJleHAiOjE3NDI1Mzg3NTd9.SR3tR_AOCa8CDgA5D8sbUmxArXUc6LhkUvf11L3_7_4
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3YzA4MzgxOTdjN2VhYzQzYmEzNzM3ZiIsImVtYWlsIjoiYWRtaW5AdGVzdC5jb20iLCJ1c2VybmFtZSI6ImFkbWluIiwiaWF0IjoxNzQxNjM5NzQ3LCJleHAiOjE3NDE5OTk3NDd9.iuXR8_sAZg42UR4C5D0REdH99CChqwa1N6YNfiB5ubY
 
 ### Solicitud (Reporte de Exámenes)
 GET http://localhost:4000/api/v1/consultasmedicas/67cf9458ccfea9392f18322c/reporte?tipo=examen HTTP/1.1
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3YzA4MzgxOTdjN2VhYzQzYmEzNzM3ZiIsImVtYWlsIjoiYWRtaW5AdGVzdC5jb20iLCJ1c2VybmFtZSI6ImFkbWluIiwiaWF0IjoxNzQyMTc4NzU3LCJleHAiOjE3NDI1Mzg3NTd9.SR3tR_AOCa8CDgA5D8sbUmxArXUc6LhkUvf11L3_7_4
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3YzA4MzgxOTdjN2VhYzQzYmEzNzM3ZiIsImVtYWlsIjoiYWRtaW5AdGVzdC5jb20iLCJ1c2VybmFtZSI6ImFkbWluIiwiaWF0IjoxNzQxNjM5NzQ3LCJleHAiOjE3NDE5OTk3NDd9.iuXR8_sAZg42UR4C5D0REdH99CChqwa1N6YNfiB5ubY
 
 ### Solicitud (Reporte de Ampliación):
 GET http://localhost:4000/api/v1/consultasmedicas/67cf9458ccfea9392f18322c/reporte?tipo=ampliacion HTTP/1.1
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3YzA4MzgxOTdjN2VhYzQzYmEzNzM3ZiIsImVtYWlsIjoiYWRtaW5AdGVzdC5jb20iLCJ1c2VybmFtZSI6ImFkbWluIiwiaWF0IjoxNzQxNjM5NzQ3LCJleHAiOjE3NDE5OTk3NDd9.iuXR8_sAZg42UR4C5D0REdH99CChqwa1N6YNfiB5ubY
-
-### Paso 5: Concluir Consulta
-PATCH http://localhost:4000/api/v1/consultasmedicas/67cf9458ccfea9392f18322c/conclude HTTP/1.1
-Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3YzA4MzgxOTdjN2VhYzQzYmEzNzM3ZiIsImVtYWlsIjoiYWRtaW5AdGVzdC5jb20iLCJ1c2VybmFtZSI6ImFkbWluIiwiaWF0IjoxNzQyMTc4NzU3LCJleHAiOjE3NDI1Mzg3NTd9.SR3tR_AOCa8CDgA5D8sbUmxArXUc6LhkUvf11L3_7_4
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3YzA4MzgxOTdjN2VhYzQzYmEzNzM3ZiIsImVtYWlsIjoiYWRtaW5AdGVzdC5jb20iLCJ1c2VybmFtZSI6ImFkbWluIiwiaWF0IjoxNzQxNjM5NzQ3LCJleHAiOjE3NDE5OTk3NDd9.iuXR8_sAZg42UR4C5D0REdH99CChqwa1N6YNfiB5ubY

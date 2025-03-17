@@ -1,12 +1,12 @@
 # Crear un usuario (necesario para asociarlo a un médico)
 POST http://localhost:4000/api/v1/users HTTP/1.1
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3YzA4MzgxOTdjN2VhYzQzYmEzNzM3ZiIsImVtYWlsIjoiYWRtaW5AdGVzdC5jb20iLCJ1c2VybmFtZSI6ImFkbWluIiwiaWF0IjoxNzQxNjM5NzQ3LCJleHAiOjE3NDE5OTk3NDd9.iuXR8_sAZg42UR4C5D0REdH99CChqwa1N6YNfiB5ubY
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3YzA4MzgxOTdjN2VhYzQzYmEzNzM3ZiIsImVtYWlsIjoiYWRtaW5AdGVzdC5jb20iLCJ1c2VybmFtZSI6ImFkbWluIiwiaWF0IjoxNzQxODE4NjA5LCJleHAiOjE3NDIxNzg2MDl9.pwq5m4piwpvEkFDXaUM7ldaKf6ZGrNgk9FmVXXpWKJc
 
 {
-    "name": "Dra. Gomez",
-    "username": "omez",
-    "email": "gomez@test.com",
+    "name": "Dra. Medico",
+    "username": "Medico",
+    "email": "medico@test.com",
     "password": "securepass123",
      "roles": ["medico1"]
 }
@@ -23,7 +23,7 @@ Content-Type: application/json
 # Crear especialidades (necesarias para asociarlas a médicos)
 POST http://localhost:4000/api/v1/especialidades HTTP/1.1
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3YzA4MzgxOTdjN2VhYzQzYmEzNzM3ZiIsImVtYWlsIjoiYWRtaW5AdGVzdC5jb20iLCJ1c2VybmFtZSI6ImFkbWluIiwiaWF0IjoxNzQxNjM5NzQ3LCJleHAiOjE3NDE5OTk3NDd9.iuXR8_sAZg42UR4C5D0REdH99CChqwa1N6YNfiB5ubY
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3YzA4MzgxOTdjN2VhYzQzYmEzNzM3ZiIsImVtYWlsIjoiYWRtaW5AdGVzdC5jb20iLCJ1c2VybmFtZSI6ImFkbWluIiwiaWF0IjoxNzQxODE4NjA5LCJleHAiOjE3NDIxNzg2MDl9.pwq5m4piwpvEkFDXaUM7ldaKf6ZGrNgk9FmVXXpWKJc
 
 {
   "nombre": "Dermatología",
@@ -36,7 +36,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3YzA4MzgxO
 # Crear especialidades (necesarias para asociarlas a médicos)
 POST http://localhost:4000/api/v1/especialidades HTTP/1.1
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3YzA4MzgxOTdjN2VhYzQzYmEzNzM3ZiIsImVtYWlsIjoiYWRtaW5AdGVzdC5jb20iLCJ1c2VybmFtZSI6ImFkbWluIiwiaWF0IjoxNzQxNjM5NzQ3LCJleHAiOjE3NDE5OTk3NDd9.iuXR8_sAZg42UR4C5D0REdH99CChqwa1N6YNfiB5ubY
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3YzA4MzgxOTdjN2VhYzQzYmEzNzM3ZiIsImVtYWlsIjoiYWRtaW5AdGVzdC5jb20iLCJ1c2VybmFtZSI6ImFkbWluIiwiaWF0IjoxNzQxODE4NjA5LCJleHAiOjE3NDIxNzg2MDl9.pwq5m4piwpvEkFDXaUM7ldaKf6ZGrNgk9FmVXXpWKJc
 
 {
     "nombre": "Pediatría",
@@ -49,24 +49,24 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3YzA4MzgxO
 # Crear un nuevo médico
 POST http://localhost:4000/api/v1/medicos HTTP/1.1
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3YzA4MzgxOTdjN2VhYzQzYmEzNzM3ZiIsImVtYWlsIjoiYWRtaW5AdGVzdC5jb20iLCJ1c2VybmFtZSI6ImFkbWluIiwiaWF0IjoxNzQxNjM5NzQ3LCJleHAiOjE3NDE5OTk3NDd9.iuXR8_sAZg42UR4C5D0REdH99CChqwa1N6YNfiB5ubY
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3YzA4MzgxOTdjN2VhYzQzYmEzNzM3ZiIsImVtYWlsIjoiYWRtaW5AdGVzdC5jb20iLCJ1c2VybmFtZSI6ImFkbWluIiwiaWF0IjoxNzQxODE4NjA5LCJleHAiOjE3NDIxNzg2MDl9.pwq5m4piwpvEkFDXaUM7ldaKf6ZGrNgk9FmVXXpWKJc
 
 {
-  "cedula": "9876223210",
-  "primerNombre": "CarlosGomes",
-  "segundoNombre": "AndréGomes",
-  "primerApellido": "GómeGomez",
-  "segundoApellido": "LópeGomez",
+  "cedula": "9876233210",
+  "primerNombre": "primermed",
+  "segundoNombre": "segundomed",
+  "primerApellido": "primermed",
+  "segundoApellido": "segundomed",
   "fechaNacimiento": "1985-09-15",
   "lugarNacimiento": "Cali",
-  "nacionalidad": "Colombiana",
-  "ciudadDondeVive": "Bogotá",
-  "direccion": "Avenida 19 #45-67",
-  "telefono": "602345678",
-  "celular": "3109876543",
+  "nacionalidad": "bolivia",
+  "ciudadDondeVive": "sucre",
+  "direccion": "calle 19 #45-67",
+  "telefono": "6223245678",
+  "celular": "3102276543",
   "genero": "Masculino",
-    "especialidades": ["67ca2a0c4cab82850ee4637b", "67ca29cf4cab82850ee46373"],
-    "usuario": "67cf795269285a8a6c579491"
+    "especialidades": ["67ca2a0c4cab82850ee4637b" ],
+    "usuario": "67d77bbe0a9574c3da5569be"
 }
 
 # Ejemplo de respuesta esperada: {"_id": "67ca2ad74cab82850ee46383", ...}
@@ -76,20 +76,20 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3YzA4MzgxO
 # Listar todos los médicos activos
 GET http://localhost:4000/api/v1/medicos HTTP/1.1
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3YzA4MzgxOTdjN2VhYzQzYmEzNzM3ZiIsImVtYWlsIjoiYWRtaW5AdGVzdC5jb20iLCJ1c2VybmFtZSI6ImFkbWluIiwiaWF0IjoxNzQxNjM5NzQ3LCJleHAiOjE3NDE5OTk3NDd9.iuXR8_sAZg42UR4C5D0REdH99CChqwa1N6YNfiB5ubY
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3YzA4MzgxOTdjN2VhYzQzYmEzNzM3ZiIsImVtYWlsIjoiYWRtaW5AdGVzdC5jb20iLCJ1c2VybmFtZSI6ImFkbWluIiwiaWF0IjoxNzQyMTc4NzU3LCJleHAiOjE3NDI1Mzg3NTd9.SR3tR_AOCa8CDgA5D8sbUmxArXUc6LhkUvf11L3_7_4
 
 ###
 
 # Obtener un médico por ID
-GET http://localhost:4000/api/v1/medicos/67ca2ad74cab82850ee46383 HTTP/1.1
+GET http://localhost:4000/api/v1/medicos/67d77bce0a9574c3da5569c2 HTTP/1.1
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3YzA4MzgxOTdjN2VhYzQzYmEzNzM3ZiIsImVtYWlsIjoiYWRtaW5AdGVzdC5jb20iLCJ1c2VybmFtZSI6ImFkbWluIiwiaWF0IjoxNzQxNjM5NzQ3LCJleHAiOjE3NDE5OTk3NDd9.iuXR8_sAZg42UR4C5D0REdH99CChqwa1N6YNfiB5ubY
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3YzA4MzgxOTdjN2VhYzQzYmEzNzM3ZiIsImVtYWlsIjoiYWRtaW5AdGVzdC5jb20iLCJ1c2VybmFtZSI6ImFkbWluIiwiaWF0IjoxNzQyMTc4NzU3LCJleHAiOjE3NDI1Mzg3NTd9.SR3tR_AOCa8CDgA5D8sbUmxArXUc6LhkUvf11L3_7_4
 ###
 
 # Actualizar un médico
 PUT http://localhost:4000/api/v1/medicos/67c783c543449cb8ad3460d1 HTTP/1.1
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3YzA4MzgxOTdjN2VhYzQzYmEzNzM3ZiIsImVtYWlsIjoiYWRtaW5AdGVzdC5jb20iLCJ1c2VybmFtZSI6ImFkbWluIiwiaWF0IjoxNzQxNjM5NzQ3LCJleHAiOjE3NDE5OTk3NDd9.iuXR8_sAZg42UR4C5D0REdH99CChqwa1N6YNfiB5ubY
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3YzA4MzgxOTdjN2VhYzQzYmEzNzM3ZiIsImVtYWlsIjoiYWRtaW5AdGVzdC5jb20iLCJ1c2VybmFtZSI6ImFkbWluIiwiaWF0IjoxNzQxODE4NjA5LCJleHAiOjE3NDIxNzg2MDl9.pwq5m4piwpvEkFDXaUM7ldaKf6ZGrNgk9FmVXXpWKJc
 
 {
      "estaActivo": true
@@ -97,76 +97,65 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3YzA4MzgxO
 
 ###
 # Actualizar un estaActivo
-PUT http://localhost:4000/api/v1/medicos/67ca2ad74cab82850ee46383 HTTP/1.1
+PUT http://localhost:4000/api/v1/medicos/67ca2cf74cab82850ee4639e HTTP/1.1
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3YzA4MzgxOTdjN2VhYzQzYmEzNzM3ZiIsImVtYWlsIjoiYWRtaW5AdGVzdC5jb20iLCJ1c2VybmFtZSI6ImFkbWluIiwiaWF0IjoxNzQxNjM5NzQ3LCJleHAiOjE3NDE5OTk3NDd9.iuXR8_sAZg42UR4C5D0REdH99CChqwa1N6YNfiB5ubY
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3YzA4MzgxOTdjN2VhYzQzYmEzNzM3ZiIsImVtYWlsIjoiYWRtaW5AdGVzdC5jb20iLCJ1c2VybmFtZSI6ImFkbWluIiwiaWF0IjoxNzQxODE4NjA5LCJleHAiOjE3NDIxNzg2MDl9.pwq5m4piwpvEkFDXaUM7ldaKf6ZGrNgk9FmVXXpWKJc
 
 {
-  "primerNombre": "Laura actualizado",
-  "segundoNombre": "Fernanda actualizado",
-  "primerApellido": "López actualizado",
-  "segundoApellido": "Gómezactualizado",
-  "fechaNacimiento": "1992-11-03",
-  "lugarNacimiento": "Monterrey",
-  "nacionalidad": "Mexicanaactualizado",
-  "ciudadDondeVive": "Cancúnactualizado",
-  "direccion": "Av. Las Palmas 123, Zona Hotelera",
-  "telefono": "912456789",
-  "celular": "0987654321",
-  "estaActivo": "Femenino"
+ "especialidades": "67ca2a0c4cab82850ee4637b"
 }
 
 ###
 # Eliminar lógicamente un médico (cambiar a Inactivo)
 DELETE http://localhost:4000/api/v1/medicos/67c14a1bff8a064058786d80/soft HTTP/1.1
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3YzA4MzgxOTdjN2VhYzQzYmEzNzM3ZiIsImVtYWlsIjoiYWRtaW5AdGVzdC5jb20iLCJ1c2VybmFtZSI6ImFkbWluIiwiaWF0IjoxNzQxNjM5NzQ3LCJleHAiOjE3NDE5OTk3NDd9.iuXR8_sAZg42UR4C5D0REdH99CChqwa1N6YNfiB5ubY
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3YzA4MzgxOTdjN2VhYzQzYmEzNzM3ZiIsImVtYWlsIjoiYWRtaW5AdGVzdC5jb20iLCJ1c2VybmFtZSI6ImFkbWluIiwiaWF0IjoxNzQxODE4NjA5LCJleHAiOjE3NDIxNzg2MDl9.pwq5m4piwpvEkFDXaUM7ldaKf6ZGrNgk9FmVXXpWKJc
 
 ###
 
 # Eliminar físicamente un médico
 DELETE http://localhost:4000/api/v1/medicos/67c14a1bff8a064058786d80 HTTP/1.1
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3YzA4MzgxOTdjN2VhYzQzYmEzNzM3ZiIsImVtYWlsIjoiYWRtaW5AdGVzdC5jb20iLCJ1c2VybmFtZSI6ImFkbWluIiwiaWF0IjoxNzQxNjM5NzQ3LCJleHAiOjE3NDE5OTk3NDd9.iuXR8_sAZg42UR4C5D0REdH99CChqwa1N6YNfiB5ubY
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3YzA4MzgxOTdjN2VhYzQzYmEzNzM3ZiIsImVtYWlsIjoiYWRtaW5AdGVzdC5jb20iLCJ1c2VybmFtZSI6ImFkbWluIiwiaWF0IjoxNzQxODE4NjA5LCJleHAiOjE3NDIxNzg2MDl9.pwq5m4piwpvEkFDXaUM7ldaKf6ZGrNgk9FmVXXpWKJc
 
 ###
 
 # Obtener cantidad de médicos por especialidad (agregación)
 GET http://localhost:4000/api/v1/medicos/stats/specialty HTTP/1.1
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3YzA4MzgxOTdjN2VhYzQzYmEzNzM3ZiIsImVtYWlsIjoiYWRtaW5AdGVzdC5jb20iLCJ1c2VybmFtZSI6ImFkbWluIiwiaWF0IjoxNzQxNjM5NzQ3LCJleHAiOjE3NDE5OTk3NDd9.iuXR8_sAZg42UR4C5D0REdH99CChqwa1N6YNfiB5ubY
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3YzA4MzgxOTdjN2VhYzQzYmEzNzM3ZiIsImVtYWlsIjoiYWRtaW5AdGVzdC5jb20iLCJ1c2VybmFtZSI6ImFkbWluIiwiaWF0IjoxNzQxODE4NjA5LCJleHAiOjE3NDIxNzg2MDl9.pwq5m4piwpvEkFDXaUM7ldaKf6ZGrNgk9FmVXXpWKJc
 
 ###
 
 # Obtener cantidad de médicos activos hoy
 GET http://localhost:4000/api/v1/medicos/stats/active-today HTTP/1.1
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3YzA4MzgxOTdjN2VhYzQzYmEzNzM3ZiIsImVtYWlsIjoiYWRtaW5AdGVzdC5jb20iLCJ1c2VybmFtZSI6ImFkbWluIiwiaWF0IjoxNzQxNjM5NzQ3LCJleHAiOjE3NDE5OTk3NDd9.iuXR8_sAZg42UR4C5D0REdH99CChqwa1N6YNfiB5ubY
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3YzA4MzgxOTdjN2VhYzQzYmEzNzM3ZiIsImVtYWlsIjoiYWRtaW5AdGVzdC5jb20iLCJ1c2VybmFtZSI6ImFkbWluIiwiaWF0IjoxNzQxODE4NjA5LCJleHAiOjE3NDIxNzg2MDl9.pwq5m4piwpvEkFDXaUM7ldaKf6ZGrNgk9FmVXXpWKJc
 
 ###
 
 # Obtener Cantidad total de médicos
 GET http://localhost:4000/api/v1/medicos/stats/total HTTP/1.1
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3YzA4MzgxOTdjN2VhYzQzYmEzNzM3ZiIsImVtYWlsIjoiYWRtaW5AdGVzdC5jb20iLCJ1c2VybmFtZSI6ImFkbWluIiwiaWF0IjoxNzQxNjM5NzQ3LCJleHAiOjE3NDE5OTk3NDd9.iuXR8_sAZg42UR4C5D0REdH99CChqwa1N6YNfiB5ubY
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3YzA4MzgxOTdjN2VhYzQzYmEzNzM3ZiIsImVtYWlsIjoiYWRtaW5AdGVzdC5jb20iLCJ1c2VybmFtZSI6ImFkbWluIiwiaWF0IjoxNzQxODE4NjA5LCJleHAiOjE3NDIxNzg2MDl9.pwq5m4piwpvEkFDXaUM7ldaKf6ZGrNgk9FmVXXpWKJc
 
 ###
 
 # Obtener médicos por ID de especialidad
 GET http://localhost:4000/api/v1/medicos/by-specialty/67ca2a0c4cab82850ee4637b HTTP/1.1
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3YzA4MzgxOTdjN2VhYzQzYmEzNzM3ZiIsImVtYWlsIjoiYWRtaW5AdGVzdC5jb20iLCJ1c2VybmFtZSI6ImFkbWluIiwiaWF0IjoxNzQxNjM5NzQ3LCJleHAiOjE3NDE5OTk3NDd9.iuXR8_sAZg42UR4C5D0REdH99CChqwa1N6YNfiB5ubY
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3YzA4MzgxOTdjN2VhYzQzYmEzNzM3ZiIsImVtYWlsIjoiYWRtaW5AdGVzdC5jb20iLCJ1c2VybmFtZSI6ImFkbWluIiwiaWF0IjoxNzQxODE4NjA5LCJleHAiOjE3NDIxNzg2MDl9.pwq5m4piwpvEkFDXaUM7ldaKf6ZGrNgk9FmVXXpWKJc
 
 ###
 
 # Obtener médicos por ID de usuario
 GET http://localhost:4000/api/v1/medicos/by-user/67c77f4546481074013e020c HTTP/1.1
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3YzA4MzgxOTdjN2VhYzQzYmEzNzM3ZiIsImVtYWlsIjoiYWRtaW5AdGVzdC5jb20iLCJ1c2VybmFtZSI6ImFkbWluIiwiaWF0IjoxNzQxNjM5NzQ3LCJleHAiOjE3NDE5OTk3NDd9.iuXR8_sAZg42UR4C5D0REdH99CChqwa1N6YNfiB5ubY
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3YzA4MzgxOTdjN2VhYzQzYmEzNzM3ZiIsImVtYWlsIjoiYWRtaW5AdGVzdC5jb20iLCJ1c2VybmFtZSI6ImFkbWluIiwiaWF0IjoxNzQxODE4NjA5LCJleHAiOjE3NDIxNzg2MDl9.pwq5m4piwpvEkFDXaUM7ldaKf6ZGrNgk9FmVXXpWKJc
 
 ###
 
 # Obtener médicos con múltiples especialidades
 GET http://localhost:4000/api/v1/medicos/multiple-specialties HTTP/1.1
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3YzA4MzgxOTdjN2VhYzQzYmEzNzM3ZiIsImVtYWlsIjoiYWRtaW5AdGVzdC5jb20iLCJ1c2VybmFtZSI6ImFkbWluIiwiaWF0IjoxNzQxNjM5NzQ3LCJleHAiOjE3NDE5OTk3NDd9.iuXR8_sAZg42UR4C5D0REdH99CChqwa1N6YNfiB5ubY
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3YzA4MzgxOTdjN2VhYzQzYmEzNzM3ZiIsImVtYWlsIjoiYWRtaW5AdGVzdC5jb20iLCJ1c2VybmFtZSI6ImFkbWluIiwiaWF0IjoxNzQxODE4NjA5LCJleHAiOjE3NDIxNzg2MDl9.pwq5m4piwpvEkFDXaUM7ldaKf6ZGrNgk9FmVXXpWKJc
