@@ -1,30 +1,28 @@
 // src/services/FichasMedicasService.ts
-import { AntecedentesFamiliaresModel } from "@models/AntecedentesFamiliares";
-import { AntecedentesPersonalesModel } from "@models/AntecedentesPersonales";
-import { ConsultasMedicasModel } from "@models/ConsultasMedicas";
-import { ExamenNeurologicoModel } from "@models/ExamenNeurologico";
-import { ExploracionFisicaModel } from "@models/ExploracionFisica";
-import { FichasMedicasModel } from "@models/FichasMedicas";
-import { OrganosSentidosModel } from "@models/OrganosSentidos";
-import { PacienteAdiccionModel } from "@models/PacienteAdicciones";
-import { PacienteObstetricoGinecologicoModel } from "@models/PacienteObstetricosGinecologicos";
-import { PacienteOperacionModel } from "@models/PacienteOperaciones";
-import { PacienteModel } from "@models/Pacientes";
-import { FichasMedicasRepository } from "@repositories/FichasMedicasRepositories";
 import { Types } from "mongoose";
-import { AntecedentesFamiliares } from "types/AntecedentesFamiliaresTypes";
-import { AntecedentesPersonales } from "types/AntecedentesPersonalesTypes";
-import { ConsultasMedicas } from "types/ConsultasMedicasTypes";
-import { ExamenNeurologico } from "types/ExamenNeurologicoTypes";
-import { ExploracionFisica } from "types/ExploracionFisicaTypes";
-import { FichasMedicas, IFichasMedicasService } from "types/FichasMedicasTypes";
-import { OrganosSentidos } from "types/OrganosSentidosTypes";
-import { PacienteAdiccion } from "types/PacienteAdiccionesTypes";
-import { PacienteObstetricoGinecologico } from "types/PacienteObstetricosGinecologicosTypes";
-import { PacienteOperacion } from "types/PacienteOperacionesTypes";
+import { IFichasMedicasService, FichasMedicas } from "../types/FichasMedicasTypes";
+import { PacienteModel } from "../models/Pacientes";
+import { AntecedentesPersonalesModel } from "../models/AntecedentesPersonales";
+import { AntecedentesFamiliaresModel } from "../models/AntecedentesFamiliares";
+import { PacienteOperacionModel } from "../models/PacienteOperaciones";
+import { PacienteObstetricoGinecologicoModel } from "../models/PacienteObstetricosGinecologicos";
+import { PacienteAdiccionModel } from "../models/PacienteAdicciones";
+import { ExploracionFisicaModel } from "../models/ExploracionFisica";
+import { ExamenNeurologicoModel } from "../models/ExamenNeurologico";
+import { OrganosSentidosModel } from "../models/OrganosSentidos";
+import { ConsultasMedicasModel } from "../models/ConsultasMedicas";
+import { FichasMedicasModel } from "../models/FichasMedicas";
+import { AntecedentesPersonales } from "../types/AntecedentesPersonalesTypes";
+import { AntecedentesFamiliares } from "../types/AntecedentesFamiliaresTypes";
+import { PacienteOperacion } from "../types/PacienteOperacionesTypes";
+import { PacienteObstetricoGinecologico } from "../types/PacienteObstetricosGinecologicosTypes";
+import { PacienteAdiccion } from "../types/PacienteAdiccionesTypes";
+import { ExploracionFisica } from "../types/ExploracionFisicaTypes";
+import { ExamenNeurologico } from "../types/ExamenNeurologicoTypes";
+import { OrganosSentidos } from "../types/OrganosSentidosTypes";
+import { ConsultasMedicas } from "../types/ConsultasMedicasTypes";
+import { FichasMedicasRepository } from "../repositories/FichasMedicasRepositories";
 
-
-// Clase personalizada para errores
 class CustomError extends Error {
   constructor(message: string, public code?: string) {
     super(message);
@@ -37,6 +35,20 @@ export class FichasMedicasService implements IFichasMedicasService {
 
   constructor(fichasMedicasRepository: FichasMedicasRepository) {
     this.fichasMedicasRepository = fichasMedicasRepository;
+  }
+
+  // Método actualizado para listar fichas médicas
+  async listFichas(page: number = 1, limit: number = 10, estado?: "Activo" | "Inactivo"): Promise<{ fichas: FichasMedicas[]; total: number }> {
+    const query: any = {};
+    if (estado) {
+      query.estado = estado;
+    }
+
+    const skip = (page - 1) * limit;
+    const fichas = await this.fichasMedicasRepository.findWithPagination(query, skip, limit);
+    const total = await FichasMedicasModel.countDocuments(query);
+
+    return { fichas, total };
   }
 
   async getFichaByPaciente(pacienteId: string): Promise<FichasMedicas | null> {

@@ -1,20 +1,39 @@
 // src/controllers/fichasMedicasControllers.ts
-import { FichasMedicasRepository } from "@repositories/FichasMedicasRepositories";
-import { FichasMedicasService } from "@services/FichasMedicasService";
 import { Request, Response } from "express";
-import { AntecedentesFamiliares } from "types/AntecedentesFamiliaresTypes";
-import { AntecedentesPersonales } from "types/AntecedentesPersonalesTypes";
-import { ConsultasMedicas } from "types/ConsultasMedicasTypes";
-import { ExamenNeurologico } from "types/ExamenNeurologicoTypes";
-import { ExploracionFisica } from "types/ExploracionFisicaTypes";
-import { OrganosSentidos } from "types/OrganosSentidosTypes";
-import { PacienteAdiccion } from "types/PacienteAdiccionesTypes";
-import { PacienteObstetricoGinecologico } from "types/PacienteObstetricosGinecologicosTypes";
-import { PacienteOperacion } from "types/PacienteOperacionesTypes";
-
+import { FichasMedicasService } from "../services/FichasMedicasService";
+import { FichasMedicasRepository } from "../repositories/FichasMedicasRepositories";
+import { AntecedentesPersonales } from "../types/AntecedentesPersonalesTypes";
+import { AntecedentesFamiliares } from "../types/AntecedentesFamiliaresTypes";
+import { PacienteOperacion } from "../types/PacienteOperacionesTypes";
+import { PacienteObstetricoGinecologico } from "../types/PacienteObstetricosGinecologicosTypes";
+import { PacienteAdiccion } from "../types/PacienteAdiccionesTypes";
+import { ExploracionFisica } from "../types/ExploracionFisicaTypes";
+import { ExamenNeurologico } from "../types/ExamenNeurologicoTypes";
+import { OrganosSentidos } from "../types/OrganosSentidosTypes";
+import { ConsultasMedicas } from "../types/ConsultasMedicasTypes";
 
 const fichasMedicasRepository = new FichasMedicasRepository();
 const fichasMedicasService = new FichasMedicasService(fichasMedicasRepository);
+
+// Nuevo controlador para listar fichas
+export const listFichas = async (req: Request, res: Response) => {
+  try {
+    const page = parseInt(req.query.page as string) || 1;
+    const limit = parseInt(req.query.limit as string) || 10;
+    const estado = req.query.estado as "Activo" | "Inactivo" | undefined;
+
+    const { fichas, total } = await fichasMedicasService.listFichas(page, limit, estado);
+    res.status(200).json({
+      fichas,
+      total,
+      page,
+      limit,
+      totalPages: Math.ceil(total / limit),
+    });
+  } catch (error: any) {
+    res.status(500).json({ error: "Error interno al listar las fichas médicas", details: error.message });
+  }
+};
 
 export const getFichaByPaciente = async (req: Request, res: Response) => {
   try {

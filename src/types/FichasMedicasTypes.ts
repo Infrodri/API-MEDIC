@@ -29,9 +29,11 @@ export interface FichasMedicas extends Document {
 
 export interface IFichasMedicasRepository extends Repository<FichasMedicas> {
   findByPaciente(pacienteId: string): Promise<FichasMedicas | null>;
+  findWithPagination(query: any, skip: number, limit: number): Promise<FichasMedicas[]>;
 }
 
 export interface IFichasMedicasService {
+  listFichas(page?: number, limit?: number, estado?: "Activo" | "Inactivo"): Promise<{ fichas: FichasMedicas[]; total: number }>; // Nuevo método
   getFichaByPaciente(pacienteId: string): Promise<FichasMedicas | null>;
   createFicha(pacienteId: string): Promise<{ ficha: FichasMedicas; message: string }>;
   updateFicha(id: string, data: Partial<FichasMedicas>): Promise<{ ficha: FichasMedicas | null; message: string }>;

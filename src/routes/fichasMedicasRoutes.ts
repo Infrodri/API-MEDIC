@@ -1,6 +1,7 @@
 // src/routes/fichasMedicasRoutes.ts
 import { Router } from "express";
 import {
+  listFichas,
   getFichaByPaciente,
   createFicha,
   updateFicha,
@@ -20,7 +21,8 @@ import { verifyToken, getPermissons } from "../middlewares/auth";
 
 const router = Router();
 
-router.post("/", verifyToken, getPermissons, createFicha); // Esto maneja POST /api/v1/fichas
+router.get("/", verifyToken, getPermissons, listFichas); // Ruta para listar fichas
+router.post("/", verifyToken, getPermissons, createFicha);
 router.get("/:pacienteId", verifyToken, getPermissons, getFichaByPaciente);
 router.put("/:id", verifyToken, getPermissons, updateFicha);
 router.delete("/:id/soft", verifyToken, getPermissons, softDeleteFicha);
@@ -34,5 +36,4 @@ router.post("/:pacienteId/examen-neurologico", verifyToken, getPermissons, addEx
 router.post("/:pacienteId/organos-sentidos", verifyToken, getPermissons, addOrganosSentidos);
 router.post("/:id/consulta-medica", verifyToken, getPermissons, addConsultaMedica);
 router.get("/:id/reporte", verifyToken, getPermissons, generateReporte);
-
 export { router };

@@ -1,41 +1,353 @@
+1. GET /api/v1/fichas - Listar todas las fichas médicas
+Descripción: Lista las fichas médicas con paginación y filtro opcional por estado.
 
-###1. Crear una nueva ficha médica Llama a createFicha en el controlador.
+GET http://localhost:4000/api/v1/fichas?page=1&limit=2&estado=Activo HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3YzA4MzgxOTdjN2VhYzQzYmEzNzM3ZiIsImVtYWlsIjoiYWRtaW5AdGVzdC5jb20iLCJ1c2VybmFtZSI6ImFkbWluIiwiaWF0IjoxNzQyNTE1NjczLCJleHAiOjE3NDI4NzU2NzN9.AzQEm3RYEKMq2-niahr5hcWCRe1sl5nQEDAiR3akhWM
+
+HTTP/1.1 200 OK
+Content-Type: application/json
+{
+  "fichas": [
+    {
+      "_id": "507f191e810c19729de860ea",
+      "paciente": {
+        "_id": "507f1f77bcf86cd799439011",
+        "primerNombre": "Juan",
+        "primerApellido": "Pérez",
+        "cedula": "12345678",
+        "edad": 30
+      },
+      "estado": "Activo"
+    },
+    {
+      "_id": "507f191e810c19729de860eb",
+      "paciente": {
+        "_id": "507f1f77bcf86cd799439012",
+        "primerNombre": "María",
+        "primerApellido": "Gómez",
+        "cedula": "87654321",
+        "edad": 25
+      },
+      "estado": "Activo"
+    }
+  ],
+  "total": 2,
+  "page": 1,
+  "limit": 2,
+  "totalPages": 1
+}
+2. POST /api/v1/fichas - Crear una ficha médica
+Descripción: Crea una nueva ficha médica para un paciente.
+
 POST http://localhost:4000/api/v1/fichas HTTP/1.1
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3YzA4MzgxOTdjN2VhYzQzYmEzNzM3ZiIsImVtYWlsIjoiYWRtaW5AdGVzdC5jb20iLCJ1c2VybmFtZSI6ImFkbWluIiwiaWF0IjoxNzQyNTE1NjczLCJleHAiOjE3NDI4NzU2NzN9.AzQEm3RYEKMq2-niahr5hcWCRe1sl5nQEDAiR3akhWM
 
+HTTP/1.1 201 Created
+Content-Type: application/json
 {
-  "pacienteId": "67ca23d379e062bd415db743"
+  "ficha": {
+    "_id": "67ca23d379e062bd415db744",
+    "paciente": "67ca23d379e062bd415db743",
+    "estado": "Activo",
+    "createdAt": "2025-03-21T00:00:00Z",
+    "updatedAt": "2025-03-21T00:00:00Z"
+  },
+  "message": "Ficha médica creada con éxito"
 }
+###3. GET /api/v1/fichas/:pacienteId - Obtener ficha por paciente
+###    Descripción: Obtiene la ficha médica de un paciente específico.
 
-###2. Obtener una ficha por paciente Llama a getFichaByPaciente.
-GET http://localhost:4000/api/v1/fichas/67ca23c779e062bd415db73f HTTP/1.1
+GET http://localhost:4000/api/v1/fichas/67cff82e5800cc5e2d0456d2 HTTP/1.1
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3YzA4MzgxOTdjN2VhYzQzYmEzNzM3ZiIsImVtYWlsIjoiYWRtaW5AdGVzdC5jb20iLCJ1c2VybmFtZSI6ImFkbWluIiwiaWF0IjoxNzQyNTE1NjczLCJleHAiOjE3NDI4NzU2NzN9.AzQEm3RYEKMq2-niahr5hcWCRe1sl5nQEDAiR3akhWM
 
+HTTP/1.1 200 OK
+Content-Type: application/json
+{
+  "_id": "507f191e810c19729de860ea",
+  "paciente": {
+    "_id": "507f1f77bcf86cd799439011",
+    "primerNombre": "Juan",
+    "primerApellido": "Pérez",
+    "cedula": "12345678",
+    "edad": 30
+  },
+  "estado": "Activo",
+  "antecedentesPersonales": null,
+  "antecedentesFamiliares": null,
+  "operacionesQuirurgicas": [],
+  "ginecologiaObstetrica": [],
+  "adicciones": [],
+  "exploracionFisica": null,
+  "examenNeurologico": null,
+  "organosSentidos": null,
+  "consultasMedicas": []
+}
+4. PUT /api/v1/fichas/:id - Actualizar una ficha médica
+Descripción: Actualiza los datos de una ficha médica existente.
 
-
-###3. 3. Añadir antecedentes personales.
-GET http://localhost:4000/api/v1/fichas//507f1f77bcf86cd799439011/antecedentes-personales HTTP/1.1
+PUT http://localhost:4000/api/v1/fichas/507f191e810c19729de860ea HTTP/1.1
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3YzA4MzgxOTdjN2VhYzQzYmEzNzM3ZiIsImVtYWlsIjoiYWRtaW5AdGVzdC5jb20iLCJ1c2VybmFtZSI6ImFkbWluIiwiaWF0IjoxNzQyNTE1NjczLCJleHAiOjE3NDI4NzU2NzN9.AzQEm3RYEKMq2-niahr5hcWCRe1sl5nQEDAiR3akhWM
 
+HTTP/1.1 200 OK
+Content-Type: application/json
+{
+  "ficha": {
+    "_id": "507f191e810c19729de860ea",
+    "paciente": "507f1f77bcf86cd799439011",
+    "estado": "Inactivo",
+    "updatedAt": "2025-03-21T00:05:00Z"
+  },
+  "message": "Ficha médica actualizada con éxito"
+}
+5. DELETE /api/v1/fichas/:id/soft - Desactivar una ficha médica
+Descripción: Realiza un borrado suave (soft delete) cambiando el estado a "Inactivo".
 
+DELETE http://localhost:4000/api/v1/fichas/507f191e810c19729de860ea/soft HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3YzA4MzgxOTdjN2VhYzQzYmEzNzM3ZiIsImVtYWlsIjoiYWRtaW5AdGVzdC5jb20iLCJ1c2VybmFtZSI6ImFkbWluIiwiaWF0IjoxNzQyNTE1NjczLCJleHAiOjE3NDI4NzU2NzN9.AzQEm3RYEKMq2-niahr5hcWCRe1sl5nQEDAiR3akhWM
+HTTP/1.1 200 OK
+Content-Type: application/json
+{
+  "success": true,
+  "message": "Ficha médica desactivada con éxito"
+}
+6. POST /api/v1/fichas/:pacienteId/antecedentes-personales - Añadir antecedentes personales
+Descripción: Añade antecedentes personales a la ficha de un paciente.
 
-###2. Obtener una ficha por paciente Llama a getFichaByPaciente.
-GET http://localhost:4000/api/v1/fichas/67ca23c779e062bd415db73f HTTP/1.1
+POST http://localhost:4000/api/v1/fichas/507f1f77bcf86cd799439011/antecedentes-personales HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3YzA4MzgxOTdjN2VhYzQzYmEzNzM3ZiIsImVtYWlsIjoiYWRtaW5AdGVzdC5jb20iLCJ1c2VybmFtZSI6ImFkbWluIiwiaWF0IjoxNzQyNTE1NjczLCJleHAiOjE3NDI4NzU2NzN9.AzQEm3RYEKMq2-niahr5hcWCRe1sl5nQEDAiR3akhWM
+{
+  "alergias": ["Penicilina"]
+}
+Condiciones previas: Existe un paciente con ID 507f1f77bcf86cd799439011.
+
+HTTP/1.1 201 Created
+Content-Type: application/json
+{
+  "antecedentes": {
+    "_id": "507f191e810c19729de860ec",
+    "paciente": "507f1f77bcf86cd799439011",
+    "enfermedades": ["Hipertensión"],
+    "alergias": ["Penicilina"],
+    "estado": "Activo"
+  },
+  "message": "Antecedentes personales añadidos con éxito"
+}
+7. POST /api/v1/fichas/:pacienteId/antecedentes-familiares - Añadir antecedentes familiares
+Descripción: Añade antecedentes familiares a la ficha de un paciente.
+
+POST http://localhost:4000/api/v1/fichas/507f1f77bcf86cd799439011/antecedentes-familiares HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3YzA4MzgxOTdjN2VhYzQzYmEzNzM3ZiIsImVtYWlsIjoiYWRtaW5AdGVzdC5jb20iLCJ1c2VybmFtZSI6ImFkbWluIiwiaWF0IjoxNzQyNTE1NjczLCJleHAiOjE3NDI4NzU2NzN9.AzQEm3RYEKMq2-niahr5hcWCRe1sl5nQEDAiR3akhWM
+  "parentesco": "Padre"
+}
+Condiciones previas: Existe un paciente con ID 507f1f77bcf86cd799439011.
+
+HTTP/1.1 201 Created
+Content-Type: application/json
+{
+  "antecedentes": {
+    "_id": "507f191e810c19729de860ed",
+    "paciente": "507f1f77bcf86cd799439011",
+    "enfermedades": ["Diabetes"],
+    "parentesco": "Padre",
+    "estado": "Activo"
+  },
+  "message": "Antecedentes familiares añadidos con éxito"
+}
+8. POST /api/v1/fichas/:pacienteId/operaciones-quirurgicas - Añadir operación quirúrgica
+Descripción: Añade una operación quirúrgica a la ficha de un paciente.
+
+POST http://localhost:4000/api/v1/fichas/507f1f77bcf86cd799439011/operaciones-quirurgicas HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3YzA4MzgxOTdjN2VhYzQzYmEzNzM3ZiIsImVtYWlsIjoiYWRtaW5AdGVzdC5jb20iLCJ1c2VybmFtZSI6ImFkbWluIiwiaWF0IjoxNzQyNTE1NjczLCJleHAiOjE3NDI4NzU2NzN9.AzQEm3RYEKMq2-niahr5hcWCRe1sl5nQEDAiR3akhWM
+  "fecha": "2023-05-15"
+}
+Condiciones previas: Existe un paciente con ID 507f1f77bcf86cd799439011.
+
+HTTP/1.1 201 Created
+Content-Type: application/json
+{
+  "operacion": {
+    "_id": "507f191e810c19729de860ee",
+    "paciente": "507f1f77bcf86cd799439011",
+    "tipoOperacionQuirurgica": "Apendicectomía",
+    "fecha": "2023-05-15",
+    "estado": "Activo"
+  },
+  "message": "Operación quirúrgica añadida con éxito"
+}
+9. POST /api/v1/fichas/:pacienteId/ginecologia-obstetrica - Añadir ginecología y obstetricia
+Descripción: Añade datos de ginecología y obstetricia a la ficha de un paciente.
+
+POST http://localhost:4000/api/v1/fichas/507f1f77bcf86cd799439012/ginecologia-obstetrica HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3YzA4MzgxOTdjN2VhYzQzYmEzNzM3ZiIsImVtYWlsIjoiYWRtaW5AdGVzdC5jb20iLCJ1c2VybmFtZSI6ImFkbWluIiwiaWF0IjoxNzQyNTE1NjczLCJleHAiOjE3NDI4NzU2NzN9.AzQEm3RYEKMq2-niahr5hcWCRe1sl5nQEDAiR3akhWM
+  "fecha": "2022-10-20"
+}
+Condiciones previas: Existe un paciente con ID 507f1f77bcf86cd799439012.
+
+HTTP/1.1 201 Created
+Content-Type: application/json
+{
+  "ginecologia": {
+    "_id": "507f191e810c19729de860ef",
+    "paciente": "507f1f77bcf86cd799439012",
+    "tipoObstetricoGinecologico": "Parto",
+    "fecha": "2022-10-20",
+    "estado": "Activo"
+  },
+  "message": "Ginecología y obstetricia añadida con éxito"
+}
+10. POST /api/v1/fichas/:pacienteId/adicciones - Añadir adicción
+Descripción: Añade una adicción a la ficha de un paciente.
+
+POST http://localhost:4000/api/v1/fichas/507f1f77bcf86cd799439011/adicciones HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3YzA4MzgxOTdjN2VhYzQzYmEzNzM3ZiIsImVtYWlsIjoiYWRtaW5AdGVzdC5jb20iLCJ1c2VybmFtZSI6ImFkbWluIiwiaWF0IjoxNzQyNTE1NjczLCJleHAiOjE3NDI4NzU2NzN9.AzQEm3RYEKMq2-niahr5hcWCRe1sl5nQEDAiR3akhWM
+  "frecuencia": "Diaria"
+}
+Condiciones previas: Existe un paciente con ID 507f1f77bcf86cd799439011.
+
+HTTP/1.1 201 Created
+Content-Type: application/json
+{
+  "adiccion": {
+    "_id": "507f191e810c19729de860f0",
+    "paciente": "507f1f77bcf86cd799439011",
+    "tipoAdiccion": "Tabaco",
+    "frecuencia": "Diaria",
+    "estado": "Activo"
+  },
+  "message": "Adicción añadida con éxito"
+}
+11. POST /api/v1/fichas/:pacienteId/exploracion-fisica - Añadir exploración física
+Descripción: Añade datos de exploración física a la ficha de un paciente.
+
+POST http://localhost:4000/api/v1/fichas/507f1f77bcf86cd799439011/exploracion-fisica HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3YzA4MzgxOTdjN2VhYzQzYmEzNzM3ZiIsImVtYWlsIjoiYWRtaW5AdGVzdC5jb20iLCJ1c2VybmFtZSI6ImFkbWluIiwiaWF0IjoxNzQyNTE1NjczLCJleHAiOjE3NDI4NzU2NzN9.AzQEm3RYEKMq2-niahr5hcWCRe1sl5nQEDAiR3akhWM
+  "altura": 175,
+  "presionArterial": "120/80"
+}
+Condiciones previas: Existe un paciente con ID 507f1f77bcf86cd799439011.
+
+HTTP/1.1 201 Created
+Content-Type: application/json
+{
+  "exploracion": {
+    "_id": "507f191e810c19729de860f1",
+    "paciente": "507f1f77bcf86cd799439011",
+    "peso": 70,
+    "altura": 175,
+    "presionArterial": "120/80",
+    "estado": "Activo"
+  },
+  "message": "Exploración física añadida con éxito"
+}
+12. POST /api/v1/fichas/:pacienteId/examen-neurologico - Añadir examen neurológico
+Descripción: Añade datos de examen neurológico a la ficha de un paciente.
+
+POST http://localhost:4000/api/v1/fichas/507f1f77bcf86cd799439011/examen-neurologico HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3YzA4MzgxOTdjN2VhYzQzYmEzNzM3ZiIsImVtYWlsIjoiYWRtaW5AdGVzdC5jb20iLCJ1c2VybmFtZSI6ImFkbWluIiwiaWF0IjoxNzQyNTE1NjczLCJleHAiOjE3NDI4NzU2NzN9.AzQEm3RYEKMq2-niahr5hcWCRe1sl5nQEDAiR3akhWM
+  "coordinacion": "Buena"
+}
+Condiciones previas: Existe un paciente con ID 507f1f77bcf86cd799439011.
+
+HTTP/1.1 201 Created
+Content-Type: application/json
+{
+  "examen": {
+    "_id": "507f191e810c19729de860f2",
+    "paciente": "507f1f77bcf86cd799439011",
+    "reflejos": "Normales",
+    "coordinacion": "Buena",
+    "estado": "Activo"
+  },
+  "message": "Examen neurológico añadido con éxito"
+}
+13. POST /api/v1/fichas/:pacienteId/organos-sentidos - Añadir órganos de los sentidos
+Descripción: Añade datos de órganos de los sentidos a la ficha de un paciente.
+
+POST http://localhost:4000/api/v1/fichas/507f1f77bcf86cd799439011/organos-sentidos HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3YzA4MzgxOTdjN2VhYzQzYmEzNzM3ZiIsImVtYWlsIjoiYWRtaW5AdGVzdC5jb20iLCJ1c2VybmFtZSI6ImFkbWluIiwiaWF0IjoxNzQyNTE1NjczLCJleHAiOjE3NDI4NzU2NzN9.AzQEm3RYEKMq2-niahr5hcWCRe1sl5nQEDAiR3akhWM
+  "audicion": "Normal"
+}
+Condiciones previas: Existe un paciente con ID 507f1f77bcf86cd799439011.
+
+HTTP/1.1 201 Created
+Content-Type: application/json
+{
+  "organos": {
+    "_id": "507f191e810c19729de860f3",
+    "paciente": "507f1f77bcf86cd799439011",
+    "vision": "20/20",
+    "audicion": "Normal",
+    "estado": "Activo"
+  },
+  "message": "Órganos de los sentidos añadidos con éxito"
+}
+14. POST /api/v1/fichas/:id/consulta-medica - Añadir consulta médica
+Descripción: Añade una consulta médica a una ficha específica.
+
+POST http://localhost:4000/api/v1/fichas/507f191e810c19729de860ea/consulta-medica HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3YzA4MzgxOTdjN2VhYzQzYmEzNzM3ZiIsImVtYWlsIjoiYWRtaW5AdGVzdC5jb20iLCJ1c2VybmFtZSI6ImFkbWluIiwiaWF0IjoxNzQyNTE1NjczLCJleHAiOjE3NDI4NzU2NzN9.AzQEm3RYEKMq2-niahr5hcWCRe1sl5nQEDAiR3akhWM
+  "diagnostico": "Migraña",
+  "fecha": "2025-03-21"
+}
+Condiciones previas: Existe una ficha con ID 507f191e810c19729de860ea.
+
+HTTP/1.1 201 Created
+Content-Type: application/json
+{
+  "consulta": {
+    "_id": "507f191e810c19729de860f4",
+    "paciente": "507f1f77bcf86cd799439011",
+    "motivo": "Dolor de cabeza",
+    "diagnostico": "Migraña",
+    "fecha": "2025-03-21",
+    "estado": "Activo"
+  },
+  "message": "Consulta médica añadida con éxito"
+}
+15. GET /api/v1/fichas/:id/reporte - Generar reporte de ficha médica
+Descripción: Genera un reporte completo de una ficha médica.
+
+GET http://localhost:4000/api/v1/fichas/507f191e810c19729de860ea/reporte HTTP/1.1
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3YzA4MzgxOTdjN2VhYzQzYmEzNzM3ZiIsImVtYWlsIjoiYWRtaW5AdGVzdC5jb20iLCJ1c2VybmFtZSI6ImFkbWluIiwiaWF0IjoxNzQyNTE1NjczLCJleHAiOjE3NDI4NzU2NzN9.AzQEm3RYEKMq2-niahr5hcWCRe1sl5nQEDAiR3akhWM
 
-
-
-###2. Obtener una ficha por paciente Llama a getFichaByPaciente.
-GET http://localhost:4000/api/v1/fichas/67ca23c779e062bd415db73f HTTP/1.1
+HTTP/1.1 200 OK
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3YzA4MzgxOTdjN2VhYzQzYmEzNzM3ZiIsImVtYWlsIjoiYWRtaW5AdGVzdC5jb20iLCJ1c2VybmFtZSI6ImFkbWluIiwiaWF0IjoxNzQyNTE1NjczLCJleHAiOjE3NDI4NzU2NzN9.AzQEm3RYEKMq2-niahr5hcWCRe1sl5nQEDAiR3akhWM
-
-
-###2. Obtener una ficha por paciente Llama a getFichaByPaciente.
-GET http://localhost:4000/api/v1/fichas/67ca23c779e062bd415db73f HTTP/1.1
-Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3YzA4MzgxOTdjN2VhYzQzYmEzNzM3ZiIsImVtYWlsIjoiYWRtaW5AdGVzdC5jb20iLCJ1c2VybmFtZSI6ImFkbWluIiwiaWF0IjoxNzQyNTE1NjczLCJleHAiOjE3NDI4NzU2NzN9.AzQEm3RYEKMq2-niahr5hcWCRe1sl5nQEDAiR3akhWM
+{
+  "paciente": {
+    "_id": "507f1f77bcf86cd799439011",
+    "primerNombre": "Juan",
+    "primerApellido": "Pérez",
+    "cedula": "12345678",
+    "edad": 30
+  },
+  "antecedentesPersonales": {
+    "_id": "507f191e810c19729de860ec",
+    "enfermedades": ["Hipertensión"],
+    "alergias": ["Penicilina"]
+  },
+  "antecedentesFamiliares": null,
+  "operacionesQuirurgicas": [],
+  "ginecologiaObstetrica": [],
+  "adicciones": [],
+  "exploracionFisica": null,
+  "examenNeurologico": null,
+  "organosSentidos": null,
+  "consultasMedicas": [],
+  "generatedAt": "2025-03-21T00:10:00Z"
+}
+Notas finales
