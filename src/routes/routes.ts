@@ -20,7 +20,7 @@ import {
 } from "@controllers/pacienteExamenesControllers";
 
 import { createEspecialidades, deleteEspecialidades, findEspecialidades, findEspecialidadesById, softDeleteEspecialidades, updateEspecialidades } from "@controllers/especialidadesControllers";
-import { createMedico,  deleteMedico, exportSessionHistory, findMedicoById, findMedicos, getActiveDoctorsToday, getDoctorsBySpecialty, getDoctorsBySpecialtyId, getDoctorsByUserId, getDoctorsWithMultipleSpecialties, getTotalDoctors, softDeleteMedico, updateMedico } from "@controllers/medicosControllers";
+import { createMedico,  deleteMedico, exportSessionHistory, findMedicoById, findMedicos, findMedicosPaginated, getActiveDoctorsToday, getDoctorsBySpecialty, getDoctorsBySpecialtyId, getDoctorsByUserId, getDoctorsWithMultipleSpecialties, getTotalDoctors, softDeleteMedico, toggleMedicoActiveStatus, updateMedico } from "@controllers/medicosControllers";
 import { createTiposObstetricosGinecologicos, deleteTiposObstetricosGinecologicos, findTiposObstetricosGinecologicos, findTiposObstetricosGinecologicosById, softDeleteTiposObstetricosGinecologicos, updateTiposObstetricosGinecologicos } from "@controllers/tiposObstetricosGinecologicosControllers";
 import { createTiposOperacionesQuirurgicas, deleteTiposOperacionesQuirurgicas, findTiposOperacionesQuirurgicas, findTiposOperacionesQuirurgicasById, softDeleteTiposOperacionesQuirurgicas, updateTiposOperacionesQuirurgicas } from "@controllers/tiposOperacionesQuirurgicasControllers";
 import { createPaciente, deletePaciente, findPacienteById, findPacientes, findPacientesByEstadoAtencion, getHistorialMedico, softDeletePaciente, updatePaciente } from "@controllers/pacientesControllers";
@@ -53,31 +53,17 @@ import {
 import { Router } from "express";
 import {  getPermissons, verifyToken } from "middlewares/auth";
 import { checkRoles } from "middlewares/roles";
+import { router as fichasMedicasRouter } from "./fichasMedicasRoutes"; // Ajusta el path si es necesario
 
 
-import {
-  getFichaByPaciente,
-  createFicha,
-  updateFicha,
-  softDeleteFicha,
-  addAntecedentesPersonales,
-  addAntecedentesFamiliares,
-  addOperacionQuirurgica,
-  addGinecologiaObstetrica,
-  addAdiccion,
-  addExploracionFisica,
-  addExamenNeurologico,
-  addOrganosSentidos,
-  addConsultaMedica,
-} from "../controllers/fichasMedicasControllers";
+
 
 
 const router = Router(); 
 
 import dashboardRoutes from "./dashboardRoutes"; 
-
 router.use("/dashboard", dashboardRoutes); 
-
+router.use("/fichas", fichasMedicasRouter);
 
 export default () => {
   router.get("/health", (req, res) => {
@@ -123,6 +109,7 @@ router.get("/pacientes/:pacienteId/historial", verifyToken, getPermissons, getHi
 
 // Rutas de Médicos (movidas bajo /medicos con middlewares)
 router.get("/medicos/:medicoId/session-history", verifyToken, getPermissons, exportSessionHistory);
+router.get("/medicos/paginated", verifyToken, getPermissons, findMedicosPaginated);
 // Rutas de Médicos
 router.get("/medicos", verifyToken, getPermissons, findMedicos);
 router.get("/medicos/stats/specialty", verifyToken, getPermissons, getDoctorsBySpecialty);
@@ -136,6 +123,7 @@ router.post("/medicos", verifyToken, getPermissons, createMedico);
 router.put("/medicos/:id", verifyToken, getPermissons, updateMedico);
 router.delete("/medicos/:id/soft", verifyToken, getPermissons, softDeleteMedico);
 router.delete("/medicos/:id", verifyToken, getPermissons, deleteMedico); 
+router.patch("/medicos/:id/active-status", verifyToken, getPermissons, toggleMedicoActiveStatus);
 
 // Rutas de Tipos de Adicciones
 router.get("/tiposadicciones", verifyToken, getPermissons, findTiposAdicciones);
@@ -171,23 +159,7 @@ router.patch("/tiposadicciones/:id/soft-delete", verifyToken, getPermissons, sof
   router.patch("/examenesmedicos/:id/soft-delete", verifyToken, getPermissons, softDeleteExamenesMedicos);
 
 
-  
-// Rutas fichas medicas después
-router.get("/fichasmedicas/:pacienteId", verifyToken, getPermissons, getFichaByPaciente);
-router.get("/fichasmedicas/:pacienteId", verifyToken, getPermissons, getFichaByPaciente);
-router.post("/fichasmedicas/", verifyToken, getPermissons, createFicha);
-router.put("/fichasmedicas/:id", verifyToken, getPermissons, updateFicha);
-router.patch("/fichasmedicas/:id/soft-delete", verifyToken, getPermissons, softDeleteFicha);
-router.post("/fichasmedicas/:pacienteId/antecedentes-personales", verifyToken, getPermissons, addAntecedentesPersonales);
-router.post("/fichasmedicas/:pacienteId/antecedentes-familiares", verifyToken, getPermissons, addAntecedentesFamiliares);
-router.post("/fichasmedicas/:pacienteId/operaciones-quirurgicas", verifyToken, getPermissons, addOperacionQuirurgica);
-router.post("/fichasmedicas/:pacienteId/ginecologia-obstetrica", verifyToken, getPermissons, addGinecologiaObstetrica);
-router.post("/fichasmedicas/:pacienteId/adicciones", verifyToken, getPermissons, addAdiccion);
-router.post("/fichasmedicas/:pacienteId/exploracion-fisica", verifyToken, getPermissons, addExploracionFisica);
-router.post("/fichasmedicas/:pacienteId/examen-neurologico", verifyToken, getPermissons, addExamenNeurologico);
-router.post("/fichasmedicas/:pacienteId/organos-sentidos", verifyToken, getPermissons, addOrganosSentidos);
-router.post("/fichasmedicas/:id/consulta", verifyToken, getPermissons, addConsultaMedica);
-router.get("/fichasmedicas/:id/reporte", verifyToken, getPermissons, generateReporte);
+
 
 
 

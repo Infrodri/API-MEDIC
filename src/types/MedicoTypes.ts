@@ -3,6 +3,19 @@ import { Document, Types } from "mongoose";
 import { Query, Repository } from "./RepositoryTypes";
 import { User } from "./UsersTypes";
 
+
+export interface PaginationOptions {
+  page?: number;
+  limit?: number;
+  sort?: string; // Ejemplo: "primerNombre" o "-primerNombre" para descendente
+}
+  export interface PaginatedResult<T> {
+    data: T[];
+    total: number;
+    page: number;
+    limit: number;
+    totalPages: number;
+}
 export interface Medico extends Document {
   getBasicInfo(): any;
   cedula: string;
@@ -33,6 +46,8 @@ export interface IMedicoRepository extends Repository<Medico> {
   findBySpecialty(especialidadId: string): Promise<Medico[]>;
   findByUser(userId: string): Promise<Medico[]>;
   findWithMultipleSpecialties(): Promise<Medico[]>;
+  findPaginated(query?: Query, options?: PaginationOptions): Promise<PaginatedResult<Medico>>;
+  updateActiveStatus(id: string, estaActivo: boolean): Promise<Medico | null>;
 }
 
 export interface IMedicoService {
@@ -49,4 +64,6 @@ export interface IMedicoService {
   getDoctorsBySpecialtyId(especialidadId: string): Promise<Medico[]>;
   getDoctorsByUserId(userId: string): Promise<Medico[]>;
   getDoctorsWithMultipleSpecialties(): Promise<Medico[]>;
+  findMedicosPaginated(query?: Query, options?: PaginationOptions): Promise<PaginatedResult<Medico>>;
+  toggleActiveStatus(id: string, estaActivo: boolean): Promise<{ medico: Medico | null; message: string }>;
 }

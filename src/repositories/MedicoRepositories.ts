@@ -1,7 +1,7 @@
 // src/repositories/MedicoRepositories.ts
 import { MedicoModel } from "@models/Medicos";
 import { Query } from "types/RepositoryTypes";
-import { IMedicoRepository, Medico } from "types/MedicoTypes";
+import { IMedicoRepository, Medico, PaginatedResult, PaginationOptions } from "types/MedicoTypes";
 
 export class MedicoRepository implements IMedicoRepository {
   async create(data: Medico): Promise<Medico> {
@@ -107,4 +107,39 @@ export class MedicoRepository implements IMedicoRepository {
       .populate("usuario")
       .exec();
   }
+  async findPaginated(query?: Query, options: PaginationOptions = {}): Promise<PaginatedResult<Medico>> {
+    const { page = 1, limit = 10, sort } = options;
+    const skip = (page - 1) * limit;
+
+    const [data, total] = await Promise.all([
+      MedicoModel.find({ ...query, estado: "Activo" })
+        .populate("especialidades")
+        .populate("usuario")
+        .sort(sort || "primerNombre")
+        .skip(skip)
+        .limit(limit)
+        .exec(),
+      MedicoModel.countDocuments({ ...query, estado: "Activo" }).exec(),
+    ]);
+
+    return {
+      data,
+      total,
+      page,
+      limit,
+      totalPages: Math.ceil(total / limit),
+    };
+  }
+
+async updateActiveStatus(id: string, estaActivo: boolean): Promise<Medico | null> {
+  return await MedicoModel.findByIdAndUpdate(
+    id,
+    { estaActivo },
+    { new: true, runValidators: true }
+  )
+    .populate("especialidades")
+    .populate("usuario")
+    .exec();
+}
+
 }

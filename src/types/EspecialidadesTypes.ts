@@ -1,7 +1,9 @@
-import { Document } from "mongoose";
+// src/types/EspecialidadesTypes.ts
+import { Document, Types } from "mongoose";
 import { Query, Repository } from "./RepositoryTypes";
 
 export interface Especialidades extends Document {
+  _id: Types.ObjectId; // Añadimos explícitamente _id
   getBasicInfo(): any;
   nombre: string; // Nombre de la especialidad (e.g., "Cardiología")
   descripcion: string; // Descripción de la especialidad

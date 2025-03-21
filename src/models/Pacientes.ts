@@ -24,13 +24,13 @@ const PacienteSchema: Schema = new Schema<Paciente>(
       type: String,
       required: [true, "El teléfono es obligatorio"],
       trim: true,
-      match: [/^\d{7,10}$/, "Formato de teléfono inválido"],
+      match: [/^\d{6,10}(-\d{1,4})?$/, "Formato de teléfono inválido"],
     },
     celular: {
       type: String,
       required: [true, "El celular es obligatorio"],
       trim: true,
-      match: [/^\d{10}$/, "Formato de celular inválido"],
+      match: [/^\d{8,10}$/, "Formato de celular inválido"],
     },
     genero: {
       type: String,

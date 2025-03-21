@@ -2,6 +2,8 @@
 import { Query } from "types/RepositoryTypes";
 import { IMedicamentosRepository, Medicamentos } from "types/MedicamentosTypes";
 import { MedicamentosModel } from "@models/Medicamentos";
+import { Medico, PaginatedResult, PaginationOptions } from "types/MedicoTypes";
+import { MedicoModel } from "@models/Medicos";
 
 export class MedicamentosRepository implements IMedicamentosRepository {
   async create(data: Medicamentos): Promise<Medicamentos> {
@@ -33,4 +35,6 @@ export class MedicamentosRepository implements IMedicamentosRepository {
     const deleted = await MedicamentosModel.findByIdAndDelete(id).exec();
     return deleted !== null;
   }
+
+
 }

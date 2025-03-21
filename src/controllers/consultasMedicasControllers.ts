@@ -13,7 +13,8 @@ export const createConsultasMedicas = async (req: Request, res: Response) => {
     res.status(201).json({ consulta: consulta.getBasicInfo(), message });
   } catch (error) {
     console.log("error :>> ", error);
-    res.status(400).json({ error: "Error al crear consulta médica", details: error.message });
+    const errorMessage = error instanceof Error ? error.message : "Error desconocido";
+    res.status(400).json({ error: "Error al crear consulta médica", details: errorMessage });
   }
 };
 
@@ -25,7 +26,8 @@ export const findConsultasMedicas = async (req: Request, res: Response) => {
     res.json({ consultas: basicInfoList, message: "Lista de consultas médicas obtenida con éxito" });
   } catch (error) {
     console.log("error :>> ", error);
-    res.status(500).json({ error: "Error al obtener consultas médicas", details: error.message });
+    const errorMessage = error instanceof Error ? error.message : "Error desconocido";
+    res.status(500).json({ error: "Error al obtener consultas médicas", details: errorMessage });
   }
 };
 
@@ -36,7 +38,8 @@ export const findConsultasMedicasById = async (req: Request, res: Response) => {
     res.json({ consulta: consulta.getBasicInfo(), message: "Consulta médica encontrada con éxito" });
   } catch (error) {
     console.log("error :>> ", error);
-    res.status(500).json({ error: "Error al obtener consulta médica", details: error.message });
+    const errorMessage = error instanceof Error ? error.message : "Error desconocido";
+    res.status(500).json({ error: "Error al obtener consulta médica", details: errorMessage });
   }
 };
 
@@ -48,7 +51,8 @@ export const findConsultasMedicasByPaciente = async (req: Request, res: Response
     res.json({ consultas: basicInfoList, message: "Consultas del paciente obtenidas con éxito" });
   } catch (error) {
     console.log("error :>> ", error);
-    res.status(500).json({ error: "Error al obtener consultas del paciente", details: error.message });
+    const errorMessage = error instanceof Error ? error.message : "Error desconocido";
+    res.status(500).json({ error: "Error al obtener consultas del paciente", details: errorMessage });
   }
 };
 
@@ -59,7 +63,8 @@ export const updateConsultasMedicas = async (req: Request, res: Response) => {
     res.json({ consulta: consulta.getBasicInfo(), message });
   } catch (error) {
     console.log("error :>> ", error);
-    res.status(500).json({ error: "Error al actualizar consulta médica", details: error.message });
+    const errorMessage = error instanceof Error ? error.message : "Error desconocido";
+    res.status(500).json({ error: "Error al actualizar consulta médica", details: errorMessage });
   }
 };
 
@@ -70,7 +75,8 @@ export const deleteConsultasMedicas = async (req: Request, res: Response) => {
     res.json({ success, message });
   } catch (error) {
     console.log("error :>> ", error);
-    res.status(500).json({ error: "Error al eliminar consulta médica", details: error.message });
+    const errorMessage = error instanceof Error ? error.message : "Error desconocido";
+    res.status(500).json({ error: "Error al eliminar consulta médica", details: errorMessage });
   }
 };
 
@@ -81,7 +87,8 @@ export const softDeleteConsultasMedicas = async (req: Request, res: Response) =>
     res.json({ success, message });
   } catch (error) {
     console.log("error :>> ", error);
-    res.status(500).json({ error: "Error al cancelar consulta médica", details: error.message });
+    const errorMessage = error instanceof Error ? error.message : "Error desconocido";
+    res.status(500).json({ error: "Error al cancelar consulta médica", details: errorMessage });
   }
 };
 
@@ -91,7 +98,8 @@ export const concludeConsulta = async (req: Request, res: Response) => {
     res.json({ consulta: consulta.getBasicInfo(), message });
   } catch (error) {
     console.log("error :>> ", error);
-    res.status(500).json({ error: "Error al concluir consulta", details: error.message });
+    const errorMessage = error instanceof Error ? error.message : "Error desconocido";
+    res.status(500).json({ error: "Error al concluir consulta", details: errorMessage });
   }
 };
 
@@ -107,7 +115,8 @@ export const deriveConsulta = async (req: Request, res: Response) => {
     res.json({ consulta: consulta.getBasicInfo(), message });
   } catch (error) {
     console.log("error :>> ", error);
-    res.status(500).json({ error: "Error al derivar consulta", details: error.message });
+    const errorMessage = error instanceof Error ? error.message : "Error desconocido";
+    res.status(500).json({ error: "Error al derivar consulta", details: errorMessage });
   }
 };
 
@@ -123,7 +132,8 @@ export const reassignConsulta = async (req: Request, res: Response) => {
     res.json({ consulta: consulta.getBasicInfo(), message });
   } catch (error) {
     console.log("error :>> ", error);
-    res.status(500).json({ error: "Error al reasignar consulta", details: error.message });
+    const errorMessage = error instanceof Error ? error.message : "Error desconocido";
+    res.status(500).json({ error: "Error al reasignar consulta", details: errorMessage });
   }
 };
 
@@ -133,7 +143,8 @@ export const addRecetaToConsulta = async (req: Request, res: Response) => {
     res.status(201).json({ consulta: consulta.getBasicInfo(), message });
   } catch (error) {
     console.log("error :>> ", error);
-    res.status(400).json({ error: "Error al añadir receta a la consulta", details: error.message });
+    const errorMessage = error instanceof Error ? error.message : "Error desconocido";
+    res.status(400).json({ error: "Error al añadir receta a la consulta", details: errorMessage });
   }
 };
 
@@ -143,7 +154,8 @@ export const addExamenToConsulta = async (req: Request, res: Response) => {
     res.status(201).json({ consulta: consulta.getBasicInfo(), message });
   } catch (error) {
     console.log("error :>> ", error);
-    res.status(400).json({ error: "Error al añadir examen a la consulta", details: error.message });
+    const errorMessage = error instanceof Error ? error.message : "Error desconocido";
+    res.status(400).json({ error: "Error al añadir examen a la consulta", details: errorMessage });
   }
 };
 
@@ -154,7 +166,8 @@ export const generateReporte = async (req: Request, res: Response) => {
     res.json({ reporte, message });
   } catch (error) {
     console.log("error :>> ", error);
-    res.status(500).json({ error: "Error al generar reporte", details: error.message });
+    const errorMessage = error instanceof Error ? error.message : "Error desconocido";
+    res.status(500).json({ error: "Error al generar reporte", details: errorMessage });
   }
 };
 
@@ -164,7 +177,8 @@ export const countConsultasByEspecialidad = async (req: Request, res: Response) 
     res.json({ count, message: "Cantidad de consultas por especialidad obtenida con éxito" });
   } catch (error) {
     console.log("error :>> ", error);
-    res.status(500).json({ error: "Error al contar consultas por especialidad", details: error.message });
+    const errorMessage = error instanceof Error ? error.message : "Error desconocido";
+    res.status(500).json({ error: "Error al contar consultas por especialidad", details: errorMessage });
   }
 };
 
@@ -174,7 +188,8 @@ export const countConsultasByMedico = async (req: Request, res: Response) => {
     res.json({ count, message: "Cantidad de consultas por médico obtenida con éxito" });
   } catch (error) {
     console.log("error :>> ", error);
-    res.status(500).json({ error: "Error al contar consultas por médico", details: error.message });
+    const errorMessage = error instanceof Error ? error.message : "Error desconocido";
+    res.status(500).json({ error: "Error al contar consultas por médico", details: errorMessage });
   }
 };
 
@@ -184,7 +199,8 @@ export const countConsultasByPaciente = async (req: Request, res: Response) => {
     res.json({ count, message: "Cantidad de consultas por paciente obtenida con éxito" });
   } catch (error) {
     console.log("error :>> ", error);
-    res.status(500).json({ error: "Error al contar consultas por paciente", details: error.message });
+    const errorMessage = error instanceof Error ? error.message : "Error desconocido";
+    res.status(500).json({ error: "Error al contar consultas por paciente", details: errorMessage });
   }
 };
 
@@ -195,6 +211,7 @@ export const getAvailableSlots = async (req: Request, res: Response) => {
     res.json({ slots, message: "Horarios disponibles obtenidos con éxito" });
   } catch (error) {
     console.log("error :>> ", error);
-    res.status(500).json({ error: "Error al obtener horarios disponibles", details: error.message });
+    const errorMessage = error instanceof Error ? error.message : "Error desconocido";
+    res.status(500).json({ error: "Error al obtener horarios disponibles", details: errorMessage });
   }
 };

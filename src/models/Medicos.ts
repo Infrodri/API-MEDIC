@@ -9,7 +9,7 @@ const MedicoSchema: Schema = new Schema<Medico>(
       required: [true, "La cédula es obligatoria"],
       unique: true,
       trim: true,
-      match: [/^\d{10}$/, "Formato de cédula inválido"],
+      match: [/^\d{6,10}$/, "Formato de cédula inválido"],
     },
     primerNombre: {
       type: String,
@@ -65,13 +65,13 @@ const MedicoSchema: Schema = new Schema<Medico>(
       type: String,
       required: [true, "El teléfono es obligatorio"],
       trim: true,
-      match: [/^\d{7,10}$/, "Formato de teléfono inválido"],
+      match: [/^\d{6,10}$/, "Formato de teléfono inválido"],
     },
     celular: {
       type: String,
       required: [true, "El celular es obligatorio"],
       trim: true,
-      match: [/^\d{10}$/, "Formato de celular inválido"],
+      match: [/^\d{6,10}$/, "Formato de celular inválido"],
     },
     genero: {
       type: String,

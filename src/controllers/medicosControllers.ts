@@ -3,7 +3,7 @@ import { SesionMedicoModel } from "@models/SesionMedico";
 import { MedicoRepository } from "@repositories/MedicoRepositories";
 import { MedicoService } from "@services/MedicoService";
 import { Request, Response } from "express";
-import { IMedicoRepository, IMedicoService, Medico } from "types/MedicoTypes";
+import { IMedicoRepository, IMedicoService, Medico, PaginationOptions } from "types/MedicoTypes";
 
 const medicoRepository: IMedicoRepository = new MedicoRepository();
 const medicoService: IMedicoService = new MedicoService(medicoRepository);
@@ -164,5 +164,56 @@ export const exportSessionHistory = async (req: Request, res: Response) => {
   } catch (error) {
     console.log("error :>> ", error);
     res.status(500).json({ error: "Error al exportar historial de sesiones", details: error });
+  }
+};
+export const findMedicosPaginated = async (req: Request, res: Response) => {
+  try {
+    const { page, limit, sort } = req.query;
+    const options: PaginationOptions = {
+      page: page ? parseInt(page as string) : undefined,
+      limit: limit ? parseInt(limit as string) : undefined,
+      sort: sort as string,
+    };
+
+    const result = await medicoService.findMedicosPaginated({}, options);
+    const basicInfoList = result.data.map((medico) => medico.getBasicInfo());
+
+    if (basicInfoList.length === 0) {
+      return res.status(404).json({ message: "No hay médicos encontrados." });
+    }
+
+    res.json({
+      medicos: basicInfoList,
+      pagination: {
+        total: result.total,
+        page: result.page,
+        limit: result.limit,
+        totalPages: result.totalPages,
+      },
+      message: "Lista de médicos obtenida con éxito",
+    });
+  } catch (error) {
+    console.log("error :>> ", error);
+    res.status(500).json({ error: "Error al obtener médicos paginados", details: error });
+  }
+};
+export const toggleMedicoActiveStatus = async (req: Request, res: Response) => {
+  try {
+    const { id } = req.params;
+    const { estaActivo } = req.body;
+
+    if (typeof estaActivo !== "boolean") {
+      return res.status(400).json({ message: "El campo 'estaActivo' debe ser un booleano" });
+    }
+
+    const { medico, message } = await medicoService.toggleActiveStatus(id, estaActivo);
+    if (!medico) {
+      return res.status(404).json({ message: "Médico no encontrado" });
+    }
+
+    res.json({ medico: medico.getBasicInfo(), message });
+  } catch (error) {
+    console.log("error :>> ", error);
+    res.status(500).json({ error: "Error al actualizar estado activo", details: error });
   }
 };

@@ -1,3 +1,4 @@
+import { UserModel } from "@models/Users";
 import { UserRepository } from "@repositories/userRepositories";
 import { UserService } from "@services/userService";
 import { Request, Response } from "express";
@@ -8,13 +9,44 @@ const userService: IUserService = new UserService(userRepository);
 
 export const findUsers = async (req: Request, res: Response) => {
   try {
-    const users = await userService.findUsers();
-    if (users.length === 0) return res.status(404).json({ message: "no users Found." });
+    const { query = "", page = "1", limit = "5" } = req.query;
+    const pageNum = parseInt(page as string, 10);
+    const limitNum = parseInt(limit as string, 10);
+    const skip = (pageNum - 1) * limitNum;
 
-    res.json(users);
+    // Filtrar usuarios por name o username (ignorando mayúsculas/minúsculas)
+    const filter = query
+      ? {
+          $or: [
+            { name: { $regex: query, $options: "i" } },
+            { username: { $regex: query, $options: "i" } },
+          ],
+        }
+      : {};
+
+    const users = await UserModel.find(filter)
+      .skip(skip)
+      .limit(limitNum)
+      .populate("roles")
+      .exec();
+
+    const totalItems = await UserModel.countDocuments(filter);
+
+    if (users.length === 0) {
+      return res.status(404).json({ message: "No users found." });
+    }
+
+    res.json({
+      users,
+      pagination: {
+        totalPages: Math.ceil(totalItems / limitNum),
+        currentPage: pageNum,
+        totalItems,
+      },
+    });
   } catch (error) {
-    console.log("error :>> ", error);
-    res.status(500).json(error);
+    console.error("Error en findUsers:", error);
+    res.status(500).json({ error: "Error al obtener usuarios" });
   }
 };
 

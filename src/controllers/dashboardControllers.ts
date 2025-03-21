@@ -1,31 +1,72 @@
-import { Request, Response } from "express";
+// src/controllers/DashboardController.ts
 import DashboardService from "@services/dashboardService";
+import { Request, Response } from "express";
+
+
 
 export const getDashboardStats = async (req: Request, res: Response) => {
   try {
-    const baseStats = await DashboardService.getBaseStats();
-    const consultasPorMes = await DashboardService.getConsultasPorMes();
-    const consultasPorMedico = await DashboardService.getConsultasPorMedico();
-    const consultasPorPacienteEstado = await DashboardService.getConsultasPorPacienteEstado();
-
-    const response = {
-      ...baseStats,
-      consultasPorMes,
-      consultasPorMedico,
-      consultasPorPacienteEstado,
-    };
-
+    const stats = await DashboardService.getDashboardStats();
     res.status(200).json({
       success: true,
-      data: response,
-      message: "Estadísticas obtenidas con éxito",
+      data: stats,
+      message: "Estadísticas del dashboard obtenidas con éxito",
     });
   } catch (error) {
+    const errorMessage = error instanceof Error ? error.message : "Error desconocido";
     console.error("Error in getDashboardStats:", error);
     res.status(500).json({
       success: false,
-      message: "Error al obtener estadísticas del dashboard",
-      error: String(error),
+      message: "Error al obtener estadísticas",
+      error: errorMessage,
+    });
+  }
+};
+
+export const getConsultasPorMesPorEspecialidad = async (req: Request, res: Response) => {
+  try {
+    const year = parseInt(req.query.year as string);
+    const month = parseInt(req.query.month as string);
+
+    if (!year || !month || month < 1 || month > 12) {
+      return res.status(400).json({
+        success: false,
+        message: "Parámetros 'year' y 'month' son requeridos y deben ser válidos (mes entre 1 y 12)",
+      });
+    }
+
+    const data = await DashboardService.getConsultasPorMesPorEspecialidad(year, month);
+    res.status(200).json({
+      success: true,
+      data,
+      message: "Consultas por mes y especialidad obtenidas con éxito",
+    });
+  } catch (error) {
+    const errorMessage = error instanceof Error ? error.message : "Error desconocido";
+    console.error("Error in getConsultasPorMesPorEspecialidad:", error);
+    res.status(500).json({
+      success: false,
+      message: "Error al obtener consultas por mes y especialidad",
+      error: errorMessage,
+    });
+  }
+};
+
+export const getMedicosList = async (req: Request, res: Response) => {
+  try {
+    const medicos = await DashboardService.getMedicosList();
+    res.status(200).json({
+      success: true,
+      data: medicos,
+      message: "Lista de médicos obtenida con éxito",
+    });
+  } catch (error) {
+    const errorMessage = error instanceof Error ? error.message : "Error desconocido";
+    console.error("Error in getMedicosList:", error);
+    res.status(500).json({
+      success: false,
+      message: "Error al obtener lista de médicos",
+      error: errorMessage,
     });
   }
 };
@@ -35,68 +76,56 @@ export const getConsultasHoy = async (req: Request, res: Response) => {
     const page = parseInt(req.query.page as string) || 1;
     const limit = parseInt(req.query.limit as string) || 10;
 
-    const { consultas, total, page: currentPage, totalPages } = await DashboardService.getConsultasHoy(page, limit);
-
-    const formattedConsultas = consultas.map((consulta: any) => ({
-      id: consulta._id,
-      paciente: `${consulta.paciente?.nombre || ""} ${consulta.paciente?.apellido || ""}`,
-      medico: `${consulta.medico?.primerNombre || ""} ${consulta.medico?.primerApellido || ""}`,
-      fecha: consulta.fecha,
-      estado: consulta.estado,
-      pacienteImagen: `https://ui-avatars.com/api/?name=${consulta.paciente?.nombre}+${consulta.paciente?.apellido}`,
-    }));
-
+    const data = await DashboardService.getConsultasHoy(page, limit);
     res.status(200).json({
       success: true,
-      data: { consultas: formattedConsultas, total, page: currentPage, totalPages },
-      message: "Consultas del día obtenidas con éxito",
+      data,
+      message: "Consultas de hoy obtenidas con éxito",
     });
   } catch (error) {
+    const errorMessage = error instanceof Error ? error.message : "Error desconocido";
     console.error("Error in getConsultasHoy:", error);
     res.status(500).json({
       success: false,
-      message: "Error al obtener consultas del día",
-      error: String(error),
+      message: "Error al obtener consultas de hoy",
+      error: errorMessage,
     });
   }
 };
 
-export const getMedicosActivosHoy = async (req: Request, res: Response) => {
+export const getPacientesEnEspera = async (req: Request, res: Response) => {
   try {
-    const medicosActivos = await DashboardService.getFormattedMedicosActivos();
+    const pacientes = await DashboardService.getPacientesEnEspera();
     res.status(200).json({
       success: true,
-      data: medicosActivos,
-      message: "Médicos activos obtenidos con éxito",
+      data: pacientes,
+      message: "Pacientes en espera obtenidos con éxito",
     });
   } catch (error) {
-    console.error("Error in getMedicosActivosHoy:", error);
+    const errorMessage = error instanceof Error ? error.message : "Error desconocido";
+    console.error("Error in getPacientesEnEspera:", error);
     res.status(500).json({
       success: false,
-      message: "Error al obtener médicos activos",
-      error: String(error),
+      message: "Error al obtener pacientes en espera",
+      error: errorMessage,
     });
   }
 };
-
-export const getPacientes = async (req: Request, res: Response) => {
+export const getConsultasPorMes = async (req: Request, res: Response) => {
   try {
-    const page = parseInt(req.query.page as string) || 1;
-    const limit = parseInt(req.query.limit as string) || 10;
-
-    const { pacientes, total, page: currentPage, totalPages } = await DashboardService.getPacientes(page, limit);
-
+    const year = parseInt(req.query.year as string) || new Date().getFullYear();
+    const data = await DashboardService.getConsultasPorMes(year);
     res.status(200).json({
       success: true,
-      data: { pacientes, total, page: currentPage, totalPages },
-      message: "Pacientes obtenidos con éxito",
+      data,
+      message: "Consultas por mes obtenidas con éxito",
     });
   } catch (error) {
-    console.error("Error in getPacientes:", error);
+    console.error("Error in getConsultasPorMes controller:", error);
     res.status(500).json({
       success: false,
-      message: "Error al obtener pacientes",
-      error: String(error),
+      message: "Error al obtener consultas por mes",
+      error: (error as Error).message,
     });
   }
 };

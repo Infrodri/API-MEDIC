@@ -78,21 +78,32 @@ GET http://localhost:4000/api/v1/medicos HTTP/1.1
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3YzA4MzgxOTdjN2VhYzQzYmEzNzM3ZiIsImVtYWlsIjoiYWRtaW5AdGVzdC5jb20iLCJ1c2VybmFtZSI6ImFkbWluIiwiaWF0IjoxNzQyMTc4NzU3LCJleHAiOjE3NDI1Mzg3NTd9.SR3tR_AOCa8CDgA5D8sbUmxArXUc6LhkUvf11L3_7_4
 
+
+### Listar todos los médicos activos
+GET http://localhost:4000/api/v1/medicos/paginated HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3YzA4MzgxOTdjN2VhYzQzYmEzNzM3ZiIsImVtYWlsIjoiYWRtaW5AdGVzdC5jb20iLCJ1c2VybmFtZSI6ImFkbWluIiwiaWF0IjoxNzQyMTc4NzU3LCJleHAiOjE3NDI1Mzg3NTd9.SR3tR_AOCa8CDgA5D8sbUmxArXUc6LhkUvf11L3_7_4
+
 ###
 
 # Obtener un médico por ID
-GET http://localhost:4000/api/v1/medicos/67d77bce0a9574c3da5569c2 HTTP/1.1
+patch http://localhost:4000/api/v1/medicos/67ca2cf74cab82850ee4639e/active-status HTTP/1.1
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3YzA4MzgxOTdjN2VhYzQzYmEzNzM3ZiIsImVtYWlsIjoiYWRtaW5AdGVzdC5jb20iLCJ1c2VybmFtZSI6ImFkbWluIiwiaWF0IjoxNzQyMTc4NzU3LCJleHAiOjE3NDI1Mzg3NTd9.SR3tR_AOCa8CDgA5D8sbUmxArXUc6LhkUvf11L3_7_4
+
+
+{
+  "estaActivo": true
+}
 ###
 
 # Actualizar un médico
-PUT http://localhost:4000/api/v1/medicos/67c783c543449cb8ad3460d1 HTTP/1.1
+put http://localhost:4000/api/v1/medicos/67c783c543449cb8ad3460d1 HTTP/1.1
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3YzA4MzgxOTdjN2VhYzQzYmEzNzM3ZiIsImVtYWlsIjoiYWRtaW5AdGVzdC5jb20iLCJ1c2VybmFtZSI6ImFkbWluIiwiaWF0IjoxNzQxODE4NjA5LCJleHAiOjE3NDIxNzg2MDl9.pwq5m4piwpvEkFDXaUM7ldaKf6ZGrNgk9FmVXXpWKJc
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3YzA4MzgxOTdjN2VhYzQzYmEzNzM3ZiIsImVtYWlsIjoiYWRtaW5AdGVzdC5jb20iLCJ1c2VybmFtZSI6ImFkbWluIiwiaWF0IjoxNzQyMTc4NzU3LCJleHAiOjE3NDI1Mzg3NTd9.SR3tR_AOCa8CDgA5D8sbUmxArXUc6LhkUvf11L3_7_4
 
 {
-     "estaActivo": true
+"primerApellido": "Lópezactualizado"
 }
 
 ###

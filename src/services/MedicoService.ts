@@ -1,6 +1,6 @@
 // src/services/MedicoService.ts
 import { Query } from "types/RepositoryTypes";
-import { IMedicoRepository, IMedicoService, Medico } from "types/MedicoTypes";
+import { IMedicoRepository, IMedicoService, Medico, PaginatedResult, PaginationOptions } from "types/MedicoTypes";
 
 export class MedicoService implements IMedicoService {
   private medicoRepository: IMedicoRepository;
@@ -75,5 +75,19 @@ export class MedicoService implements IMedicoService {
 
   async getDoctorsWithMultipleSpecialties(): Promise<Medico[]> {
     return await this.medicoRepository.findWithMultipleSpecialties();
+  }
+  async findMedicosPaginated(query?: Query, options?: PaginationOptions): Promise<PaginatedResult<Medico>> {
+    return await this.medicoRepository.findPaginated(query, options);
+  }
+
+  async toggleActiveStatus(id: string, estaActivo: boolean): Promise<{ medico: Medico | null; message: string }> {
+    const updatedMedico = await this.medicoRepository.updateActiveStatus(id, estaActivo);
+    if (!updatedMedico) {
+      return { medico: null, message: "Médico no encontrado" };
+    }
+    return {
+      medico: updatedMedico,
+      message: `Estado activo del médico ${estaActivo ? "activado" : "desactivado"} con éxito`,
+    };
   }
 }
